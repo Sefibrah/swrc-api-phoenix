@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "flight_numbers",
+  "info": {
+    "singularName": "flight-number",
+    "pluralName": "flight-numbers",
+    "displayName": "Flight Number"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    }
+  }
+}

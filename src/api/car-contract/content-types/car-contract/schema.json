@@ -1,0 +1,85 @@
+{
+  "kind": "collectionType",
+  "collectionName": "car_contracts",
+  "info": {
+    "singularName": "car-contract",
+    "pluralName": "car-contracts",
+    "displayName": "Car Contract",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "car": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::car.car"
+    },
+    "startLocation": {
+      "type": "string"
+    },
+    "endLocation": {
+      "type": "string"
+    },
+    "startDatetime": {
+      "type": "datetime"
+    },
+    "endDatetime": {
+      "type": "datetime"
+    },
+    "comment": {
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    },
+    "totalRent": {
+      "type": "decimal"
+    },
+    "status": {
+      "type": "string"
+    },
+    "additionalCost": {
+      "type": "decimal",
+      "min": 0
+    },
+    "deposit": {
+      "type": "decimal",
+      "min": 0
+    },
+    "paymentMethod": {
+      "type": "string"
+    },
+    "discount": {
+      "type": "decimal",
+      "min": 0
+    },
+    "renter": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::customer.customer"
+    },
+    "primaryDriver": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::customer.customer"
+    },
+    "secondaryDriver": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::customer.customer"
+    },
+    "primaryDriverDocumentVersions": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::document-connection.document-connection"
+    },
+    "secondaryDriverDocumentVersions": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::document-connection.document-connection"
+    }
+  }
+}

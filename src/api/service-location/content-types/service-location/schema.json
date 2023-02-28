@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "service_locations",
+  "info": {
+    "singularName": "service-location",
+    "pluralName": "service-locations",
+    "displayName": "Service Location"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    }
+  }
+}

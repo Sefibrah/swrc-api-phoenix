@@ -1,0 +1,66 @@
+{
+  "kind": "collectionType",
+  "collectionName": "car_reservations",
+  "info": {
+    "singularName": "car-reservation",
+    "pluralName": "car-reservations",
+    "displayName": "Car Reservation",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "car": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::car.car"
+    },
+    "startLocation": {
+      "type": "string"
+    },
+    "endLocation": {
+      "type": "string"
+    },
+    "startDatetime": {
+      "type": "datetime"
+    },
+    "endDatetime": {
+      "type": "datetime"
+    },
+    "flightNumber": {
+      "type": "string"
+    },
+    "comment": {
+      "type": "text",
+      "maxLength": 255
+    },
+    "discount": {
+      "type": "decimal",
+      "min": 0
+    },
+    "author": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "totalRent": {
+      "type": "decimal"
+    },
+    "additionalCost": {
+      "type": "decimal",
+      "min": 0
+    },
+    "deposit": {
+      "type": "decimal",
+      "min": 0
+    },
+    "renter": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::customer.customer"
+    }
+  }
+}

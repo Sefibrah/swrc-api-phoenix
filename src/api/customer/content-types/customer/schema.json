@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "customers",
+  "info": {
+    "singularName": "customer",
+    "pluralName": "customers",
+    "displayName": "Customer",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "contact": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::contact.contact"
+    },
+    "country": {
+      "type": "string"
+    },
+    "comment": {
+      "type": "text"
+    },
+    "isLocal": {
+      "type": "boolean"
+    },
+    "individual": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::individual.individual"
+    },
+    "organisation": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::organisation.organisation"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "USER",
+        "GUEST"
+      ]
+    }
+  }
+}

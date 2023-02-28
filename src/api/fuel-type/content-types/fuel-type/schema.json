@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "fuel_types",
+  "info": {
+    "singularName": "fuel-type",
+    "pluralName": "fuel-types",
+    "displayName": "Fuel Type"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    }
+  }
+}

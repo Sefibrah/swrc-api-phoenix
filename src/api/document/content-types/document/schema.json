@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "documents",
+  "info": {
+    "singularName": "document",
+    "pluralName": "documents",
+    "displayName": "Document",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "issuedBy": {
+      "type": "string"
+    },
+    "expiry": {
+      "type": "datetime"
+    },
+    "type": {
+      "type": "string"
+    },
+    "number": {
+      "type": "string"
+    },
+    "individual": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::individual.individual",
+      "inversedBy": "documents"
+    }
+  }
+}

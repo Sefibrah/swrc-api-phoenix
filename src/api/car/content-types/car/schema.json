@@ -1,0 +1,117 @@
+{
+  "kind": "collectionType",
+  "collectionName": "cars",
+  "info": {
+    "singularName": "car",
+    "pluralName": "cars",
+    "displayName": "Car",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "registrationPlate": {
+      "type": "string",
+      "required": false,
+      "unique": true
+    },
+    "color": {
+      "type": "string",
+      "required": false
+    },
+    "chassis": {
+      "type": "string",
+      "required": false,
+      "unique": true
+    },
+    "seats": {
+      "type": "integer",
+      "required": false,
+      "min": 0
+    },
+    "doors": {
+      "type": "integer",
+      "required": false,
+      "min": 0
+    },
+    "smallBaggage": {
+      "type": "integer",
+      "min": 0,
+      "required": false
+    },
+    "largeBaggage": {
+      "type": "integer",
+      "min": 0
+    },
+    "isAvailable": {
+      "type": "boolean",
+      "default": true,
+      "required": false
+    },
+    "registrationDate": {
+      "type": "datetime",
+      "required": false
+    },
+    "year": {
+      "type": "integer",
+      "min": 1900,
+      "required": false
+    },
+    "cubicSize": {
+      "type": "integer",
+      "min": 0,
+      "required": false
+    },
+    "prices": {
+      "type": "component",
+      "repeatable": true,
+      "component": "car.price"
+    },
+    "make": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    },
+    "thumbnail": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "inspectionImages": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "carType": {
+      "type": "string"
+    },
+    "fuelType": {
+      "type": "string"
+    },
+    "transmissionType": {
+      "type": "string"
+    },
+    "carGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::car-group.car-group",
+      "inversedBy": "cars"
+    },
+    "airConditioner": {
+      "type": "boolean"
+    },
+    "discount": {
+      "type": "decimal",
+      "min": 0
+    }
+  }
+}

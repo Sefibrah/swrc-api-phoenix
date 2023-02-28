@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "car_maintenances",
+  "info": {
+    "singularName": "car-maintenance",
+    "pluralName": "car-maintenances",
+    "displayName": "Car Maintenance"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "car": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::car.car"
+    },
+    "startDatetime": {
+      "type": "datetime"
+    },
+    "endDatetime": {
+      "type": "datetime"
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "typeOfService": {
+      "type": "string"
+    },
+    "comment": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    }
+  }
+}

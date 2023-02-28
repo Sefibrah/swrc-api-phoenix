@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_car_prices",
+  "info": {
+    "displayName": "Price",
+    "icon": "money-bill",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "min_days": {
+      "type": "integer",
+      "min": 1,
+      "required": true,
+      "unique": false
+    },
+    "amount": {
+      "type": "decimal",
+      "min": 0,
+      "required": true
+    }
+  }
+}

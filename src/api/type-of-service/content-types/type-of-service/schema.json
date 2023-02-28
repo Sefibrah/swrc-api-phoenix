@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "type_of_services",
+  "info": {
+    "singularName": "type-of-service",
+    "pluralName": "type-of-services",
+    "displayName": "Type of Service"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    }
+  }
+}

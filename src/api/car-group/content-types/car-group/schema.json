@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "car_groups",
+  "info": {
+    "singularName": "car-group",
+    "pluralName": "car-groups",
+    "displayName": "Car Group",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "cars": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::car.car",
+      "mappedBy": "carGroup"
+    },
+    "name": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "individuals",
+  "info": {
+    "singularName": "individual",
+    "pluralName": "individuals",
+    "displayName": "Individual",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "civilNumber": {
+      "type": "string",
+      "unique": true
+    },
+    "dateOfBirth": {
+      "type": "datetime"
+    },
+    "documents": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::document.document",
+      "mappedBy": "individual"
+    },
+    "customer": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::customer.customer"
+    },
+    "name": {
+      "type": "string"
+    }
+  }
+}
