@@ -35,6 +35,8 @@ const noRestrictionsUser = [
   "update",
 ];
 const restrictedUser = ["me"];
+const noLimitsUpload = ["destroy", "find", "findOne", "upload"];
+const noDeleteUpload = ["find", "findOne", "upload"];
 
 const hashPassword = (password) => {
   return new Promise((resolve, reject) => {
@@ -135,6 +137,10 @@ const getReceptionistPermissions = () => {
     ["plugin::users-permissions.auth"],
     noRestrictionsAuth
   );
+  let noDeleteUploadPermissions = combineActionWithService(
+    ["plugin::upload.content-api"],
+    noDeleteUpload
+  );
   let restrictedUserPermissions = combineActionWithService(
     ["plugin::users-permissions.user"],
     restrictedUser
@@ -144,6 +150,7 @@ const getReceptionistPermissions = () => {
     ...noDeletePermissions,
     ...noRestrictionsAuthPermissions,
     ...restrictedUserPermissions,
+    ...noDeleteUploadPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -181,11 +188,16 @@ const getMechanicPermissions = () => {
     ["plugin::users-permissions.user"],
     restrictedUser
   );
+  let noDeleteUploadPermissions = combineActionWithService(
+    ["plugin::upload.content-api"],
+    noDeleteUpload
+  );
   return [
     ...restrictedPermissions,
     ...noDeletePermissions,
     ...noRestrictionsAuthPermissions,
     ...restrictedUserPermissions,
+    ...noDeleteUploadPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -225,10 +237,15 @@ const getManagerPermissions = () => {
     ["plugin::users-permissions.user"],
     restrictedUser
   );
+  let noLimitUploadPermissions = combineActionWithService(
+    ["plugin::upload.content-api"],
+    noLimitsUpload
+  );
   return [
     ...noRestrictionPermissions,
     ...noRestrictionAuthPermissions,
     ...restrictedUserPermissions,
+    ...noLimitsUpload,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -272,11 +289,16 @@ const getAdminPermissions = () => {
     ["plugin::users-permissions.user"],
     noRestrictionsUser
   );
+  let noLimitUploadPermissions = combineActionWithService(
+    ["plugin::upload.content-api"],
+    noLimitsUpload
+  );
   return [
     ...noRestrictionPermissions,
     ...noRestrictionAuthPermissions,
     ...noRestrictionRolePermissions,
     ...noRestrictionUserPermissions,
+    ...noLimitUploadPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -290,9 +312,14 @@ const getAuthenticatedPermissions = () => {
     ["plugin::users-permissions.user"],
     restrictedUser
   );
+  let noDeleteUploadPermissions = combineActionWithService(
+    ["plugin::upload.content-api"],
+    noDeleteUpload
+  );
   return [
     ...noRestrictionAuthPermissions,
     ...restrictedUserPermissions,
+    ...noDeleteUploadPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -428,7 +455,8 @@ module.exports = {
       authenticatedRole.id,
       authenticatedRoleActions
     );
-
+    
     const admin = await createAdminUser(adminRole.id);
+    // console.log(admin);
   },
 };
