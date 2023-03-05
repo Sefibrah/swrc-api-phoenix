@@ -106,9 +106,6 @@
       "target": "api::car-group.car-group",
       "inversedBy": "cars"
     },
-    "airConditioner": {
-      "type": "boolean"
-    },
     "discount": {
       "type": "decimal",
       "min": 0

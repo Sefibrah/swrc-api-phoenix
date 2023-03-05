@@ -115,6 +115,7 @@ const getReceptionistPermissions = () => {
       "api::transmission-type.transmission-type",
       "api::type-of-service.type-of-service",
       "api::vehicle-type.vehicle-type",
+      "api::place-of-issue.place-of-issue",
     ],
     restricted
   );
@@ -173,6 +174,7 @@ const getMechanicPermissions = () => {
       "api::car-reservation.car-reservation",
       "api::car-contract.car-contract",
       "api::document-connection.document-connection",
+      "api::place-of-issue.place-of-issue",
     ],
     restricted
   );
@@ -226,6 +228,7 @@ const getManagerPermissions = () => {
       "api::guest.guest",
       "api::individual.individual",
       "api::organisation.organisation",
+      "api::place-of-issue.place-of-issue",
     ],
     noRestrictions
   );
@@ -245,7 +248,7 @@ const getManagerPermissions = () => {
     ...noRestrictionPermissions,
     ...noRestrictionAuthPermissions,
     ...restrictedUserPermissions,
-    ...noLimitsUpload,
+    ...noLimitUploadPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -274,6 +277,7 @@ const getAdminPermissions = () => {
       "api::guest.guest",
       "api::individual.individual",
       "api::organisation.organisation",
+      "api::place-of-issue.place-of-issue",
     ],
     noRestrictions
   );
@@ -455,7 +459,7 @@ module.exports = {
       authenticatedRole.id,
       authenticatedRoleActions
     );
-    
+
     const admin = await createAdminUser(adminRole.id);
     // console.log(admin);
   },
