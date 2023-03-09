@@ -50,7 +50,7 @@
       "default": true,
       "required": false
     },
-    "registrationDate": {
+    "registeredUntil": {
       "type": "datetime",
       "required": false
     },
