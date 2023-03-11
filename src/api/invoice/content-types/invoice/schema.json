@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "invoices",
+  "info": {
+    "singularName": "invoice",
+    "pluralName": "invoices",
+    "displayName": "Invoice"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "carContract": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::car-contract.car-contract"
+    },
+    "invoiceNumber": {
+      "type": "string"
+    },
+    "fiscalNumber": {
+      "type": "integer"
+    },
+    "placeOfIssue": {
+      "type": "string"
+    },
+    "dateOfIssue": {
+      "type": "datetime"
+    },
+    "dateOfDelivery": {
+      "type": "datetime"
+    }
+  }
+}

@@ -229,6 +229,7 @@ const getManagerPermissions = () => {
       "api::individual.individual",
       "api::organisation.organisation",
       "api::place-of-issue.place-of-issue",
+      "api::invoice.invoice",
     ],
     noRestrictions
   );
@@ -278,6 +279,7 @@ const getAdminPermissions = () => {
       "api::individual.individual",
       "api::organisation.organisation",
       "api::place-of-issue.place-of-issue",
+      "api::invoice.invoice",
     ],
     noRestrictions
   );
