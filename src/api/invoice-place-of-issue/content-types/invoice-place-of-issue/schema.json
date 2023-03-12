@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "invoice_place_of_issues",
+  "info": {
+    "singularName": "invoice-place-of-issue",
+    "pluralName": "invoice-place-of-issues",
+    "displayName": "Invoice Place of Issue"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    }
+  }
+}
