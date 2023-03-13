@@ -1,4 +1,4 @@
-"use strict";(self.webpackChunkstrapi=self.webpackChunkstrapi||[]).push([[4121],{11199:(We,S,t)=>{t.r(S),t.d(S,{default:()=>ge});var e=t(67294),s=t(68547),W=t(87751),B=t(49656),U=t(97132),F=t(17034),X=t(67838),j=t(36989),J=t(49066),Q=t(89722),M=t(11047),Y=t(7681),A=t(12028),x=t(41451),q=t(11057),_=t(49386),ee=t(63985),$=t(47144),d=t(18374),te=t(550),g=t(75515),H=t(29728),ne=t(63237),b=t(45697),P=t(71893),K=t(41580);const y=P.default.div`
+"use strict";(self.webpackChunkstrapi=self.webpackChunkstrapi||[]).push([[4121],{11199:(We,S,t)=>{t.r(S),t.d(S,{default:()=>ge});var e=t(67294),s=t(68547),W=t(87751),B=t(49656),U=t(97132),F=t(17034),X=t(67838),j=t(36989),J=t(49066),Q=t(89722),M=t(11047),Y=t(7681),A=t(12028),x=t(41451),q=t(11057),_=t(49386),ee=t(63985),$=t(47144),d=t(18374),te=t(550),g=t(75515),H=t(29728),ne=t(63237),b=t(45697),P=t(27821),K=t(41580);const y=P.default.div`
   background: ${({theme:l})=>l.colors.danger500};
   border: none;
   border-radius: 16px;

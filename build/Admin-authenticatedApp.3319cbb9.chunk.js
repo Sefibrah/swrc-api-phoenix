@@ -1,4 +1,4 @@
-"use strict";(self.webpackChunkstrapi=self.webpackChunkstrapi||[]).push([[801],{93858:(z,C,t)=>{t.r(C),t.d(C,{default:()=>Bt});var e=t(67294),i=t(68547),I=t(23724),f=t(27361),Q=t.n(f);const x=JSON.parse('{"i8":"4.7.0-beta.0"}');var y=t(48474),d=t(49656),A=t(37424),M=t(99168),B=t(61080),Y=t(38914),K=t.n(Y),V=t(64729),T=t(71893),Le=t(45697),r=t.n(Le),U=t(97132),Oe=t(44034),ie=t(25896),v=t(11047),L=t(41580),J=t(7681),De=t(12028),re=t(29728),be=t(70968);const Be=(0,T.default)(v.k)`
+"use strict";(self.webpackChunkstrapi=self.webpackChunkstrapi||[]).push([[801],{93858:(z,C,t)=>{t.r(C),t.d(C,{default:()=>Bt});var e=t(67294),i=t(68547),I=t(23724),f=t(27361),Q=t.n(f);const x=JSON.parse('{"i8":"4.7.0-beta.0"}');var y=t(48474),d=t(49656),A=t(37424),M=t(99168),B=t(61080),Y=t(38914),K=t.n(Y),V=t(64729),T=t(27821),Le=t(45697),r=t.n(Le),U=t(97132),Oe=t(44034),ie=t(25896),v=t(11047),L=t(41580),J=t(7681),De=t(12028),re=t(29728),be=t(70968);const Be=(0,T.default)(v.k)`
   position: fixed;
   z-index: 4;
   inset: 0;
