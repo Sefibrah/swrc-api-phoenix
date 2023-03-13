@@ -1,4 +1,4 @@
-"use strict";(self.webpackChunkstrapi=self.webpackChunkstrapi||[]).push([[5516],{82679:(D,M,n)=>{n.r(M),n.d(M,{MarketPlacePage:()=>Pe,default:()=>Mt});var e=n(67294),f=n(97132),x=n(15482),j=n(63852),u=n(68547),N=n(17034),q=n(49066),A=n(185),Te=n(49123),g=n(41580),Se=n(14087),y=n(75515),k=n(11047),we=n(82777),L=n(60633),O=n(42761),X=n(45697),a=n.n(X),b=n(52624),Ie=n(86031),w=n(71893);const _=w.default.div`
+"use strict";(self.webpackChunkstrapi=self.webpackChunkstrapi||[]).push([[5516],{82679:(D,M,n)=>{n.r(M),n.d(M,{MarketPlacePage:()=>Pe,default:()=>Mt});var e=n(67294),f=n(97132),x=n(15482),j=n(63852),u=n(68547),N=n(17034),q=n(49066),A=n(185),Te=n(49123),g=n(41580),Se=n(14087),y=n(75515),k=n(11047),we=n(82777),L=n(60633),O=n(42761),X=n(45697),a=n.n(X),b=n(52624),Ie=n(86031),w=n(27821);const _=w.default.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   grid-gap: ${({theme:t})=>t.spaces[4]};
