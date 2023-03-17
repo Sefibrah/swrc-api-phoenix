@@ -7,7 +7,7 @@ module.exports = (config, { strapi }) => {
 
     console.log(host);
     console.log(subdomain);
-    console.log(prefix);
+    console.log(envPrefix);
     if (
       host != "https://swrcapi.com" &&
       envPrefix.toLowerCase() != "localhost:1337" &&
