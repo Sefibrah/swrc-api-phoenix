@@ -3,7 +3,7 @@ module.exports = (config, { strapi }) => {
 
     const host = ctx.request.header.host;
     const subdomain = host.split(".")[0];
-    const envPrefix = subdomain.toString().toUpperCase() || 'DATABASE';
+    const envPrefix = `${subdomain.toString().toUpperCase()}_DATABASE` || 'DATABASE';
 
     console.log(host);
     console.log(subdomain);
