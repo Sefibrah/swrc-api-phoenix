@@ -2,10 +2,13 @@ module.exports = (config, { strapi }) => {
   return async (ctx, next) => {
     const host = ctx.request.header.host;
     const subdomain = host.split(".")[0];
-
     const prefix = subdomain.toString().toUpperCase();
 
+    console.log(host);
+    console.log(subdomain);
+    console.log(prefix);
     if (
+      host != "https://swrcapi.com" &&
       prefix.toLowerCase() != "localhost:1337" &&
       process.env.NODE_ENV === "production"
     ) {
