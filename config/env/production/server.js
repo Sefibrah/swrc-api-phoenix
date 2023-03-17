@@ -1,3 +1,3 @@
 module.exports = ({ env }) => ({
-  url: env("https://swrcapi.com"),
+  url: env("https://gulftravelbosnia.swrcapi.com"),
 });
