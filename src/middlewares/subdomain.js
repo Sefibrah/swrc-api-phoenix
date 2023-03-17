@@ -1,28 +1,36 @@
 module.exports = (config, { strapi }) => {
   return async (ctx, next) => {
+
     const host = ctx.request.header.host;
     const subdomain = host.split(".")[0];
-    const prefix = subdomain.toString().toUpperCase();
+    const envPrefix = subdomain.toString().toUpperCase() || 'DATABASE';
 
     console.log(host);
     console.log(subdomain);
     console.log(prefix);
     if (
       host != "https://swrcapi.com" &&
-      prefix.toLowerCase() != "localhost:1337" &&
+      envPrefix.toLowerCase() != "localhost:1337" &&
       process.env.NODE_ENV === "production"
     ) {
-      const newConfig = {
-        database: process.env[`${prefix}_DATABASE_NAME`],
-        user: process.env[`${prefix}_DATABASE_USERNAME`],
-        password: process.env[`${prefix}_DATABASE_PASSWORD`],
+      const dbUser = process.env[`${envPrefix}_USER`];
+      const dbPassword = process.env[`${envPrefix}_PASSWORD`];
+      const dbName = process.env[`${envPrefix}_NAME`];
+
+      const settings = {
+        client: 'mysql',
+        connection: {
+          host: process.env.HOST,
+          port: process.env.PORT || 3306,
+          database: dbName,
+          user: dbUser,
+          password: dbPassword,
+          charset: 'utf8',
+          collation: 'utf8_general_ci',
+        },
       };
 
-      const currentConfig = strapi.db.config.connection.connection;
-      strapi.db.config.connection.connection = {
-        ...currentConfig,
-        ...newConfig,
-      };
+      await strapi.config.functions.database.set(settings);
     }
 
     // Call the next middleware in the chain
