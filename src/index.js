@@ -1,6 +1,7 @@
 "use strict";
 const bcrypt = require("bcryptjs");
 const _ = require("lodash");
+require('dotenv').config({ path: require('find-config')('.env') }) 
 
 // create dashboard strapi user
 // https://market.strapi.io/plugins/strapi-plugin-init-admin-user
