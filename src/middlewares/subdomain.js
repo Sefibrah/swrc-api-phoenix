@@ -7,7 +7,7 @@ module.exports = (config, { strapi }) => {
 
     if (
       prefix.toLowerCase() != "localhost:1337" &&
-      process.env.NODE_ENV === "Production"
+      process.env.NODE_ENV === "production"
     ) {
       const newConfig = {
         database: process.env[`${prefix}_DATABASE_NAME`],
