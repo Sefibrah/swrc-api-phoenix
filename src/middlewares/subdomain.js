@@ -5,7 +5,10 @@ module.exports = (config, { strapi }) => {
 
     const prefix = subdomain.toString().toUpperCase();
 
-    if (prefix.toLowerCase() != "localhost:1337") {
+    if (
+      prefix.toLowerCase() != "localhost:1337" &&
+      process.env.NODE_ENV === "Production"
+    ) {
       const newConfig = {
         database: process.env[`${prefix}_DATABASE_NAME`],
         user: process.env[`${prefix}_DATABASE_USERNAME`],
