@@ -5,6 +5,10 @@ module.exports = (config, { strapi }) => {
     const envPrefix =
       `${subdomain.toString().toUpperCase()}_DATABASE` || "DATABASE";
 
+    console.log(host);
+    console.log(subdomain);
+    console.log(envPrefix);
+
     const dbUser = process.env[`${envPrefix}_USER`];
     const dbPassword = process.env[`${envPrefix}_PASSWORD`];
     const dbName = process.env[`${envPrefix}_NAME`];
@@ -14,6 +18,8 @@ module.exports = (config, { strapi }) => {
       user: dbUser,
       password: dbPassword,
     };
+
+    console.log(settings);
 
     strapi.db.config.connection.connection = {
       ...strapi.db.config.connection.connection,
