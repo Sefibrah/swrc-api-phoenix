@@ -6,19 +6,16 @@ module.exports = (config, { strapi }) => {
     const prefix = subdomain.toString().toUpperCase();
 
     if (prefix.toLowerCase() != "localhost:1337") {
-      const dbConfig = {
-        host: process.env.DB_HOST,
-        port: process.env.DB_PORT,
-        database: process.env[`${prefix}_DB_NAME`],
-        user: process.env[`${prefix}_DB_USERNAME`],
-        password: process.env[`${prefix}_DB_PASSWORD`],
-        ssl: false,
+      const newConfig = {
+        database: process.env[`${prefix}_DATABASE_NAME`],
+        user: process.env[`${prefix}_DATABASE_USERNAME`],
+        password: process.env[`${prefix}_DATABASE_PASSWORD`],
       };
 
       const currentConfig = strapi.db.config.connection.connection;
       strapi.db.config.connection.connection = {
         ...currentConfig,
-        ...dbConfig,
+        ...newConfig,
       };
     }
 
