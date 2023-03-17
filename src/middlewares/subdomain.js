@@ -6,7 +6,18 @@ module.exports = (config, { strapi }) => {
 
     // modify the default connection object based on the subdomain
     if (subdomain === "gulftravelbosnia") {
-      connections.default = connections.gulftravelbosnia;
+      connections.default = {
+        connector: "bookshelf",
+        settings: {
+          client: "mysql",
+          host: env("DATABASE_HOST", "localhost"),
+          port: env.int("DATABASE_PORT", 3306),
+          database: env("GULFTRAVELBOSNIA_DATABASE_NAME", "strapi"),
+          username: env("GULFTRAVELBOSNIA_DATABASE_USERNAME", "strapi"),
+          password: env("GULFTRAVELBOSNIA_DATABASE_PASSWORD", "strapi"),
+        },
+        options: {},
+      };
     }
     await next();
   };
