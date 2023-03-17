@@ -1,58 +1,18 @@
 module.exports = (config, { strapi }) => {
   return async (ctx, next) => {
-    const host = ctx.request.header.host;
-    const subdomain = host.split(".")[0];
-    // const envPrefix = `${
-    //   host.split(".").length === 1
-    //     ? "DATABASE"
-    //     : subdomain.toString().toUpperCase() + "_DATABASE"
-    // }`;
+    const subdomain = ctx.request.header.host.split(".")[0]; // get the subdomain from the request header
 
-    // strapi.log.debug(host);
-    // strapi.log.debug(subdomain);
-    // strapi.log.debug(envPrefix);
-
-    // const dbUser = process.env[`${envPrefix}_USERNAME`];
-    // const dbPassword = process.env[`${envPrefix}_PASSWORD`];
-    // const dbName = process.env[`${envPrefix}_NAME`];
-
-    // strapi.log.debug(dbUser);
-    // strapi.log.debug(dbPassword);
-    // strapi.log.debug(dbName);
-
-    if (subdomain === 'gulftravelbosnia') {
-      strapi.connections.default = strapi.connections.gulftravelbosnia;
+    console.log(strapi.config.database);
+    if (
+      strapi.config.database?.connections != null &&
+      strapi.config.database?.connections[subdomain]
+    ) {
+      // if the database connection exists, set it as the current connection
+      strapi.config.currentEnvironment.database = subdomain;
+    } else {
+      // if the database connection does not exist, log an error
+      console.error(`Database connection ${subdomain} does not exist`);
     }
-
-    // const connections = strapi.config.get("database.connections", {});
-    // const defaultConnection = strapi.config.get(
-    //   "database.defaultConnection",
-    //   "default"
-    // );
-    // const defaultSettings = connections[defaultConnection];
-    // const dbSettings = Object.assign({}, defaultSettings, {
-    //   database: dbName,
-    //   user: dbUser,
-    //   password: dbPassword,
-    // });
-    // connections[defaultConnection] = dbSettings;
-    // strapi.config.set({ database: { connections } });
-
-    // const dbSettings = {
-    //   database: dbName,
-    //   user: dbUser,
-    //   password: dbPassword,
-    // };
-
-    // strapi.db.config.connection.connection = {
-    //   ...strapi.db.config.connection.connection,
-    //   ...dbSettings,
-    // };
-
-    // console.log(strapi.db.config.connection)
-    // strapi.log.debug(strapi.db.config.connection);
-
-    // Call the next middleware in the chain
     await next();
   };
 };
