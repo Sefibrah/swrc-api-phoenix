@@ -13,6 +13,7 @@
   "dependencies": {
     "@strapi/plugin-graphql": "4.7.0-beta.0",
     "@strapi/plugin-i18n": "4.7.0-beta.0",
+    "@strapi/plugin-sentry": "^4.8.2",
     "@strapi/plugin-users-permissions": "4.7.0-beta.0",
     "@strapi/provider-upload-cloudinary": "4.7.0-beta.0",
     "@strapi/strapi": "4.7.0-beta.0",
