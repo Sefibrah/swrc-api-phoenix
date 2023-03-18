@@ -14,6 +14,7 @@ module.exports = [
       },
     },
   },
+  "global::subdomain",
   "strapi::cors",
   "strapi::poweredBy",
   "strapi::logger",
@@ -23,5 +24,4 @@ module.exports = [
   "strapi::favicon",
   "strapi::public",
   "global::register",
-  "global::subdomain",
 ];

@@ -4,11 +4,11 @@ module.exports = [
   "strapi::cors",
   "strapi::poweredBy",
   "strapi::logger",
+  "global::subdomain",
   "strapi::query",
   "strapi::body",
   "strapi::session",
   "strapi::favicon",
   "strapi::public",
   "global::register",
-  "global::subdomain",
 ];
