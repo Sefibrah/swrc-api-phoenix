@@ -1,10 +1,10 @@
 module.exports = [
+  "global::subdomain",
   "strapi::errors",
   "strapi::security",
   "strapi::cors",
   "strapi::poweredBy",
   "strapi::logger",
-  "global::subdomain",
   "strapi::query",
   "strapi::body",
   "strapi::session",
