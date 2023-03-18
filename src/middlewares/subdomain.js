@@ -21,20 +21,20 @@ module.exports = (config, { strapi }) => {
     strapi
       .plugin("sentry")
       .service("sentry")
-      .sendError("SUBDOMAIN", (scope, sentryInstance) => {
+      .sendError(subdomain, (scope, sentryInstance) => {
         // Customize the scope here
-        scope.setExtra(
-          "connections",
-          JSON.stringify(strapi.db.config.connections)
-        );
-        scope.setExtra(
-          "connections.gulftravelbosnia",
-          JSON.stringify(connections.gulftravelbosnia)
-        );
-        scope.setExtra(
-          "strapi.db.config.connections.default",
-          JSON.stringify(strapi.db.config.connections.default)
-        );
+        // scope.setExtra(
+        //   "connections",
+        //   JSON.stringify(strapi.db.config.connections)
+        // );
+        // scope.setExtra(
+        //   "connections.gulftravelbosnia",
+        //   JSON.stringify(connections.gulftravelbosnia)
+        // );
+        // scope.setExtra(
+        //   "strapi.db.config.connections.default",
+        //   JSON.stringify(strapi.db.config.connections.default)
+        // );
         scope.setTag("my_custom_tag", "Tag value");
       });
     await next();
