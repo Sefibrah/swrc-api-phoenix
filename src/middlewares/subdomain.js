@@ -6,7 +6,7 @@ module.exports = (config, { strapi }) => {
 
     // modify the default connection object based on the subdomain
     if (subdomain === "gulftravelbosnia") {
-      connections.default = connections.gulftravelbosnia;
+      strapi.db.config.connections.default = connections.gulftravelbosnia;
     }
     await next();
   };
