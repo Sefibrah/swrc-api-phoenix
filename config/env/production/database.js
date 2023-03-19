@@ -13,17 +13,5 @@ module.exports = ({ env }) => ({
       },
       options: {},
     },
-    gulftravelbosnia: {
-      connector: "bookshelf",
-      settings: {
-        client: "mysql",
-        host: process.env.DATABASE_HOST,
-        port: process.env.DATABASE_PORT,
-        database: process.env.GULFTRAVELBOSNIA_DATABASE_NAME,
-        username: process.env.GULFTRAVELBOSNIA_DATABASE_USERNAME,
-        password: process.env.GULFTRAVELBOSNIA_DATABASE_PASSWORD,
-      },
-      options: {},
-    },
   },
 });

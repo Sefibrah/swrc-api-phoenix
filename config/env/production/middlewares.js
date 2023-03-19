@@ -1,5 +1,4 @@
 module.exports = [
-  "global::subdomain",
   "strapi::errors",
   {
     name: "strapi::security",
