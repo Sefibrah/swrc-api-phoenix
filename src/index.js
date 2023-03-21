@@ -37,6 +37,7 @@ const noRestrictionsUser = [
 const restrictedUser = ["me"];
 const noLimitsUpload = ["destroy", "find", "findOne", "upload"];
 const noDeleteUpload = ["find", "findOne", "upload"];
+const restrictedUserGroup = ["find", "findOne", "update"];
 
 const hashPassword = (password) => {
   return new Promise((resolve, reject) => {
@@ -146,12 +147,17 @@ const getReceptionistPermissions = () => {
     ["plugin::users-permissions.user"],
     restrictedUser
   );
+  let restrictedUserGroupPermissions = combineActionWithService(
+    ["plugin::multi-tenant.user-group"],
+    restrictedUserGroup
+  );
   return [
     ...restrictedPermissions,
     ...noDeletePermissions,
     ...noRestrictionsAuthPermissions,
     ...restrictedUserPermissions,
     ...noDeleteUploadPermissions,
+    ...restrictedUserGroupPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -194,12 +200,17 @@ const getMechanicPermissions = () => {
     ["plugin::upload.content-api"],
     noDeleteUpload
   );
+  let restrictedUserGroupPermissions = combineActionWithService(
+    ["plugin::multi-tenant.user-group"],
+    restrictedUserGroup
+  );
   return [
     ...restrictedPermissions,
     ...noDeletePermissions,
     ...noRestrictionsAuthPermissions,
     ...restrictedUserPermissions,
     ...noDeleteUploadPermissions,
+    ...restrictedUserGroupPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -246,11 +257,16 @@ const getManagerPermissions = () => {
     ["plugin::upload.content-api"],
     noLimitsUpload
   );
+  let restrictedUserGroupPermissions = combineActionWithService(
+    ["plugin::multi-tenant.user-group"],
+    restrictedUserGroup
+  );
   return [
     ...noRestrictionPermissions,
     ...noRestrictionAuthPermissions,
     ...restrictedUserPermissions,
     ...noLimitUploadPermissions,
+    ...restrictedUserGroupPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -301,12 +317,17 @@ const getAdminPermissions = () => {
     ["plugin::upload.content-api"],
     noLimitsUpload
   );
+  let restrictedUserGroupPermissions = combineActionWithService(
+    ["plugin::multi-tenant.user-group"],
+    restrictedUserGroup
+  );
   return [
     ...noRestrictionPermissions,
     ...noRestrictionAuthPermissions,
     ...noRestrictionRolePermissions,
     ...noRestrictionUserPermissions,
     ...noLimitUploadPermissions,
+    ...restrictedUserGroupPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -324,10 +345,15 @@ const getAuthenticatedPermissions = () => {
     ["plugin::upload.content-api"],
     noDeleteUpload
   );
+  let restrictedUserGroupPermissions = combineActionWithService(
+    ["plugin::multi-tenant.user-group"],
+    restrictedUserGroup
+  );
   return [
     ...noRestrictionAuthPermissions,
     ...restrictedUserPermissions,
     ...noDeleteUploadPermissions,
+    ...restrictedUserGroupPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -341,9 +367,14 @@ const getPublicPermissions = () => {
     ["plugin::users-permissions.user"],
     restrictedUser
   );
+  let restrictedUserGroupPermissions = combineActionWithService(
+    ["plugin::multi-tenant.user-group"],
+    restrictedUserGroup
+  );
   return [
     ...restrictedAuthPermissions,
     ...restrictedUserPermissions,
+    ...restrictedUserGroupPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -407,7 +438,155 @@ module.exports = {
    *
    * This gives you an opportunity to extend code.
    */
-  register({ strapi }) {},
+  register({ strapi }) {
+    strapi.contentType("plugin::multi-tenant.user-group").attributes = {
+      ...strapi.contentType("plugin::multi-tenant.user-group").attributes,
+      cars: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::car.car",
+        mappedBy: "userGroup",
+      },
+      carContracts: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::car-contract.car-contract",
+        mappedBy: "userGroup",
+      },
+      carGroups: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::car-group.car-group",
+        mappedBy: "userGroup",
+      },
+      carMaintenances: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::car-maintenance.car-maintenance",
+        mappedBy: "userGroup",
+      },
+      carReservations: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::car-reservation.car-reservation",
+        mappedBy: "userGroup",
+      },
+      colors: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::color.color",
+        mappedBy: "userGroup",
+      },
+      contacts: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::contact.contact",
+        mappedBy: "userGroup",
+      },
+      customers: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::customer.customer",
+        mappedBy: "userGroup",
+      },
+      documents: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::document.document",
+        mappedBy: "userGroup",
+      },
+      documentConnections: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::document-connection.document-connection",
+        mappedBy: "userGroup",
+      },
+      flightNumbers: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::flight-number.flight-number",
+        mappedBy: "userGroup",
+      },
+      fuelTypes: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::fuel-type.fuel-type",
+        mappedBy: "userGroup",
+      },
+      guests: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::guest.guest",
+        mappedBy: "userGroup",
+      },
+      individuals: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::individual.individual",
+        mappedBy: "userGroup",
+      },
+      invoices: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::invoice.invoice",
+        mappedBy: "userGroup",
+      },
+      invoicePlaceOfIssues: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::invoice-place-of-issue.invoice-place-of-issue",
+        mappedBy: "userGroup",
+      },
+      locations: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::location.location",
+        mappedBy: "userGroup",
+      },
+      organisations: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::organisation.organisation",
+        mappedBy: "userGroup",
+      },
+      placeOfIssues: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::place-of-issue.place-of-issue",
+        mappedBy: "userGroup",
+      },
+      serviceLocations: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::service-location.service-location",
+        mappedBy: "userGroup",
+      },
+      statuses: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::status.status",
+        mappedBy: "userGroup",
+      },
+      transmissionTypes: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::transmission-type.transmission-type",
+        mappedBy: "userGroup",
+      },
+      typeOfServices: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::type-of-service.type-of-service",
+        mappedBy: "userGroup",
+      },
+      vehicleTypes: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::vehicle-type.vehicle-type",
+        mappedBy: "userGroup",
+      },
+    };
+  },
 
   /**
    * An asynchronous bootstrap function that runs before
@@ -465,6 +644,17 @@ module.exports = {
     );
 
     const admin = await createAdminUser(adminRole.id);
+
+    // const loggedUserUserGroup = await strapi
+    // .query("plugin::multi-tenant.user-group")
+    // .findOne({
+    //   where: {
+    //     users: {
+    //       id: { $in: ctx.state.user.id },
+    //     },
+    //   },
+    // });
+    // DODAJ PERMISSIONE ZA USERGROUPS!!!!
     // console.log(admin);
   },
 };

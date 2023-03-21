@@ -1,9 +1,12 @@
 module.exports = ({ env }) => ({
   // ...
+  "multi-tenant": {
+    enabled: true,
+  },
   sentry: {
     enabled: true,
     config: {
-      dsn: env('SENTRY_DSN'),
+      dsn: env("SENTRY_DSN"),
       sendMetadata: true,
     },
   },

@@ -80,6 +80,12 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::document-connection.document-connection"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "carContracts"
     }
   }
 }

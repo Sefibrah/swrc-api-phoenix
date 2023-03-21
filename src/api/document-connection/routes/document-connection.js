@@ -1,9 +1,47 @@
-'use strict';
+"use strict";
 
 /**
  * document-connection router
  */
 
-const { createCoreRouter } = require('@strapi/strapi').factories;
+const sameUserGroupPolicyConfig = {
+  name: "plugin::multi-tenant.is-same-user-group",
+  config: {
+    contentType: "api::document-connection.document-connection",
+  },
+};
 
-module.exports = createCoreRouter('api::document-connection.document-connection');
+const { createCoreRouter } = require("@strapi/strapi").factories;
+
+module.exports = createCoreRouter(
+  "api::document-connection.document-connection",
+  {
+    config: {
+      update: {
+        policies: [sameUserGroupPolicyConfig],
+      },
+      delete: {
+        policies: [sameUserGroupPolicyConfig],
+      },
+      findOne: {
+        policies: [sameUserGroupPolicyConfig],
+      },
+      find: {
+        middlewares: [
+          {
+            name: "plugin::multi-tenant.find-same-user-group",
+            config: {},
+          },
+        ],
+      },
+      create: {
+        middlewares: [
+          {
+            name: "plugin::multi-tenant.add-same-user-group",
+            config: {},
+          },
+        ],
+      },
+    },
+  }
+);

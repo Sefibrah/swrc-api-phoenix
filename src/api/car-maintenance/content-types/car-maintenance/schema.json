@@ -36,6 +36,12 @@
     },
     "author": {
       "type": "string"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "carMaintenances"
     }
   }
 }

@@ -8,7 +8,8 @@
     "prod": "strapi production",
     "start": "strapi start",
     "build": "strapi build",
-    "strapi": "strapi"
+    "strapi": "strapi",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@strapi/plugin-graphql": "4.7.0-beta.0",
@@ -27,7 +28,8 @@
     "pg": "^8.8.0",
     "pg-connection-string": "^2.5.0",
     "postinstall-postinstall": "^2.1.0",
-    "strapi-plugin-init-admin-user": "^0.2.1"
+    "strapi-plugin-init-admin-user": "^0.2.1",
+    "strapi-plugin-multi-tenant": "^1.0.4"
   },
   "author": {
     "name": "A Strapi developer"

@@ -4,15 +4,22 @@
   "info": {
     "singularName": "place-of-issue",
     "pluralName": "place-of-issues",
-    "displayName": "Place of Issue"
+    "displayName": "Place of Issue",
+    "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
     "name": {
       "type": "string"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "placeOfIssues"
     }
   }
 }

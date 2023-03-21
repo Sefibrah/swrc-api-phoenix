@@ -26,6 +26,12 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::document.document"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "documentConnections"
     }
   }
 }

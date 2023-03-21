@@ -29,6 +29,12 @@
       "relation": "manyToOne",
       "target": "api::individual.individual",
       "inversedBy": "documents"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "documents"
     }
   }
 }

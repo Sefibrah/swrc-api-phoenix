@@ -62,6 +62,16 @@ module.exports = () => {
         name,
         "USER"
       );
+
+      // const loggedUserUserGroup = await strapi
+      //   .query("plugin::multi-tenant.user-group")
+      //   .findOne({
+      //     where: {
+      //       users: {
+      //         id: { $in: ctx.state.user.id },
+      //       },
+      //     },
+      //   });
       const updatedIndividual = await updateIndividual(
         individual.id,
         customer.id
