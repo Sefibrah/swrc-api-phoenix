@@ -25,10 +25,19 @@ module.exports = (plugin) => {
   plugin.controllers.user.find = async (ctx) => {
     const users = await strapi.entityService.findMany(
       "plugin::users-permissions.user",
-      { ...ctx.params, populate: ["role"] }
+      { ...ctx.params, populate: ["role"], ...ctx.query }
     );
 
     ctx.body = users.map((user) => sanitizeOutput(user));
+  };
+
+  plugin.controllers.role.find = async (ctx) => {
+    const roles = await strapi.entityService.findMany(
+      "plugin::users-permissions.role",
+      { ...ctx.params, ...ctx.query }
+    );
+
+    ctx.body = roles.map((role) => sanitizeOutput(role));
   };
 
   return plugin;

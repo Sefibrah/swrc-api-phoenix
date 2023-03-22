@@ -439,6 +439,15 @@ module.exports = {
    * This gives you an opportunity to extend code.
    */
   register({ strapi }) {
+    strapi.contentType("plugin::users-permissions.user").attributes = {
+      ...strapi.contentType("plugin::users-permissions.user").attributes,
+      userGroup: {
+        type: "relation",
+        relation: "manyToOne",
+        target: "plugin::multi-tenant.user-group",
+        inversedBy: "users",
+      },
+    };
     strapi.contentType("plugin::multi-tenant.user-group").attributes = {
       ...strapi.contentType("plugin::multi-tenant.user-group").attributes,
       cars: {
@@ -585,6 +594,12 @@ module.exports = {
         target: "api::vehicle-type.vehicle-type",
         mappedBy: "userGroup",
       },
+      users: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "plugin::users-permissions.user",
+        mappedBy: "userGroup",
+      },
     };
   },
 
@@ -644,17 +659,5 @@ module.exports = {
     );
 
     const admin = await createAdminUser(adminRole.id);
-
-    // const loggedUserUserGroup = await strapi
-    // .query("plugin::multi-tenant.user-group")
-    // .findOne({
-    //   where: {
-    //     users: {
-    //       id: { $in: ctx.state.user.id },
-    //     },
-    //   },
-    // });
-    // DODAJ PERMISSIONE ZA USERGROUPS!!!!
-    // console.log(admin);
   },
 };

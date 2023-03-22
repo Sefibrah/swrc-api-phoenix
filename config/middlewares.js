@@ -9,5 +9,7 @@ module.exports = [
   "strapi::session",
   "strapi::favicon",
   "strapi::public",
+  "global::users-find",
+  "global::users-create",
   "global::register",
 ];
