@@ -5,7 +5,7 @@ module.exports = (config, { strapi }) => {
     if (
       ctx.request.method === "POST" &&
       ctx.request.header?.authorization != null &&
-      ctx.request.url === "/api/users"
+      ctx.request.url.includes("/api/users")
     ) {
       const jwt = ctx.request.header.authorization.replace("Bearer ", "");
       const decoded = jwt_decode(jwt);

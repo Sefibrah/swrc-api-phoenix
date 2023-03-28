@@ -5,9 +5,9 @@ module.exports = () => {
     if (
       ctx.request.method === "GET" &&
       ctx.request.header?.authorization != null &&
-      ctx.request.url === "/api/users"
+      ctx.request.url.includes("/api/users") &&
+      !ctx.request.url.includes("/api/users-permissions")
     ) {
-      console.log("wtf why is he here", ctx);
       const jwt = ctx.request.header.authorization.replace("Bearer ", "");
       const decoded = jwt_decode(jwt);
       const userId = decoded?.id;
