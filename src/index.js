@@ -441,6 +441,19 @@ module.exports = {
   register({ strapi }) {
     strapi.contentType("plugin::users-permissions.user").attributes = {
       ...strapi.contentType("plugin::users-permissions.user").attributes,
+      username: {
+        type: "string",
+        minLength: 3,
+        unique: false,
+        configurable: false,
+        required: true,
+      },
+      email: {
+        type: "string",
+        unique: false,
+        configurable: false,
+        required: true,
+      },
       userGroup: {
         type: "relation",
         relation: "manyToOne",

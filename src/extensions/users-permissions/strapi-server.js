@@ -1,3 +1,14 @@
+const jwt_decode = require("jwt-decode");
+const _ = require('lodash');
+const {
+  validateCreateUserBody,
+  validateUpdateUserBody,
+} = require("@strapi/plugin-users-permissions/server/controllers/validation/user");
+
+const utils = require("@strapi/utils");
+const { getService } = require("@strapi/plugin-users-permissions/server/utils");
+const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
+
 module.exports = (plugin) => {
   const sanitizeOutput = (user) => {
     const {
@@ -38,6 +49,157 @@ module.exports = (plugin) => {
     );
 
     ctx.body = roles.map((role) => sanitizeOutput(role));
+  };
+
+  plugin.controllers.user.update = async (ctx) => {
+    const token = ctx.request.header.authorization.replace("Bearer ", "");
+    const decoded = jwt_decode(token);
+    const userId = decoded?.id;
+
+    const advancedConfigs = await strapi
+      .store({ type: "plugin", name: "users-permissions", key: "advanced" })
+      .get();
+
+    const { id } = ctx.params;
+    const { email, username, password } = ctx.request.body;
+
+    const loggedUserUserGroup = await strapi
+      .query("plugin::multi-tenant.user-group")
+      .findOne({
+        where: {
+          users: {
+            id: { $in: userId },
+          },
+        },
+      });
+
+    const user = await getService("user").fetch(id);
+    if (!user) {
+      throw new NotFoundError(`User not found`);
+    }
+
+    await validateUpdateUserBody(ctx.request.body);
+
+    if (
+      user.provider === "local" &&
+      _.has(ctx.request.body, "password") &&
+      !password
+    ) {
+      throw new ValidationError("password.notNull");
+    }
+
+    if (_.has(ctx.request.body, "username")) {
+      const userWithSameUsername = await strapi
+        .query("plugin::users-permissions.user")
+        .findOne({ where: { username, userGroup: loggedUserUserGroup.id } });
+
+      if (
+        userWithSameUsername &&
+        _.toString(userWithSameUsername.id) !== _.toString(id)
+      ) {
+        throw new ApplicationError("Username already taken");
+      }
+    }
+
+    if (_.has(ctx.request.body, "email") && advancedConfigs.unique_email) {
+      const userWithSameEmail = await strapi
+        .query("plugin::users-permissions.user")
+        .findOne({
+          where: {
+            email: email.toLowerCase(),
+            userGroup: loggedUserUserGroup.id,
+          },
+        });
+
+      if (
+        userWithSameEmail &&
+        _.toString(userWithSameEmail.id) !== _.toString(id)
+      ) {
+        throw new ApplicationError("Email already taken");
+      }
+      ctx.request.body.email = ctx.request.body.email.toLowerCase();
+    }
+
+    const updateData = {
+      ...ctx.request.body,
+    };
+
+    const data = await getService("user").edit(user.id, updateData);
+    const sanitizedData = await sanitizeOutput(data, ctx);
+
+    ctx.send(sanitizedData);
+  };
+
+  plugin.controllers.user.create = async (ctx) => {
+    const token = ctx.request.header.authorization.replace("Bearer ", "");
+    const decoded = jwt_decode(token);
+    const userId = decoded?.id;
+
+    const advanced = await strapi
+      .store({ type: "plugin", name: "users-permissions", key: "advanced" })
+      .get();
+
+    await validateCreateUserBody(ctx.request.body);
+
+    const { email, username, role } = ctx.request.body;
+
+    const loggedUserUserGroup = await strapi
+      .query("plugin::multi-tenant.user-group")
+      .findOne({
+        where: {
+          users: {
+            id: { $in: userId },
+          },
+        },
+      });
+
+    const userWithSameUsername = await strapi
+      .query("plugin::users-permissions.user")
+      .findOne({
+        where: { username, userGroup: loggedUserUserGroup.id },
+      });
+
+    if (userWithSameUsername) {
+      if (!email) throw new ApplicationError("Username already taken");
+    }
+
+    if (advanced.unique_email) {
+      const userWithSameEmail = await strapi
+        .query("plugin::users-permissions.user")
+        .findOne({
+          where: {
+            email: email.toLowerCase(),
+            userGroup: loggedUserUserGroup.id,
+          },
+        });
+
+      if (userWithSameEmail) {
+        throw new ApplicationError("Email already taken");
+      }
+    }
+
+    const user = {
+      ...ctx.request.body,
+      email: email.toLowerCase(),
+      provider: "local",
+    };
+
+    if (!role) {
+      const defaultRole = await strapi
+        .query("plugin::users-permissions.role")
+        .findOne({ where: { type: advanced.default_role } });
+
+      user.role = defaultRole.id;
+    }
+
+    try {
+      const data = await getService("user").add(user);
+      const sanitizedData = await sanitizeOutput(data, ctx);
+
+      ctx.created(sanitizedData);
+    } catch (error) {
+      throw new ApplicationError(error.message);
+    }
   };
 
   return plugin;
