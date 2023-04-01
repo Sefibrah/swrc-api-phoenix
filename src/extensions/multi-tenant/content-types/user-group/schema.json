@@ -43,6 +43,12 @@
       "relation": "oneToMany",
       "target": "api::place-of-issue.place-of-issue",
       "mappedBy": "userGroup"
+    },
+    "cars": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::car.car",
+      "mappedBy": "userGroup"
     }
   }
 }

@@ -7,7 +7,7 @@
   },
   "options": {},
   "attributes": {
-    "min_days": {
+    "minDays": {
       "type": "integer",
       "min": 1,
       "required": true,

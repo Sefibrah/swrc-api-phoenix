@@ -1,17 +1,25 @@
-const createContact = async (email, telephonePrimary, telephoneSecondary) => {
+const createContact = async (
+  email,
+  telephonePrimary,
+  telephoneSecondary,
+  userGroup
+) => {
   return await strapi.entityService.create("api::contact.contact", {
     data: {
       email,
       telephonePrimary,
       telephoneSecondary,
+      userGroup,
     },
   });
 };
-const createIndividual = async (contactId, dateOfBirth) => {
+const createIndividual = async (contactId, dateOfBirth, name, userGroup) => {
   return await strapi.entityService.create("api::individual.individual", {
     data: {
       contact: contactId,
       dateOfBirth,
+      name,
+      userGroup,
     },
   });
 };
@@ -19,63 +27,85 @@ const createIndividual = async (contactId, dateOfBirth) => {
 const createCustomer = async (
   individualId,
   contactId,
-  name,
+  // name,
   type,
+  userGroup,
   isLocal = false
 ) => {
   return await strapi.entityService.create("api::customer.customer", {
     data: {
       individual: individualId,
       contact: contactId,
-      name,
+      // name,
       type,
       isLocal,
+      userGroup,
     },
   });
 };
 const updateIndividual = async (id, customerId) => {
-  return await strapi.entityService.update("api::individual.individual", {
-    id,
+  return await strapi.entityService.update("api::individual.individual", id, {
     data: {
       customer: customerId,
     },
   });
 };
+const updateUser = async (id, userGroup) => {
+  return await strapi.entityService.update(
+    "plugin::users-permissions.user",
+    id,
+    {
+      data: {
+        userGroup,
+      },
+    }
+  );
+};
 
 module.exports = () => {
   return async (ctx, next) => {
     await next();
-    // only if path was register with newsletter param and it was successfull. Then we will put user in the mailing list.
+    let subdomain = ctx.request.header.host.split(".")[0];
+    if (subdomain === "localhost:1337") subdomain = "seferware";
     if (
-      ctx.request.url === "/auth/local/register" &&
+      ctx.request.url.includes("/api/auth/local/register") &&
       ctx.response.status === 200
     ) {
+      const loggedUserUserGroup = await strapi
+        .query("plugin::multi-tenant.user-group")
+        .findOne({
+          where: {
+            name: { $eq: subdomain },
+          },
+        });
+
       const email = ctx.response.body.user.email;
       const telephone = ctx.response.body.user.telephone;
       const dateOfBirth = ctx.response.body.user.dateOfBirth;
-      const name = ctx.response.body.user.name;
-      const contact = await createContact(email, "", telephone);
-      const individual = await createIndividual(contact.id, dateOfBirth);
+      const name = ctx.response.body.user.username;
+
+      const contact = await createContact(
+        email,
+        "",
+        telephone,
+        loggedUserUserGroup.id
+      );
+
+      const individual = await createIndividual(
+        contact.id,
+        dateOfBirth,
+        name,
+        loggedUserUserGroup.id
+      );
       const customer = await createCustomer(
         individual.id,
         contact.id,
-        name,
-        "USER"
+        // name,
+        "USER",
+        loggedUserUserGroup.id
       );
-
-      // const loggedUserUserGroup = await strapi
-      //   .query("plugin::multi-tenant.user-group")
-      //   .findOne({
-      //     where: {
-      //       users: {
-      //         id: { $in: ctx.state.user.id },
-      //       },
-      //     },
-      //   });
-      const updatedIndividual = await updateIndividual(
-        individual.id,
-        customer.id
-      );
+      await updateIndividual(individual.id, customer.id);
+      await updateUser(ctx.response.body.user.id, loggedUserUserGroup.id);
     }
   };
 };

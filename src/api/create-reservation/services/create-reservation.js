@@ -1,6 +1,9 @@
 "use strict";
 const jwt_decode = require("jwt-decode");
 
+const utils = require("@strapi/utils");
+const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
+
 /**
  * create-reservation service
  */
@@ -13,7 +16,8 @@ module.exports = () => ({
     location,
     flightNumber,
     extras,
-    price
+    price,
+    subdomain
   ) => {
     let carReservation = null;
     const extrasComment = extras
@@ -21,6 +25,28 @@ module.exports = () => ({
       .join(", ");
     const comment =
       extrasComment + "\nCijena dodataka nije uključena u ukupnu cijenu najma";
+
+    const loggedUserUserGroup = await strapi
+      .query("plugin::multi-tenant.user-group")
+      .findOne({
+        where: {
+          name: { $eq: subdomain },
+        },
+      });
+
+    const carFromDb = await strapi.query("api::car.car").findOne({
+      where: {
+        userGroup: loggedUserUserGroup.id,
+        id: carId,
+      },
+    });
+
+    // fixme: not working for some weird reason...
+    if (!carFromDb) {
+      throw new NotFoundError("Car not found");
+    }
+
+    const userGroup = loggedUserUserGroup.id;
     if (user?.jwt != null) {
       const decoded = jwt_decode(user.jwt);
       const userId = decoded?.id;
@@ -30,13 +56,13 @@ module.exports = () => ({
           where: { id: { $eq: userId } },
           populate: { customer: { populate: true } },
         });
-      if (userFromDb != null) {
+      if (userFromDb != null && loggedUserUserGroup != null) {
         carReservation = await strapi.entityService.create(
           "api::car-reservation.car-reservation",
           {
             data: {
               flightNumber,
-              car: carId,
+              car: carFromDb.id,
               startLocation: location.startLocation,
               endLocation: location.endLocation,
               startDatetime: time.startDatetime,
@@ -46,13 +72,14 @@ module.exports = () => ({
               discount: price.discount,
               renter: userFromDb.customer.id,
               author: userFromDb.customer.individual.name,
+              userGroup,
               comment,
             },
           }
         );
-        console.log(carReservation);
       }
     } else {
+      // fixme: idea: mozda je dobro da odradimo provjeru da li guest vec postoji?
       const name = user.info.title + " " + user.info.name;
       const contact = await strapi.entityService.create(
         "api::contact.contact",
@@ -60,6 +87,7 @@ module.exports = () => ({
           data: {
             email: user.info.email,
             telephoneSecondary: user.info.telephone,
+            userGroup,
           },
         }
       );
@@ -68,6 +96,8 @@ module.exports = () => ({
         {
           data: {
             contact: contact.id,
+            name,
+            userGroup,
           },
         }
       );
@@ -77,7 +107,8 @@ module.exports = () => ({
           data: {
             individual: individual.id,
             contact: contact.id,
-            name,
+            userGroup,
+            // name,
             type: "GUEST",
             isLocal: false,
           },
@@ -91,10 +122,10 @@ module.exports = () => ({
             customer: customer.id,
           },
         });
-      console.log(contact, individual, customer, updatedIndividual);
       const guest = await strapi.entityService.create("api::guest.guest", {
         data: {
           customer: customer.id,
+          userGroup,
         },
       });
       carReservation = await strapi.entityService.create(
@@ -102,7 +133,7 @@ module.exports = () => ({
         {
           data: {
             flightNumber,
-            car: carId,
+            car: carFromDb.id,
             startLocation: location.startLocation,
             endLocation: location.endLocation,
             startDatetime: time.startDatetime,
@@ -112,6 +143,7 @@ module.exports = () => ({
             discount: price.discount,
             renter: customer.id,
             author: name,
+            userGroup,
             comment,
           },
         }

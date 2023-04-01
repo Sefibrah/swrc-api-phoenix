@@ -7,6 +7,8 @@
 module.exports = {
   createReservation: async (ctx, next) => {
     try {
+      let subdomain = ctx.request.header.host.split(".")[0];
+      if (subdomain === "localhost:1337") subdomain = "seferware";
       const jwt = ctx.request.header?.authorization?.replace("Bearer ", "") || null;
       const carId = ctx.request.body.carId;
       const time = ctx.request.body.time;
@@ -25,7 +27,8 @@ module.exports = {
           location,
           flightNumber,
           extras,
-          price
+          price,
+          subdomain
         );
       ctx.body = data;
     } catch (err) {
