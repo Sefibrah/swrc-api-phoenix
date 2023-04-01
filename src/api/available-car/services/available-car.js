@@ -36,6 +36,9 @@ module.exports = () => ({
       .findMany({
         select: ["id", "name"],
         populate: {
+          prices: {
+            select: ["minDays", "amount"],
+          },
           cars: {
             select: [
               "id",
@@ -48,9 +51,6 @@ module.exports = () => ({
               "discount",
             ],
             populate: {
-              prices: {
-                select: ["minDays", "amount"],
-              },
               thumbnail: {
                 select: ["url"],
               },
@@ -59,7 +59,6 @@ module.exports = () => ({
         },
         where: carFilter,
       });
-
     const epicEventQuery = {
       $or: [
         {
@@ -149,34 +148,32 @@ module.exports = () => ({
         (car) => !uniqueBusyCarIds.includes(car.id) && car.isAvailable
       );
     });
-    const availableCarGroups = carGroups.filter(
+    let availableCarGroups = carGroups.filter(
       (carGroup) => carGroup.cars.length > 0
     );
     // calculate the vehicle prices!!
-    for (const carGroup of availableCarGroups) {
-      for (const car of carGroup.cars) {
-        if (car.prices.length > 0) {
-          // Every car has a price catalog that consists of minDays & amount.
-          // Find a price catalog column closest
-          // to the amount of days the customer wants to reserve the car for,
-          // and then calculate that base unit amount with the amount of days
-          // to get the final price of the car
-          let closestPriceColumn = car.prices.reduce((prev, curr) =>
-            Math.abs(curr.minDays - days) < Math.abs(prev.minDays - days)
-              ? curr
-              : prev
-          );
-          car.price =
-            car.prices.find(
-              (price) => closestPriceColumn.minDays === price.minDays
-            ).amount * days;
-        } else {
-          car.price = null;
-        }
-        delete car.prices;
-        delete car.isAvailable;
+    availableCarGroups = availableCarGroups.map((carGroup) => {
+      let price = null;
+      if (carGroup.prices.length > 0) {
+        let closestPriceColumn = carGroup.prices.reduce((prev, curr) =>
+          Math.abs(curr.minDays - days) < Math.abs(prev.minDays - days)
+            ? curr
+            : prev
+        );
+        price =
+          carGroup.prices.find(
+            (price) => closestPriceColumn.minDays === price.minDays
+          ).amount * days;
       }
-    }
+      // we don't need to show the client the entire price column
+      delete carGroup.prices;
+      return {
+        ...carGroup,
+        price,
+        // we don't need to show it if the cars related to the car group are available...
+        cars: carGroup.cars.map(({ isAvailable, ...car }) => car),
+      };
+    });
     // fixme: tokom rentanja, ili tokom narudzbe?
     // pripremi konstantu koja zna da li je datum pocetka naruzbe zimski period?
     const m = startDatetime.getMonth();
@@ -187,12 +184,18 @@ module.exports = () => ({
         ? startDatetime.getDate() < 21
         : m < 2;
     // only return each group's first car child!
-    const response = availableCarGroups.map((carGroup) => ({
-      name: carGroup.name,
-      // add discount if it's during winter
-      discount: isWinter ? carGroup.cars[0].discount : 0,
-      ...carGroup.cars[0],
-    }));
+    const response = availableCarGroups.map((carGroup) => {
+      const discount = isWinter ? carGroup.cars[0].discount : 0;
+      return {
+        name: carGroup.name,
+        priceOriginal: carGroup.price,
+        priceWithModification: carGroup.price - (carGroup.price * discount / 100),
+        // add discount if it's during winter
+        discount,
+        ...carGroup.cars[0],
+      };
+    });
+    console.log("response", response);
     return response;
   },
 });
