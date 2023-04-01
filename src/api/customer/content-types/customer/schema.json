@@ -48,6 +48,9 @@
       "relation": "manyToOne",
       "target": "plugin::multi-tenant.user-group",
       "inversedBy": "customers"
+    },
+    "name": {
+      "type": "string"
     }
   }
 }

@@ -30,9 +30,6 @@
       "relation": "oneToOne",
       "target": "api::customer.customer"
     },
-    "name": {
-      "type": "string"
-    },
     "userGroup": {
       "type": "relation",
       "relation": "manyToOne",
