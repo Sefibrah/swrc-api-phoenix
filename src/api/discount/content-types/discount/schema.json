@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "discounts",
+  "info": {
+    "singularName": "discount",
+    "pluralName": "discounts",
+    "displayName": "Discount",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "decimal"
+    },
+    "type": {
+      "type": "string"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::multi-tenant.user-group"
+    }
+  }
+}

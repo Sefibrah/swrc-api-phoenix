@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "temporary_discounts",
+  "info": {
+    "singularName": "temporary-discount",
+    "pluralName": "temporary-discounts",
+    "displayName": "Temporary Discount",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "startDatetime": {
+      "type": "datetime"
+    },
+    "endDatetime": {
+      "type": "datetime"
+    },
+    "discount": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::discount.discount"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::multi-tenant.user-group"
+    }
+  }
+}

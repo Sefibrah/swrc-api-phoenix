@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "recurring_discounts",
+  "info": {
+    "singularName": "recurring-discount",
+    "pluralName": "recurring-discounts",
+    "displayName": "Recurring Discount",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "startDay": {
+      "type": "integer"
+    },
+    "startMonth": {
+      "type": "integer"
+    },
+    "endDay": {
+      "type": "integer"
+    },
+    "endMonth": {
+      "type": "integer"
+    },
+    "discount": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::discount.discount"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::multi-tenant.user-group"
+    }
+  }
+}

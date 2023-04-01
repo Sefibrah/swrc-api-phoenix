@@ -67,6 +67,12 @@
       "relation": "oneToMany",
       "target": "api::customer.customer",
       "mappedBy": "userGroup"
+    },
+    "carGroups": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::car-group.car-group",
+      "mappedBy": "userGroup"
     }
   }
 }

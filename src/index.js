@@ -613,6 +613,30 @@ module.exports = {
         target: "plugin::users-permissions.user",
         mappedBy: "userGroup",
       },
+      prices: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::price.price",
+        mappedBy: "userGroup",
+      },
+      discounts: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::discount.discount",
+        mappedBy: "userGroup",
+      },
+      recurringDiscounts: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::recurring-discount.recurring-discount",
+        mappedBy: "userGroup",
+      },
+      temporaryDiscounts: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::temporary-discount.temporary-discount",
+        mappedBy: "userGroup",
+      },
     };
   },
 

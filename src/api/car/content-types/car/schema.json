@@ -64,32 +64,11 @@
       "min": 0,
       "required": false
     },
-    "prices": {
-      "type": "component",
-      "repeatable": true,
-      "component": "car.price"
-    },
     "make": {
       "type": "string"
     },
     "model": {
       "type": "string"
-    },
-    "thumbnail": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images"
-      ]
-    },
-    "inspectionImages": {
-      "type": "media",
-      "multiple": true,
-      "required": false,
-      "allowedTypes": [
-        "images"
-      ]
     },
     "carType": {
       "type": "string"
