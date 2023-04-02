@@ -85,10 +85,6 @@
       "target": "api::car-group.car-group",
       "inversedBy": "cars"
     },
-    "discount": {
-      "type": "decimal",
-      "min": 0
-    },
     "userGroup": {
       "type": "relation",
       "relation": "manyToOne",

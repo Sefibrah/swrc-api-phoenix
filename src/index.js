@@ -117,6 +117,10 @@ const getReceptionistPermissions = () => {
       "api::type-of-service.type-of-service",
       "api::vehicle-type.vehicle-type",
       "api::place-of-issue.place-of-issue",
+      "api::discount.discount",
+      "api::recurring-discount.recurring-discount",
+      "api::temporary-discount.temporary-discount",
+      "api::price.price",
     ],
     restricted
   );
@@ -181,6 +185,10 @@ const getMechanicPermissions = () => {
       "api::car-contract.car-contract",
       "api::document-connection.document-connection",
       "api::place-of-issue.place-of-issue",
+      "api::discount.discount",
+      "api::recurring-discount.recurring-discount",
+      "api::temporary-discount.temporary-discount",
+      "api::price.price",
     ],
     restricted
   );
@@ -242,6 +250,10 @@ const getManagerPermissions = () => {
       "api::place-of-issue.place-of-issue",
       "api::invoice-place-of-issue.invoice-place-of-issue",
       "api::invoice.invoice",
+      "api::discount.discount",
+      "api::recurring-discount.recurring-discount",
+      "api::temporary-discount.temporary-discount",
+      "api::price.price",
     ],
     noRestrictions
   );
@@ -298,6 +310,10 @@ const getAdminPermissions = () => {
       "api::place-of-issue.place-of-issue",
       "api::invoice-place-of-issue.invoice-place-of-issue",
       "api::invoice.invoice",
+      "api::discount.discount",
+      "api::recurring-discount.recurring-discount",
+      "api::temporary-discount.temporary-discount",
+      "api::price.price",
     ],
     noRestrictions
   );
