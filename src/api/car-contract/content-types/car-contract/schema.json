@@ -12,55 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "car": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::car.car"
-    },
-    "startLocation": {
-      "type": "string"
-    },
-    "endLocation": {
-      "type": "string"
-    },
-    "startDatetime": {
-      "type": "datetime"
-    },
-    "endDatetime": {
-      "type": "datetime"
-    },
-    "comment": {
-      "type": "string"
-    },
-    "author": {
-      "type": "string"
-    },
-    "totalRent": {
-      "type": "decimal"
-    },
-    "status": {
-      "type": "string"
-    },
-    "additionalCost": {
-      "type": "decimal",
-      "min": 0
-    },
-    "deposit": {
-      "type": "decimal",
-      "min": 0
-    },
-    "paymentMethod": {
-      "type": "string"
-    },
-    "discount": {
-      "type": "decimal",
-      "min": 0
-    },
-    "renter": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::customer.customer"
-    },
     "primaryDriver": {
       "type": "relation",
       "relation": "oneToOne",
@@ -86,6 +37,31 @@
       "relation": "manyToOne",
       "target": "plugin::multi-tenant.user-group",
       "inversedBy": "carContracts"
+    },
+    "car": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::car.car"
+    },
+    "rentalAgreementDetail": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::rental-agreement-detail.rental-agreement-detail"
+    },
+    "agreementDetail": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::agreement-detail.agreement-detail"
+    },
+    "transaction": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::transaction.transaction"
+    },
+    "rentalExtras": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::rental-extra.rental-extra"
     }
   }
 }

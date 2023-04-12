@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "extras",
+  "info": {
+    "singularName": "extra",
+    "pluralName": "extras",
+    "displayName": "Extra"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "integer"
+    },
+    "thumbnail": {
+      "allowedTypes": [
+        "images",
+        "files"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "extras"
+    }
+  }
+}

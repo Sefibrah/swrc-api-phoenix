@@ -1,0 +1,54 @@
+{
+  "kind": "collectionType",
+  "collectionName": "transactions",
+  "info": {
+    "singularName": "transaction",
+    "pluralName": "transactions",
+    "displayName": "Transaction",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "discount": {
+      "type": "decimal"
+    },
+    "discountType": {
+      "type": "enumeration",
+      "enum": [
+        "FIXED",
+        "PER_DAY",
+        "PERCENTAGE"
+      ]
+    },
+    "additionalCost": {
+      "type": "decimal"
+    },
+    "deposit": {
+      "type": "decimal"
+    },
+    "tax": {
+      "type": "decimal"
+    },
+    "paymentMethod": {
+      "type": "string"
+    },
+    "totalWithTax": {
+      "type": "decimal"
+    },
+    "totalWithoutTax": {
+      "type": "decimal"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "transactions"
+    },
+    "extrasPrice": {
+      "type": "decimal"
+    }
+  }
+}

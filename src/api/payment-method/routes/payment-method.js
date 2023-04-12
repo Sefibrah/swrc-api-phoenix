@@ -1,19 +1,19 @@
 'use strict';
 
 /**
- * temporary-discount router
+ * payment-method router
  */
 
 const sameUserGroupPolicyConfig = {
   name: "plugin::multi-tenant.is-same-user-group",
   config: {
-    contentType: "api::temporary-discount.temporary-discount",
+    contentType: "api::payment-method.payment-method",
   },
 };
 
 const { createCoreRouter } = require('@strapi/strapi').factories;
 
-module.exports = createCoreRouter('api::temporary-discount.temporary-discount', {
+module.exports = createCoreRouter('api::payment-method.payment-method', {
   config: {
     update: {
       policies: [sameUserGroupPolicyConfig],

@@ -4,18 +4,14 @@
   "info": {
     "singularName": "invoice",
     "pluralName": "invoices",
-    "displayName": "Invoice"
+    "displayName": "Invoice",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
-    "carContract": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::car-contract.car-contract"
-    },
     "invoiceNumber": {
       "type": "string"
     },

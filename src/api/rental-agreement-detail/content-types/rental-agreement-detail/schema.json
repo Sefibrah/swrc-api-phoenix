@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "rental_agreement_details",
+  "info": {
+    "singularName": "rental-agreement-detail",
+    "pluralName": "rental-agreement-details",
+    "displayName": "Rental Agreement Detail",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "renter": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::customer.customer"
+    },
+    "startLocation": {
+      "type": "string"
+    },
+    "endLocation": {
+      "type": "string"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "rentalAgreementDetails"
+    }
+  }
+}

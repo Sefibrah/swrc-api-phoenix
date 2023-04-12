@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "rental_extras",
+  "info": {
+    "singularName": "rental-extra",
+    "pluralName": "rental-extras",
+    "displayName": "Rental Extra"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "extra": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::extra.extra"
+    },
+    "quantity": {
+      "type": "integer"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "rentalExtras"
+    }
+  }
+}

@@ -107,20 +107,17 @@ const getReceptionistPermissions = () => {
     [
       "api::car.car",
       "api::color.color",
-      "api::flight-number.flight-number",
       "api::fuel-type.fuel-type",
       "api::car-group.car-group",
       "api::location.location",
-      "api::service-location.service-location",
       "api::status.status",
       "api::transmission-type.transmission-type",
-      "api::type-of-service.type-of-service",
       "api::vehicle-type.vehicle-type",
-      "api::place-of-issue.place-of-issue",
       "api::discount.discount",
       "api::recurring-discount.recurring-discount",
       "api::temporary-discount.temporary-discount",
       "api::price.price",
+      "api::extra.extra",
     ],
     restricted
   );
@@ -136,6 +133,11 @@ const getReceptionistPermissions = () => {
       "api::guest.guest",
       "api::individual.individual",
       "api::organisation.organisation",
+      "api::payment-method.payment-method",
+      "api::transaction.transaction",
+      "api::rental-agreement-detail.rental-agreement-detail",
+      "api::agreement-detail.agreement-detail",
+      "api::rental-extra.rental-extra",
     ],
     noDelete
   );
@@ -155,9 +157,19 @@ const getReceptionistPermissions = () => {
     ["plugin::multi-tenant.user-group"],
     restrictedUserGroup
   );
+  let noRestrictionPermissions = combineActionWithService(
+    [
+      "api::service-location.service-location",
+      "api::type-of-service.type-of-service",
+      "api::flight-number.flight-number",
+      "api::place-of-issue.place-of-issue",
+    ],
+    noRestrictions
+  );
   return [
     ...restrictedPermissions,
     ...noDeletePermissions,
+    ...noRestrictionPermissions,
     ...noRestrictionsAuthPermissions,
     ...restrictedUserPermissions,
     ...noDeleteUploadPermissions,
@@ -176,10 +188,8 @@ const getMechanicPermissions = () => {
       "api::fuel-type.fuel-type",
       "api::car-group.car-group",
       "api::location.location",
-      "api::service-location.service-location",
       "api::status.status",
       "api::transmission-type.transmission-type",
-      "api::type-of-service.type-of-service",
       "api::vehicle-type.vehicle-type",
       "api::car-reservation.car-reservation",
       "api::car-contract.car-contract",
@@ -189,12 +199,27 @@ const getMechanicPermissions = () => {
       "api::recurring-discount.recurring-discount",
       "api::temporary-discount.temporary-discount",
       "api::price.price",
+      "api::extra.extra",
+      "api::payment-method.payment-method",
+      "api::rental-agreement-detail.rental-agreement-detail",
+      "api::rental-extra.rental-extra",
     ],
     restricted
   );
   let noDeletePermissions = combineActionWithService(
-    ["api::car-maintenance.car-maintenance"],
+    [
+      "api::car-maintenance.car-maintenance",
+      "api::transaction.transaction",
+      "api::agreement-detail.agreement-detail",
+    ],
     noDelete
+  );
+  let noRestrictionPermissions = combineActionWithService(
+    [
+      "api::service-location.service-location",
+      "api::type-of-service.type-of-service",
+    ],
+    noRestrictions
   );
   let noRestrictionsAuthPermissions = combineActionWithService(
     ["plugin::users-permissions.auth"],
@@ -215,6 +240,7 @@ const getMechanicPermissions = () => {
   return [
     ...restrictedPermissions,
     ...noDeletePermissions,
+    ...noRestrictionPermissions,
     ...noRestrictionsAuthPermissions,
     ...restrictedUserPermissions,
     ...noDeleteUploadPermissions,
@@ -254,6 +280,13 @@ const getManagerPermissions = () => {
       "api::recurring-discount.recurring-discount",
       "api::temporary-discount.temporary-discount",
       "api::price.price",
+      "api::extra.extra",
+      "api::payment-method.payment-method",
+      "api::transaction.transaction",
+      "api::rental-agreement-detail.rental-agreement-detail",
+      "api::agreement-detail.agreement-detail",
+      "api::car-contract-invoice.car-contract-invoice",
+      "api::rental-extra.rental-extra",
     ],
     noRestrictions
   );
@@ -314,6 +347,13 @@ const getAdminPermissions = () => {
       "api::recurring-discount.recurring-discount",
       "api::temporary-discount.temporary-discount",
       "api::price.price",
+      "api::extra.extra",
+      "api::payment-method.payment-method",
+      "api::transaction.transaction",
+      "api::rental-agreement-detail.rental-agreement-detail",
+      "api::agreement-detail.agreement-detail",
+      "api::car-contract-invoice.car-contract-invoice",
+      "api::rental-extra.rental-extra",
     ],
     noRestrictions
   );
@@ -365,11 +405,16 @@ const getAuthenticatedPermissions = () => {
     ["plugin::multi-tenant.user-group"],
     restrictedUserGroup
   );
+  let restrictedPermissions = combineActionWithService(
+    ["api::extra.extra", "api::flight-number.flight-number"],
+    restricted
+  );
   return [
     ...noRestrictionAuthPermissions,
     ...restrictedUserPermissions,
     ...noDeleteUploadPermissions,
     ...restrictedUserGroupPermissions,
+    ...restrictedPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -387,10 +432,15 @@ const getPublicPermissions = () => {
     ["plugin::multi-tenant.user-group"],
     restrictedUserGroup
   );
+  let restrictedPermissions = combineActionWithService(
+    ["api::extra.extra", "api::flight-number.flight-number"],
+    restricted
+  );
   return [
     ...restrictedAuthPermissions,
     ...restrictedUserPermissions,
     ...restrictedUserGroupPermissions,
+    ...restrictedPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -651,6 +701,42 @@ module.exports = {
         type: "relation",
         relation: "oneToMany",
         target: "api::temporary-discount.temporary-discount",
+        mappedBy: "userGroup",
+      },
+      extras: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::extra.extra",
+        mappedBy: "userGroup",
+      },
+      paymentMethods: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::payment-method.payment-method",
+        mappedBy: "userGroup",
+      },
+      transactions: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::transaction.transaction",
+        mappedBy: "userGroup",
+      },
+      rentalAgreementDetails: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::rental-agreement-detail.rental-agreement-detail",
+        mappedBy: "userGroup",
+      },
+      agreementDetails: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::agreement-detail.agreement-detail",
+        mappedBy: "userGroup",
+      },
+      rentalExtras: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::rental-extra.rental-extra",
         mappedBy: "userGroup",
       },
     };

@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "car_contract_invoices",
+  "info": {
+    "singularName": "car-contract-invoice",
+    "pluralName": "car-contract-invoices",
+    "displayName": "Car Contract Invoice"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "carContract": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::car-contract.car-contract"
+    },
+    "invoice": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::invoice.invoice"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "agreementDetails"
+    }
+  }
+}

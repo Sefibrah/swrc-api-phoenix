@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "agreement_details",
+  "info": {
+    "singularName": "agreement-detail",
+    "pluralName": "agreement-details",
+    "displayName": "Agreement Detail",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "startDatetime": {
+      "type": "datetime"
+    },
+    "endDatetime": {
+      "type": "datetime"
+    },
+    "comment": {
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "agreementDetails"
+    }
+  }
+}

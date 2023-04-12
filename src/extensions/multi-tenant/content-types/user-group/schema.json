@@ -73,6 +73,42 @@
       "relation": "oneToMany",
       "target": "api::car-group.car-group",
       "mappedBy": "userGroup"
+    },
+    "carContracts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::car-contract.car-contract",
+      "mappedBy": "userGroup"
+    },
+    "carReservations": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::car-reservation.car-reservation",
+      "mappedBy": "userGroup"
+    },
+    "invoices": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::invoice.invoice",
+      "mappedBy": "userGroup"
+    },
+    "carMaintenances": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::car-maintenance.car-maintenance",
+      "mappedBy": "userGroup"
+    },
+    "rentalAgreementDetails": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::rental-agreement-detail.rental-agreement-detail",
+      "mappedBy": "userGroup"
+    },
+    "transactions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::transaction.transaction",
+      "mappedBy": "userGroup"
     }
   }
 }

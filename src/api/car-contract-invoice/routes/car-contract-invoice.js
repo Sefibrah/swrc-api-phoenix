@@ -1,19 +1,19 @@
 'use strict';
 
 /**
- * temporary-discount router
+ * car-contract-invoice router
  */
 
 const sameUserGroupPolicyConfig = {
   name: "plugin::multi-tenant.is-same-user-group",
   config: {
-    contentType: "api::temporary-discount.temporary-discount",
+    contentType: "api::car-contract-invoice.car-contract-invoice",
   },
 };
 
 const { createCoreRouter } = require('@strapi/strapi').factories;
 
-module.exports = createCoreRouter('api::temporary-discount.temporary-discount', {
+module.exports = createCoreRouter('api::car-contract-invoice.car-contract-invoice', {
   config: {
     update: {
       policies: [sameUserGroupPolicyConfig],
