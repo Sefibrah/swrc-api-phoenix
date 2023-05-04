@@ -12,16 +12,23 @@ module.exports = createCoreController(
   ({ strapi }) => ({
     myDetail: async (ctx, next) => {
       try {
-        const reqUrl = url.parse(ctx.request.url);
-        const hostname = reqUrl.hostname;
-        const parts = hostname.split(".");
         let subdomain = null;
-        if (parts.length >= 3) {
-          subdomain = parts[0];
-        }
         // makes sense only when i am doing it on localhost, for production this should never work
         // unless a hacker comes??
-        if (subdomain === "localhost:1337") subdomain = "seferware";
+        console.log(ctx.req.headers.host);
+        if (ctx.req.headers.host.includes("localhost")) {
+          subdomain = "seferware";
+        } else {
+          const reqUrl = url.parse(`${ctx.req.headers.host}${ctx.request.url}`);
+          console.log(reqUrl);
+          const hostname = reqUrl.hostname;
+          console.log(hostname);
+          const parts = hostname.split(".");
+          console.log(parts);
+          if (parts.length >= 3) {
+            subdomain = parts[0];
+          }
+        }
 
         const loggedUserUserGroup = await strapi
           .query("plugin::multi-tenant.user-group")
