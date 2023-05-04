@@ -74,7 +74,7 @@ module.exports = () => {
     strapi
       .plugin("sentry")
       .service("sentry")
-      .sendError(`ctx.req.headers.host: ${ctx.req.headers.host}`);
+      .sendError(`ctx.req.headers.host: ${ctx.req.headers.host}; ctx.subdomains: ${ctx.subdomains}`);
     if (ctx.req.headers.host.includes("localhost")) {
       subdomain = "seferware";
     } else {
