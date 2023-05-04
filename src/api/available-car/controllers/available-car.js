@@ -15,7 +15,8 @@ module.exports = {
       if (ctx.req.headers.host.includes("localhost")) {
         subdomain = "seferware";
       } else {
-        subdomain = ctx.subdomains[0];
+        const host = ctx.request.header.host;
+        subdomain = host.split(".")[0];
       }
       const startDatetime = new Date(ctx.request.query.startDatetime);
       const endDatetime = new Date(ctx.request.query.endDatetime);
