@@ -53,7 +53,10 @@ module.exports = createCoreController(
           });
         console.log("mySkinRaw", JSON.stringify(mySkinRaw));
 
-        strapi.plugin("sentry").service("sentry").sendError(`log it all here`);
+        strapi
+          .plugin("sentry")
+          .service("sentry")
+          .sendError(`mySkinRaw:${JSON.stringify(mySkinRaw)}`);
         const mySkin = getIdAndAttributes(mySkinRaw);
         console.log("mySkin", JSON.stringify(mySkin));
         const iconDark = getIdAndAttributes(mySkin.attributes.iconDark);
