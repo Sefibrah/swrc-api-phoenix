@@ -18,15 +18,8 @@ module.exports = createCoreController(
         if (ctx.req.headers.host.includes("localhost")) {
           subdomain = "seferware";
         } else {
-          const reqUrl = url.parse(`${ctx.req.headers.host}`);
-          console.log(reqUrl);
-          const hostname = reqUrl.hostname;
-          console.log(hostname);
-          const parts = hostname.split(".");
-          console.log(parts);
-          if (parts.length >= 3) {
-            subdomain = parts[0];
-          }
+          const host = ctx.req.headers.host;
+          subdomain = host.split(".")[0];
         }
 
         const loggedUserUserGroup = await strapi
