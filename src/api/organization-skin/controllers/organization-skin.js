@@ -50,6 +50,8 @@ module.exports = createCoreController(
               userGroup: loggedUserUserGroup.id,
             },
           });
+
+        strapi.plugin("sentry").service("sentry").sendError(`log it all here`);
         const mySkin = getIdAndAttributes(mySkinRaw);
         console.log("mySkin", JSON.stringify(mySkin));
         const iconDark = getIdAndAttributes(mySkin.attributes.iconDark);
@@ -60,8 +62,6 @@ module.exports = createCoreController(
         console.log("logoDark", JSON.stringify(logoDark));
         const logoLight = getIdAndAttributes(mySkin.attributes.logoLight);
         console.log("logoLight", JSON.stringify(logoLight));
-
-        strapi.plugin("sentry").service("sentry").sendError(`log it all here`);
         ctx.body = {
           data: {
             id: mySkin.id,
