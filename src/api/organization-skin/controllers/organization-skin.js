@@ -52,12 +52,11 @@ module.exports = createCoreController(
             },
           });
         console.log("mySkinRaw", JSON.stringify(mySkinRaw));
-
+        const mySkin = getIdAndAttributes(mySkinRaw);
         strapi
           .plugin("sentry")
           .service("sentry")
-          .sendError(`mySkinRaw:${JSON.stringify(mySkinRaw)}`);
-        const mySkin = getIdAndAttributes(mySkinRaw);
+          .sendError(`mySkin:${JSON.stringify(mySkin)}`);
         console.log("mySkin", JSON.stringify(mySkin));
         const iconDark = getIdAndAttributes(mySkin.attributes.iconDark);
         console.log("iconDark", JSON.stringify(iconDark));
