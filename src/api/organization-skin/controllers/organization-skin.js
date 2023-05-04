@@ -18,7 +18,7 @@ module.exports = createCoreController(
         if (ctx.req.headers.host.includes("localhost")) {
           subdomain = "seferware";
         } else {
-          const reqUrl = url.parse(`${ctx.req.headers.host}${ctx.request.url}`);
+          const reqUrl = url.parse(`${ctx.req.headers.host}`);
           console.log(reqUrl);
           const hostname = reqUrl.hostname;
           console.log(hostname);
