@@ -29,7 +29,6 @@ module.exports = createCoreController(
             },
           });
 
-        console.log("loggedUserUserGroup", JSON.stringify(loggedUserUserGroup));
         const mySkinRaw = await strapi
           .query("api::organization-skin.organization-skin")
           .findOne({
@@ -51,21 +50,11 @@ module.exports = createCoreController(
               userGroup: loggedUserUserGroup.id,
             },
           });
-        console.log("mySkinRaw", JSON.stringify(mySkinRaw));
         const mySkin = getIdAndAttributes(mySkinRaw);
-        strapi
-          .plugin("sentry")
-          .service("sentry")
-          .sendError(`mySkin:${JSON.stringify(mySkin)}`);
-        console.log("mySkin", JSON.stringify(mySkin));
         const iconDark = getIdAndAttributes(mySkin.attributes.iconDark);
-        console.log("iconDark", JSON.stringify(iconDark));
         const iconLight = getIdAndAttributes(mySkin.attributes.iconLight);
-        console.log("iconLight", JSON.stringify(iconLight));
         const logoDark = getIdAndAttributes(mySkin.attributes.logoDark);
-        console.log("logoDark", JSON.stringify(logoDark));
         const logoLight = getIdAndAttributes(mySkin.attributes.logoLight);
-        console.log("logoLight", JSON.stringify(logoLight));
         ctx.body = {
           data: {
             id: mySkin.id,

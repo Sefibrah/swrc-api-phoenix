@@ -74,9 +74,8 @@ module.exports = () => {
     if (ctx.req.headers.host.includes("localhost")) {
       subdomain = "seferware";
     } else {
-      const subdomains = ctx.subdomains;
-      const mainDomain = subdomains.pop();
-      subdomain = subdomains.join(".");
+      const host = ctx.req.headers.host;
+      subdomain = host.split(".")[0];
     }
     if (
       ctx.request.url.includes("/api/auth/local/register") &&
