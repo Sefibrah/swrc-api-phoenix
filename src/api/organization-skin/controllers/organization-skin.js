@@ -21,10 +21,6 @@ module.exports = createCoreController(
           const host = ctx.req.headers.host;
           subdomain = host.split(".")[0];
         }
-        strapi
-          .plugin("sentry")
-          .service("sentry")
-          .sendError(`subdomain: ${JSON.stringify(subdomain)}`);
         const loggedUserUserGroup = await strapi
           .query("plugin::multi-tenant.user-group")
           .findOne({
@@ -33,12 +29,6 @@ module.exports = createCoreController(
             },
           });
 
-        strapi
-          .plugin("sentry")
-          .service("sentry")
-          .sendError(
-            `loggedUserUserGroup: ${JSON.stringify(loggedUserUserGroup)}`
-          );
         const mySkinRaw = await strapi
           .query("api::organization-skin.organization-skin")
           .findOne({
@@ -60,18 +50,18 @@ module.exports = createCoreController(
               userGroup: loggedUserUserGroup.id,
             },
           });
-
-        strapi
-          .plugin("sentry")
-          .service("sentry")
-          .sendError(
-            `mySkinRaw: ${JSON.stringify(mySkinRaw)}`
-          );
         const mySkin = getIdAndAttributes(mySkinRaw);
+        console.log("mySkin", JSON.stringify(mySkin));
         const iconDark = getIdAndAttributes(mySkin.attributes.iconDark);
+        console.log("iconDark", JSON.stringify(iconDark));
         const iconLight = getIdAndAttributes(mySkin.attributes.iconLight);
+        console.log("iconLight", JSON.stringify(iconLight));
         const logoDark = getIdAndAttributes(mySkin.attributes.logoDark);
+        console.log("logoDark", JSON.stringify(logoDark));
         const logoLight = getIdAndAttributes(mySkin.attributes.logoLight);
+        console.log("logoLight", JSON.stringify(logoLight));
+
+        strapi.plugin("sentry").service("sentry").sendError(`log it all here`);
         ctx.body = {
           data: {
             id: mySkin.id,
