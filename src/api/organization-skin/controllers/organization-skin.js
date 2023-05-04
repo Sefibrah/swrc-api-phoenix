@@ -29,6 +29,7 @@ module.exports = createCoreController(
             },
           });
 
+        console.log("loggedUserUserGroup", JSON.stringify(loggedUserUserGroup));
         const mySkinRaw = await strapi
           .query("api::organization-skin.organization-skin")
           .findOne({
@@ -50,6 +51,7 @@ module.exports = createCoreController(
               userGroup: loggedUserUserGroup.id,
             },
           });
+        console.log("mySkinRaw", JSON.stringify(mySkinRaw));
 
         strapi.plugin("sentry").service("sentry").sendError(`log it all here`);
         const mySkin = getIdAndAttributes(mySkinRaw);
