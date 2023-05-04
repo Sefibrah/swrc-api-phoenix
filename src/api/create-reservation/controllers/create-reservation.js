@@ -15,8 +15,7 @@ module.exports = {
       if (ctx.req.headers.host.includes("localhost")) {
         subdomain = "seferware";
       } else {
-        const host = ctx.req.headers.host;
-        subdomain = host.split(".")[0];
+        subdomain = ctx.subdomains[0];
       }
       const jwt =
         ctx.request.header?.authorization?.replace("Bearer ", "") || null;
