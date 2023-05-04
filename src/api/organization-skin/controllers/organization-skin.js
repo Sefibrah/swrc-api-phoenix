@@ -72,20 +72,20 @@ module.exports = createCoreController(
             attributes: {
               ...mySkin.attributes,
               iconDark: {
-                id: iconDark.id,
-                attributes: iconDark.attributes,
+                id: iconDark?.id,
+                attributes: iconDark?.attributes,
               },
               iconLight: {
-                id: iconLight.id,
-                attributes: iconLight.attributes,
+                id: iconLight?.id,
+                attributes: iconLight?.attributes,
               },
               logoDark: {
-                id: logoDark.id,
-                attributes: logoDark.attributes,
+                id: logoDark?.id,
+                attributes: logoDark?.attributes,
               },
               logoLight: {
-                id: logoLight.id,
-                attributes: logoLight.attributes,
+                id: logoLight?.id,
+                attributes: logoLight?.attributes,
               },
             },
           },
@@ -98,6 +98,7 @@ module.exports = createCoreController(
 );
 
 function getIdAndAttributes(obj) {
+  if (obj == null) return null;
   const { id, ...attributes } = obj;
   return {
     id,
