@@ -19,8 +19,9 @@ module.exports = createCoreController(
         if (ctx.req.headers.host.includes("localhost")) {
           subdomain = "seferware";
         } else {
-          const host = ctx.request.header.host;
-          subdomain = host.split(".")[0];
+          const subdomains = ctx.subdomains;
+          const mainDomain = subdomains.pop();
+          subdomain = subdomains.join(".");
         }
         const loggedUserUserGroup = await strapi
           .query("plugin::multi-tenant.user-group")
