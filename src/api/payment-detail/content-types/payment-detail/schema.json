@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "payment_details",
+  "info": {
+    "singularName": "payment-detail",
+    "pluralName": "payment-details",
+    "displayName": "Payment Detail",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "bankName": {
+      "type": "string"
+    },
+    "localCurrencyAccountNumber": {
+      "type": "string"
+    },
+    "foreignCurrencyAccountNumber": {
+      "type": "string"
+    },
+    "IBAN": {
+      "type": "string"
+    },
+    "swiftCode": {
+      "type": "string"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "paymentDetails"
+    }
+  }
+}

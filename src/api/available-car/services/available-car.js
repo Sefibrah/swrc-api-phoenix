@@ -48,7 +48,6 @@ module.exports = () => ({
               "doors",
               "seats",
               "isAvailable",
-              "discount",
             ],
             populate: {
               thumbnail: {
@@ -64,25 +63,16 @@ module.exports = () => ({
         {
           $and: [
             {
-              startDatetime: {
-                $gte: startDatetime,
-                $lte: endDatetime,
+              agreementDetail: {
+                startDatetime: {
+                  $gte: startDatetime,
+                  $lte: endDatetime,
+                },
               },
-              endDatetime: {
-                $gte: endDatetime,
-              },
-            },
-          ],
-        },
-        {
-          $and: [
-            {
-              endDatetime: {
-                $gte: startDatetime,
-                $lte: endDatetime,
-              },
-              startDatetime: {
-                $lte: endDatetime,
+              agreementDetail: {
+                endDatetime: {
+                  $gte: endDatetime,
+                },
               },
             },
           ],
@@ -90,13 +80,34 @@ module.exports = () => ({
         {
           $and: [
             {
-              startDatetime: {
-                $lte: startDatetime,
-                $lte: endDatetime,
+              agreementDetail: {
+                endDatetime: {
+                  $gte: startDatetime,
+                  $lte: endDatetime,
+                },
               },
-              endDatetime: {
-                $gte: endDatetime,
-                $gte: startDatetime,
+              agreementDetail: {
+                startDatetime: {
+                  $lte: endDatetime,
+                },
+              },
+            },
+          ],
+        },
+        {
+          $and: [
+            {
+              agreementDetail: {
+                startDatetime: {
+                  $lte: startDatetime,
+                  $lte: endDatetime,
+                },
+              },
+              agreementDetail: {
+                endDatetime: {
+                  $gte: endDatetime,
+                  $gte: startDatetime,
+                },
               },
             },
           ],
@@ -106,10 +117,13 @@ module.exports = () => ({
     const carContracts = await strapi.db
       .query("api::car-contract.car-contract")
       .findMany({
-        select: ["id", "startDatetime", "endDatetime"],
+        select: ["id"],
         populate: {
           car: {
             select: ["id"],
+          },
+          agreementDetail: {
+            select: ["startDatetime", "endDatetime"],
           },
         },
         where: epicEventQuery,
@@ -117,10 +131,13 @@ module.exports = () => ({
     const carReservations = await strapi.db
       .query("api::car-reservation.car-reservation")
       .findMany({
-        select: ["id", "startDatetime", "endDatetime"],
+        select: ["id"],
         populate: {
           car: {
             select: ["id"],
+          },
+          agreementDetail: {
+            select: ["startDatetime", "endDatetime"],
           },
         },
         where: epicEventQuery,
@@ -128,10 +145,13 @@ module.exports = () => ({
     const carMaintenances = await strapi.db
       .query("api::car-maintenance.car-maintenance")
       .findMany({
-        select: ["id", "startDatetime", "endDatetime"],
+        select: ["id"],
         populate: {
           car: {
             select: ["id"],
+          },
+          agreementDetail: {
+            select: ["startDatetime", "endDatetime"],
           },
         },
         where: epicEventQuery,
@@ -187,12 +207,13 @@ module.exports = () => ({
     const response = availableCarGroups.map((carGroup) => {
       const discount = isWinter ? carGroup.cars[0].discount : 0;
       return {
+        ...carGroup.cars[0],
         name: carGroup.name,
         priceOriginal: carGroup.price,
-        priceWithModification: carGroup.price - (carGroup.price * discount / 100),
+        id: carGroup.id,
+        price: carGroup.price - (carGroup.price * discount) / 100,
         // add discount if it's during winter
         discount,
-        ...carGroup.cars[0],
       };
     });
     console.log("response", response);

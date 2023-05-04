@@ -23,8 +23,7 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::multi-tenant.organization",
-      "inversedBy": "userGroups",
-      "required": true
+      "inversedBy": "userGroups"
     },
     "parent": {
       "type": "relation",
@@ -108,6 +107,18 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::transaction.transaction",
+      "mappedBy": "userGroup"
+    },
+    "contacts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::contact.contact",
+      "mappedBy": "userGroup"
+    },
+    "paymentDetails": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::payment-detail.payment-detail",
       "mappedBy": "userGroup"
     }
   }

@@ -26,6 +26,9 @@
       "relation": "manyToOne",
       "target": "plugin::multi-tenant.user-group",
       "inversedBy": "contacts"
+    },
+    "website": {
+      "type": "string"
     }
   }
 }

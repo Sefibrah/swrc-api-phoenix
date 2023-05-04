@@ -38,6 +38,10 @@ const restrictedUser = ["me"];
 const noLimitsUpload = ["destroy", "find", "findOne", "upload"];
 const noDeleteUpload = ["find", "findOne", "upload"];
 const restrictedUserGroup = ["find", "findOne", "update"];
+const myOrganizationSkin = ["mySkin"];
+const myOrganizationSkinRestricted = ["mySkin", "update"];
+const myOrganizationDetail = ["myDetail"];
+const myOrganizationDetailRestricted = ["myDetail", "update"];
 
 const hashPassword = (password) => {
   return new Promise((resolve, reject) => {
@@ -157,6 +161,14 @@ const getReceptionistPermissions = () => {
     ["plugin::multi-tenant.user-group"],
     restrictedUserGroup
   );
+  let myOrganizationSkinPermissions = combineActionWithService(
+    ["api::organization-skin.organization-skin"],
+    myOrganizationSkin
+  );
+  let myOrganizationDetailPermissions = combineActionWithService(
+    ["api::organization-detail.organization-detail"],
+    myOrganizationDetail
+  );
   let noRestrictionPermissions = combineActionWithService(
     [
       "api::service-location.service-location",
@@ -173,6 +185,8 @@ const getReceptionistPermissions = () => {
     ...noRestrictionsAuthPermissions,
     ...restrictedUserPermissions,
     ...noDeleteUploadPermissions,
+    ...myOrganizationSkinPermissions,
+    ...myOrganizationDetailPermissions,
     ...restrictedUserGroupPermissions,
     ...getCustomEndpointPermissions(),
   ];
@@ -237,7 +251,17 @@ const getMechanicPermissions = () => {
     ["plugin::multi-tenant.user-group"],
     restrictedUserGroup
   );
+  let myOrganizationSkinPermissions = combineActionWithService(
+    ["api::organization-skin.organization-skin"],
+    myOrganizationSkin
+  );
+  let myOrganizationDetailPermissions = combineActionWithService(
+    ["api::organization-detail.organization-detail"],
+    myOrganizationDetail
+  );
   return [
+    ...myOrganizationSkinPermissions,
+    ...myOrganizationDetailPermissions,
     ...restrictedPermissions,
     ...noDeletePermissions,
     ...noRestrictionPermissions,
@@ -287,6 +311,8 @@ const getManagerPermissions = () => {
       "api::agreement-detail.agreement-detail",
       "api::car-contract-invoice.car-contract-invoice",
       "api::rental-extra.rental-extra",
+      "api::payment-detail.payment-detail",
+      "api::address.address",
     ],
     noRestrictions
   );
@@ -306,7 +332,17 @@ const getManagerPermissions = () => {
     ["plugin::multi-tenant.user-group"],
     restrictedUserGroup
   );
+  let myOrganizationSkinPermissions = combineActionWithService(
+    ["api::organization-skin.organization-skin"],
+    myOrganizationSkinRestricted
+  );
+  let myOrganizationDetailPermissions = combineActionWithService(
+    ["api::organization-detail.organization-detail"],
+    myOrganizationDetailRestricted
+  );
   return [
+    ...myOrganizationSkinPermissions,
+    ...myOrganizationDetailPermissions,
     ...noRestrictionPermissions,
     ...noRestrictionAuthPermissions,
     ...restrictedUserPermissions,
@@ -354,6 +390,8 @@ const getAdminPermissions = () => {
       "api::agreement-detail.agreement-detail",
       "api::car-contract-invoice.car-contract-invoice",
       "api::rental-extra.rental-extra",
+      "api::payment-detail.payment-detail",
+      "api::address.address",
     ],
     noRestrictions
   );
@@ -377,7 +415,17 @@ const getAdminPermissions = () => {
     ["plugin::multi-tenant.user-group"],
     restrictedUserGroup
   );
+  let myOrganizationSkinPermissions = combineActionWithService(
+    ["api::organization-skin.organization-skin"],
+    myOrganizationSkinRestricted
+  );
+  let myOrganizationDetailPermissions = combineActionWithService(
+    ["api::organization-detail.organization-detail"],
+    myOrganizationDetailRestricted
+  );
   return [
+    ...myOrganizationSkinPermissions,
+    ...myOrganizationDetailPermissions,
     ...noRestrictionPermissions,
     ...noRestrictionAuthPermissions,
     ...noRestrictionRolePermissions,
@@ -406,10 +454,24 @@ const getAuthenticatedPermissions = () => {
     restrictedUserGroup
   );
   let restrictedPermissions = combineActionWithService(
-    ["api::extra.extra", "api::flight-number.flight-number"],
+    [
+      "api::extra.extra",
+      "api::flight-number.flight-number",
+      "api::vehicle-type.vehicle-type",
+    ],
     restricted
   );
+  let myOrganizationSkinPermissions = combineActionWithService(
+    ["api::organization-skin.organization-skin"],
+    myOrganizationSkin
+  );
+  let myOrganizationDetailPermissions = combineActionWithService(
+    ["api::organization-detail.organization-detail"],
+    myOrganizationDetail
+  );
   return [
+    ...myOrganizationSkinPermissions,
+    ...myOrganizationDetailPermissions,
     ...noRestrictionAuthPermissions,
     ...restrictedUserPermissions,
     ...noDeleteUploadPermissions,
@@ -433,10 +495,24 @@ const getPublicPermissions = () => {
     restrictedUserGroup
   );
   let restrictedPermissions = combineActionWithService(
-    ["api::extra.extra", "api::flight-number.flight-number"],
+    [
+      "api::extra.extra",
+      "api::flight-number.flight-number",
+      "api::vehicle-type.vehicle-type",
+    ],
     restricted
   );
+  let myOrganizationSkinPermissions = combineActionWithService(
+    ["api::organization-skin.organization-skin"],
+    myOrganizationSkin
+  );
+  let myOrganizationDetailPermissions = combineActionWithService(
+    ["api::organization-detail.organization-detail"],
+    myOrganizationDetail
+  );
   return [
+    ...myOrganizationSkinPermissions,
+    ...myOrganizationDetailPermissions,
     ...restrictedAuthPermissions,
     ...restrictedUserPermissions,
     ...restrictedUserGroupPermissions,
@@ -737,6 +813,30 @@ module.exports = {
         type: "relation",
         relation: "oneToMany",
         target: "api::rental-extra.rental-extra",
+        mappedBy: "userGroup",
+      },
+      organizationSkins: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::organization-skin.organization-skin",
+        mappedBy: "userGroup",
+      },
+      organizationDetails: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::organization-detail.organization-detail",
+        mappedBy: "userGroup",
+      },
+      paymentDetails: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::payment-detail.payment-detail",
+        mappedBy: "userGroup",
+      },
+      addresses: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::address.address",
         mappedBy: "userGroup",
       },
     };

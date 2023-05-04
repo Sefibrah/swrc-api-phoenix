@@ -1,0 +1,72 @@
+{
+  "kind": "collectionType",
+  "collectionName": "organization_skins",
+  "info": {
+    "singularName": "organization-skin",
+    "pluralName": "organization-skins",
+    "displayName": "Organization Skin",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "primaryColorLight": {
+      "type": "string"
+    },
+    "secondaryColorLight": {
+      "type": "string"
+    },
+    "accentColorLight": {
+      "type": "string"
+    },
+    "iconLight": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "logoLight": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "logoDark": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "iconDark": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "primaryColorDark": {
+      "type": "string"
+    },
+    "secondaryColorDark": {
+      "type": "string"
+    },
+    "accentColorDark": {
+      "type": "string"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "organizationSkins"
+    }
+  }
+}

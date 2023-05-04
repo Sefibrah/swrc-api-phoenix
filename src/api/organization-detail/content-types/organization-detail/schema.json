@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "organization_details",
+  "info": {
+    "singularName": "organization-detail",
+    "pluralName": "organization-details",
+    "displayName": "Organization Detail",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "organizationName": {
+      "type": "string"
+    },
+    "address": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::address.address"
+    },
+    "contact": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::contact.contact"
+    },
+    "organizationId": {
+      "type": "string"
+    },
+    "paymentDetail": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::payment-detail.payment-detail"
+    },
+    "organizationTaxId": {
+      "type": "string"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "organizationDetails"
+    }
+  }
+}
