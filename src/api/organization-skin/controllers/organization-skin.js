@@ -1,5 +1,5 @@
 "use strict";
-
+const url = require("url");
 /**
  * organization-skin controller
  */
@@ -11,7 +11,15 @@ module.exports = createCoreController(
   ({ strapi }) => ({
     mySkin: async (ctx, next) => {
       try {
-        let subdomain = ctx.request.header.host.split(".")[0];
+        const reqUrl = url.parse(ctx.request.url);
+        const hostname = reqUrl.hostname;
+        const parts = hostname.split(".");
+        let subdomain = null;
+        if (parts.length >= 3) {
+          subdomain = parts[0];
+        }
+        // makes sense only when i am doing it on localhost, for production this should never work
+        // unless a hacker comes??
         if (subdomain === "localhost:1337") subdomain = "seferware";
 
         const loggedUserUserGroup = await strapi
