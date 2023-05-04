@@ -15,17 +15,16 @@ module.exports = createCoreController(
         // makes sense only when i am doing it on localhost, for production this should never work
         // unless a hacker comes??
         console.log(ctx.req.headers.host);
-        strapi
-          .plugin("sentry")
-          .service("sentry")
-          .sendError(`ctx.req.headers.host: ${ctx.req.headers.host}; ctx.subdomains: ${ctx.subdomains}`);
         if (ctx.req.headers.host.includes("localhost")) {
           subdomain = "seferware";
         } else {
-          const subdomains = ctx.subdomains;
-          const mainDomain = subdomains.pop();
-          subdomain = subdomains.join(".");
+          const host = ctx.req.headers.host;
+          subdomain = host.split(".")[0];
         }
+        strapi
+          .plugin("sentry")
+          .service("sentry")
+          .sendError(`subdomain: ${JSON.stringify(subdomain)}`);
         const loggedUserUserGroup = await strapi
           .query("plugin::multi-tenant.user-group")
           .findOne({
@@ -34,6 +33,12 @@ module.exports = createCoreController(
             },
           });
 
+        strapi
+          .plugin("sentry")
+          .service("sentry")
+          .sendError(
+            `loggedUserUserGroup: ${JSON.stringify(loggedUserUserGroup)}`
+          );
         const mySkinRaw = await strapi
           .query("api::organization-skin.organization-skin")
           .findOne({
@@ -55,6 +60,13 @@ module.exports = createCoreController(
               userGroup: loggedUserUserGroup.id,
             },
           });
+
+        strapi
+          .plugin("sentry")
+          .service("sentry")
+          .sendError(
+            `mySkinRaw: ${JSON.stringify(mySkinRaw)}`
+          );
         const mySkin = getIdAndAttributes(mySkinRaw);
         const iconDark = getIdAndAttributes(mySkin.attributes.iconDark);
         const iconLight = getIdAndAttributes(mySkin.attributes.iconLight);
