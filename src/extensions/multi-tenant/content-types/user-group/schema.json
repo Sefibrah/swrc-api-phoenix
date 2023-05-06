@@ -120,6 +120,12 @@
       "relation": "oneToMany",
       "target": "api::payment-detail.payment-detail",
       "mappedBy": "userGroup"
+    },
+    "organizationDetails": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::organization-detail.organization-detail",
+      "mappedBy": "userGroup"
     }
   }
 }
