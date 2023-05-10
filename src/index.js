@@ -42,6 +42,8 @@ const myOrganizationSkin = ["mySkin"];
 const myOrganizationSkinRestricted = ["mySkin", "update"];
 const myOrganizationDetail = ["myDetail"];
 const myOrganizationDetailRestricted = ["myDetail", "update"];
+const availabilityNoLimits = ["available", "isAvailable"];
+const availabilityLimited = ["available"];
 
 const hashPassword = (password) => {
   return new Promise((resolve, reject) => {
@@ -107,9 +109,12 @@ const combineActionWithService = (uids, endpoints) => {
 };
 
 const getReceptionistPermissions = () => {
+  let restrictedAvailableEndpointsPermissions = combineActionWithService(
+    ["api::car.car", "api::extra.extra"],
+    [...availabilityNoLimits, ...restricted]
+  );
   let restrictedPermissions = combineActionWithService(
     [
-      "api::car.car",
       "api::color.color",
       "api::fuel-type.fuel-type",
       "api::car-group.car-group",
@@ -121,7 +126,6 @@ const getReceptionistPermissions = () => {
       "api::recurring-discount.recurring-discount",
       "api::temporary-discount.temporary-discount",
       "api::price.price",
-      "api::extra.extra",
     ],
     restricted
   );
@@ -179,6 +183,7 @@ const getReceptionistPermissions = () => {
     noRestrictions
   );
   return [
+    ...restrictedAvailableEndpointsPermissions,
     ...restrictedPermissions,
     ...noDeletePermissions,
     ...noRestrictionPermissions,
@@ -193,9 +198,12 @@ const getReceptionistPermissions = () => {
 };
 
 const getMechanicPermissions = () => {
+  let restrictedAvailableEndpointsPermissions = combineActionWithService(
+    ["api::car.car", "api::extra.extra"],
+    [...availabilityNoLimits, ...restricted]
+  );
   let restrictedPermissions = combineActionWithService(
     [
-      "api::car.car",
       "api::color.color",
       "api::contact.contact",
       "api::flight-number.flight-number",
@@ -213,7 +221,6 @@ const getMechanicPermissions = () => {
       "api::recurring-discount.recurring-discount",
       "api::temporary-discount.temporary-discount",
       "api::price.price",
-      "api::extra.extra",
       "api::payment-method.payment-method",
       "api::rental-agreement-detail.rental-agreement-detail",
       "api::rental-extra.rental-extra",
@@ -260,6 +267,7 @@ const getMechanicPermissions = () => {
     myOrganizationDetail
   );
   return [
+    ...restrictedAvailableEndpointsPermissions,
     ...myOrganizationSkinPermissions,
     ...myOrganizationDetailPermissions,
     ...restrictedPermissions,
@@ -274,9 +282,12 @@ const getMechanicPermissions = () => {
 };
 
 const getManagerPermissions = () => {
+  let noRestrictionsAvailableEndpointsPermissions = combineActionWithService(
+    ["api::car.car", "api::extra.extra"],
+    [...availabilityNoLimits, ...noRestrictions]
+  );
   let noRestrictionPermissions = combineActionWithService(
     [
-      "api::car.car",
       "api::color.color",
       "api::contact.contact",
       "api::car-group.car-group",
@@ -304,7 +315,6 @@ const getManagerPermissions = () => {
       "api::recurring-discount.recurring-discount",
       "api::temporary-discount.temporary-discount",
       "api::price.price",
-      "api::extra.extra",
       "api::payment-method.payment-method",
       "api::transaction.transaction",
       "api::rental-agreement-detail.rental-agreement-detail",
@@ -341,6 +351,7 @@ const getManagerPermissions = () => {
     myOrganizationDetailRestricted
   );
   return [
+    ...noRestrictionsAvailableEndpointsPermissions,
     ...myOrganizationSkinPermissions,
     ...myOrganizationDetailPermissions,
     ...noRestrictionPermissions,
@@ -353,9 +364,12 @@ const getManagerPermissions = () => {
 };
 
 const getAdminPermissions = () => {
+  let noRestrictionsAvailableEndpointsPermissions = combineActionWithService(
+    ["api::car.car", "api::extra.extra"],
+    [...availabilityNoLimits, ...noRestrictions]
+  );
   let noRestrictionPermissions = combineActionWithService(
     [
-      "api::car.car",
       "api::color.color",
       "api::flight-number.flight-number",
       "api::fuel-type.fuel-type",
@@ -383,7 +397,6 @@ const getAdminPermissions = () => {
       "api::recurring-discount.recurring-discount",
       "api::temporary-discount.temporary-discount",
       "api::price.price",
-      "api::extra.extra",
       "api::payment-method.payment-method",
       "api::transaction.transaction",
       "api::rental-agreement-detail.rental-agreement-detail",
@@ -424,6 +437,7 @@ const getAdminPermissions = () => {
     myOrganizationDetailRestricted
   );
   return [
+    ...noRestrictionsAvailableEndpointsPermissions,
     ...myOrganizationSkinPermissions,
     ...myOrganizationDetailPermissions,
     ...noRestrictionPermissions,
@@ -437,6 +451,10 @@ const getAdminPermissions = () => {
 };
 
 const getAuthenticatedPermissions = () => {
+  let availableEndpointsPermissions = combineActionWithService(
+    ["api::car.car", "api::extra.extra"],
+    availabilityLimited
+  );
   let noRestrictionAuthPermissions = combineActionWithService(
     ["plugin::users-permissions.auth"],
     noRestrictionsAuth
@@ -470,6 +488,7 @@ const getAuthenticatedPermissions = () => {
     myOrganizationDetail
   );
   return [
+    ...availableEndpointsPermissions,
     ...myOrganizationSkinPermissions,
     ...myOrganizationDetailPermissions,
     ...noRestrictionAuthPermissions,
@@ -482,6 +501,10 @@ const getAuthenticatedPermissions = () => {
 };
 
 const getPublicPermissions = () => {
+  let availableEndpointsPermissions = combineActionWithService(
+    ["api::car.car", "api::extra.extra"],
+    availabilityLimited
+  );
   let restrictedAuthPermissions = combineActionWithService(
     ["plugin::users-permissions.auth"],
     noRestrictionsAuth
@@ -511,6 +534,7 @@ const getPublicPermissions = () => {
     myOrganizationDetail
   );
   return [
+    ...availableEndpointsPermissions,
     ...myOrganizationSkinPermissions,
     ...myOrganizationDetailPermissions,
     ...restrictedAuthPermissions,
@@ -522,15 +546,11 @@ const getPublicPermissions = () => {
 };
 
 const getCustomEndpointPermissions = () => {
-  let createReservationPermissions = combineActionWithService(
-    ["api::create-reservation.create-reservation"],
-    ["createReservation"]
+  let makeReservationPermissions = combineActionWithService(
+    ["api::consumer.consumer"],
+    ["makeReservation"]
   );
-  let availableCarPermissions = combineActionWithService(
-    ["api::available-car.available-car"],
-    ["availableCar"]
-  );
-  return [...createReservationPermissions, ...availableCarPermissions];
+  return [...makeReservationPermissions];
 };
 
 const generatePermission = async (role, action) => {

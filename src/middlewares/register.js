@@ -70,7 +70,6 @@ module.exports = () => {
     let subdomain = null;
     // makes sense only when i am doing it on localhost, for production this should never work
     // unless a hacker comes??
-    console.log(ctx.req.headers.host);
     if (ctx.req.headers.host.includes("localhost")) {
       subdomain = "seferware";
     } else {
