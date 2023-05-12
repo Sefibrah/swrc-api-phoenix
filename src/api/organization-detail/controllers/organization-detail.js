@@ -104,6 +104,7 @@ module.exports = createCoreController(
 );
 
 function getIdAndAttributes(obj) {
+  if (obj == null) return null;
   const { id, ...attributes } = obj;
   return {
     id,

@@ -17,7 +17,8 @@
     "users": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "plugin::users-permissions.user"
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "userGroup"
     },
     "organization": {
       "type": "relation",

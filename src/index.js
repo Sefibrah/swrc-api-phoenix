@@ -38,6 +38,7 @@ const restrictedUser = ["me"];
 const noLimitsUpload = ["destroy", "find", "findOne", "upload"];
 const noDeleteUpload = ["find", "findOne", "upload"];
 const restrictedUserGroup = ["find", "findOne", "update"];
+const restrictedUserSetting = ["find", "findOne", "update"];
 const myOrganizationSkin = ["mySkin"];
 const myOrganizationSkinRestricted = ["mySkin", "update"];
 const myOrganizationDetail = ["myDetail"];
@@ -173,6 +174,10 @@ const getReceptionistPermissions = () => {
     ["api::organization-detail.organization-detail"],
     myOrganizationDetail
   );
+  let restrictedUserSettingPermissions = combineActionWithService(
+    ["api::user-setting.user-setting"],
+    restrictedUserSetting
+  );
   let noRestrictionPermissions = combineActionWithService(
     [
       "api::service-location.service-location",
@@ -183,6 +188,7 @@ const getReceptionistPermissions = () => {
     noRestrictions
   );
   return [
+    ...restrictedUserSettingPermissions,
     ...restrictedAvailableEndpointsPermissions,
     ...restrictedPermissions,
     ...noDeletePermissions,
@@ -266,7 +272,12 @@ const getMechanicPermissions = () => {
     ["api::organization-detail.organization-detail"],
     myOrganizationDetail
   );
+  let restrictedUserSettingPermissions = combineActionWithService(
+    ["api::user-setting.user-setting"],
+    restrictedUserSetting
+  );
   return [
+    ...restrictedUserSettingPermissions,
     ...restrictedAvailableEndpointsPermissions,
     ...myOrganizationSkinPermissions,
     ...myOrganizationDetailPermissions,
@@ -350,7 +361,12 @@ const getManagerPermissions = () => {
     ["api::organization-detail.organization-detail"],
     myOrganizationDetailRestricted
   );
+  let restrictedUserSettingPermissions = combineActionWithService(
+    ["api::user-setting.user-setting"],
+    restrictedUserSetting
+  );
   return [
+    ...restrictedUserSettingPermissions,
     ...noRestrictionsAvailableEndpointsPermissions,
     ...myOrganizationSkinPermissions,
     ...myOrganizationDetailPermissions,
@@ -405,6 +421,7 @@ const getAdminPermissions = () => {
       "api::rental-extra.rental-extra",
       "api::payment-detail.payment-detail",
       "api::address.address",
+      "api::user-setting.user-setting"
     ],
     noRestrictions
   );
@@ -487,7 +504,12 @@ const getAuthenticatedPermissions = () => {
     ["api::organization-detail.organization-detail"],
     myOrganizationDetail
   );
+  let restrictedUserSettingPermissions = combineActionWithService(
+    ["api::user-setting.user-setting"],
+    restrictedUserSetting
+  );
   return [
+    ...restrictedUserSettingPermissions,
     ...availableEndpointsPermissions,
     ...myOrganizationSkinPermissions,
     ...myOrganizationDetailPermissions,
@@ -857,6 +879,12 @@ module.exports = {
         type: "relation",
         relation: "oneToMany",
         target: "api::address.address",
+        mappedBy: "userGroup",
+      },
+      userSettings: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::user-setting.user-setting",
         mappedBy: "userGroup",
       },
     };

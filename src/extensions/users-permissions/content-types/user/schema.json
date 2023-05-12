@@ -67,6 +67,18 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::customer.customer"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "users"
+    },
+    "userSetting": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::user-setting.user-setting",
+      "inversedBy": "user"
     }
   }
 }

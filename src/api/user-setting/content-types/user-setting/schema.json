@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "user_settings",
+  "info": {
+    "singularName": "user-setting",
+    "pluralName": "user-settings",
+    "displayName": "User Setting"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "language": {
+      "type": "string",
+      "default": "ba"
+    },
+    "ui": {
+      "type": "string"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "userSettings"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "userSetting"
+    }
+  }
+}

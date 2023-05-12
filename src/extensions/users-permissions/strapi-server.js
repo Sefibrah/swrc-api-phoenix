@@ -1,5 +1,5 @@
 const jwt_decode = require("jwt-decode");
-const _ = require('lodash');
+const _ = require("lodash");
 const {
   validateCreateUserBody,
   validateUpdateUserBody,
@@ -27,10 +27,23 @@ module.exports = (plugin) => {
     const user = await strapi.entityService.findOne(
       "plugin::users-permissions.user",
       ctx.state.user.id,
-      { populate: ["role"] }
+      { populate: ["role", "userSetting"] }
     );
 
-    ctx.body = sanitizeOutput(user);
+    ctx.body = sanitizeOutput(organizeUser(user));
+  };
+
+  plugin.controllers.user.findOne = async (ctx) => {
+    const { id } = ctx.params;
+    const { query } = ctx;
+
+    let data = await getService("user").fetch(id, query);
+
+    if (data) {
+      data = await sanitizeOutput(data, ctx);
+    }
+
+    ctx.body = organizeUser(data);
   };
 
   plugin.controllers.user.find = async (ctx) => {
@@ -39,7 +52,7 @@ module.exports = (plugin) => {
       { ...ctx.params, populate: ["role"], ...ctx.query }
     );
 
-    ctx.body = users.map((user) => sanitizeOutput(user));
+    ctx.body = users.map((user) => sanitizeOutput(organizeUser(user)));
   };
 
   plugin.controllers.role.find = async (ctx) => {
@@ -48,7 +61,10 @@ module.exports = (plugin) => {
       { ...ctx.params, ...ctx.query }
     );
 
-    ctx.body = roles.map((role) => sanitizeOutput(role));
+    ctx.body = roles.map((role) => {
+      let organizedRole = getIdAndAttributes(role);
+      return sanitizeOutput(organizedRole);
+    });
   };
 
   plugin.controllers.user.update = async (ctx) => {
@@ -125,7 +141,7 @@ module.exports = (plugin) => {
     };
 
     const data = await getService("user").edit(user.id, updateData);
-    const sanitizedData = await sanitizeOutput(data, ctx);
+    const sanitizedData = await sanitizeOutput(organizeUser(data), ctx);
 
     ctx.send(sanitizedData);
   };
@@ -194,7 +210,7 @@ module.exports = (plugin) => {
 
     try {
       const data = await getService("user").add(user);
-      const sanitizedData = await sanitizeOutput(data, ctx);
+      const sanitizedData = await sanitizeOutput(organizeUser(data), ctx);
 
       ctx.created(sanitizedData);
     } catch (error) {
@@ -204,3 +220,25 @@ module.exports = (plugin) => {
 
   return plugin;
 };
+
+function getIdAndAttributes(obj) {
+  if (obj == null) return null;
+  const { id, ...attributes } = obj;
+  const result = {
+    id,
+    attributes: {},
+  };
+  for (const [key, value] of Object.entries(attributes)) {
+    if (typeof value === "object" && value !== null) {
+      result.attributes[key] = getIdAndAttributes(value);
+    } else {
+      result.attributes[key] = value;
+    }
+  }
+  return result;
+}
+
+function organizeUser(user) {
+  let organizedUser = getIdAndAttributes(user);
+  return organizedUser;
+}
