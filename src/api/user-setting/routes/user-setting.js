@@ -6,7 +6,7 @@ const {
 } = require("../../../shared/route-safety-policies");
 
 const sameUserGroupPolicyConfig = getSameUserGroupPolicyConfig(
-  "api::type-of-service.type-of-service"
+  "api::user-setting.user-setting"
 );
 const routeConfig = getRouteConfig(sameUserGroupPolicyConfig);
 
