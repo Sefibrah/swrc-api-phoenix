@@ -1,9 +1,18 @@
-'use strict';
+"use strict";
 
-/**
- * user-setting router
- */
+const {
+  getSameUserGroupPolicyConfig,
+  getRouteConfig,
+} = require("../../../shared/route-safety-policies");
 
-const { createCoreRouter } = require('@strapi/strapi').factories;
+const sameUserGroupPolicyConfig = getSameUserGroupPolicyConfig(
+  "api::type-of-service.type-of-service"
+);
+const routeConfig = getRouteConfig(sameUserGroupPolicyConfig);
 
-module.exports = createCoreRouter('api::user-setting.user-setting');
+const { createCoreRouter } = require("@strapi/strapi").factories;
+
+module.exports = createCoreRouter(
+  "api::user-setting.user-setting",
+  routeConfig
+);

@@ -1,44 +1,15 @@
 'use strict';
 
-/**
- * rental-agreement-detail router
- */
+const {
+  getSameUserGroupPolicyConfig,
+  getRouteConfig,
+} = require("../../../shared/route-safety-policies");
 
-const sameUserGroupPolicyConfig = {
-  name: "plugin::multi-tenant.is-same-user-group",
-  config: {
-    contentType: "api::rental-agreement-detail.rental-agreement-detail",
-  },
-};
+const sameUserGroupPolicyConfig = getSameUserGroupPolicyConfig(
+  "api::rental-agreement-detail.rental-agreement-detail"
+);
+const routeConfig = getRouteConfig(sameUserGroupPolicyConfig);
 
 const { createCoreRouter } = require('@strapi/strapi').factories;
 
-module.exports = createCoreRouter('api::rental-agreement-detail.rental-agreement-detail', {
-  config: {
-    update: {
-      policies: [sameUserGroupPolicyConfig],
-    },
-    delete: {
-      policies: [sameUserGroupPolicyConfig],
-    },
-    findOne: {
-      policies: [sameUserGroupPolicyConfig],
-    },
-    find: {
-      middlewares: [
-        {
-          name: "plugin::multi-tenant.find-same-user-group",
-          config: {},
-        },
-      ],
-    },
-    create: {
-      middlewares: [
-        {
-          name: "plugin::multi-tenant.add-same-user-group",
-          config: {},
-        },
-      ],
-    },
-  },
-});
+module.exports = createCoreRouter('api::rental-agreement-detail.rental-agreement-detail', routeConfig);

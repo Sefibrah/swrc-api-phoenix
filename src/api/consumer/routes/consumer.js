@@ -2,10 +2,10 @@ module.exports = {
   routes: [
     {
       method: "POST",
-      path: "/consumer/make-reservation",
-      handler: "consumer.makeReservation",
+      path: "/consumer/reservation",
+      handler: "consumer.createReservation",
       config: {
-        auth: false
+        auth: false,
       },
     },
   ],

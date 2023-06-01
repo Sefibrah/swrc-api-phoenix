@@ -5,17 +5,17 @@
  */
 
 const { createCoreService } = require("@strapi/strapi").factories;
+const {
+  getLoggedUserUserGroup,
+} = require("../../../shared/get-logged-user-user-group");
 
 module.exports = createCoreService("api::car.car", ({ strapi }) => ({
   isAvailable: async (carId, startDatetime, endDatetime, subdomain) => {
     try {
-      const loggedUserUserGroup = await strapi
-        .query("plugin::multi-tenant.user-group")
-        .findOne({
-          where: {
-            name: { $eq: subdomain },
-          },
-        });
+      const loggedUserUserGroup = await getLoggedUserUserGroup(
+        strapi,
+        subdomain
+      );
 
       const epicEventQuery = {
         userGroup: loggedUserUserGroup.id,

@@ -5,28 +5,19 @@ const url = require("url");
  */
 
 const { createCoreController } = require("@strapi/strapi").factories;
+const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
+const { getLoggedUserUserGroup } = require("../../../shared/get-logged-user-user-group")
 
 module.exports = createCoreController(
   "api::organization-skin.organization-skin",
   ({ strapi }) => ({
     mySkin: async (ctx, next) => {
       try {
-        let subdomain = null;
-        // makes sense only when i am doing it on localhost, for production this should never work
-        // unless a hacker comes??
-        if (ctx.req.headers.host.includes("localhost")) {
-          subdomain = "seferware";
-        } else {
-          const host = ctx.req.headers.host;
-          subdomain = host.split(".")[0];
-        }
-        const loggedUserUserGroup = await strapi
-          .query("plugin::multi-tenant.user-group")
-          .findOne({
-            where: {
-              name: { $eq: subdomain },
-            },
-          });
+        const subdomain = getSubdomainFromRequest(ctx.request);
+        const loggedUserUserGroup = await getLoggedUserUserGroup(
+          strapi,
+          subdomain
+        );
 
         const mySkinRaw = await strapi
           .query("api::organization-skin.organization-skin")

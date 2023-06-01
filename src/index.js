@@ -421,7 +421,7 @@ const getAdminPermissions = () => {
       "api::rental-extra.rental-extra",
       "api::payment-detail.payment-detail",
       "api::address.address",
-      "api::user-setting.user-setting"
+      "api::user-setting.user-setting",
     ],
     noRestrictions
   );
@@ -568,11 +568,11 @@ const getPublicPermissions = () => {
 };
 
 const getCustomEndpointPermissions = () => {
-  let makeReservationPermissions = combineActionWithService(
+  let createReservationPermissions = combineActionWithService(
     ["api::consumer.consumer"],
-    ["makeReservation"]
+    ["createReservation"]
   );
-  return [...makeReservationPermissions];
+  return [...createReservationPermissions];
 };
 
 const generatePermission = async (role, action) => {

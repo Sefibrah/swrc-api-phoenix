@@ -6,6 +6,11 @@
 
 const { createCoreController } = require("@strapi/strapi").factories;
 
+const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
+const {
+  getLoggedUserUserGroup,
+} = require("../../../shared/get-logged-user-user-group");
+
 module.exports = createCoreController("api::extra.extra", ({ strapi }) => ({
   isAvailable: async (ctx, next) => {
     try {
@@ -13,16 +18,7 @@ module.exports = createCoreController("api::extra.extra", ({ strapi }) => ({
       const startDatetime = new Date(ctx.request.query.startDatetime);
       const endDatetime = new Date(ctx.request.query.endDatetime);
       const quantity = ctx.request.query.quantity;
-
-      let subdomain = null;
-      // makes sense only when i am doing it on localhost, for production this should never work
-      // unless a hacker comes??
-      if (ctx.req.headers.host.includes("localhost")) {
-        subdomain = "seferware";
-      } else {
-        const host = ctx.req.headers.host;
-        subdomain = host.split(".")[0];
-      }
+      const subdomain = getSubdomainFromRequest(ctx.request);
 
       const isAvailable = await strapi
         .service("api::extra.extra")
@@ -38,24 +34,11 @@ module.exports = createCoreController("api::extra.extra", ({ strapi }) => ({
     try {
       const startDatetime = new Date(ctx.request.query.startDatetime);
       const endDatetime = new Date(ctx.request.query.endDatetime);
-      const quantity = ctx.request.query.quantity;
-
-      let subdomain = null;
-      // makes sense only when i am doing it on localhost, for production this should never work
-      // unless a hacker comes??
-      if (ctx.req.headers.host.includes("localhost")) {
-        subdomain = "seferware";
-      } else {
-        const host = ctx.req.headers.host;
-        subdomain = host.split(".")[0];
-      }
-      const loggedUserUserGroup = await strapi
-        .query("plugin::multi-tenant.user-group")
-        .findOne({
-          where: {
-            name: { $eq: subdomain },
-          },
-        });
+      const subdomain = getSubdomainFromRequest(ctx.request);
+      const loggedUserUserGroup = await getLoggedUserUserGroup(
+        strapi,
+        subdomain
+      );
 
       const epicEventQuery = {
         userGroup: loggedUserUserGroup.id,

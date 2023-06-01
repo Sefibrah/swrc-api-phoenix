@@ -8,6 +8,9 @@ const {
 const utils = require("@strapi/utils");
 const { getService } = require("@strapi/plugin-users-permissions/server/utils");
 const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
+const {
+  getLoggedUserUserGroupWithId,
+} = require("../../shared/get-logged-user-user-group");
 
 module.exports = (plugin) => {
   const sanitizeOutput = (user) => {
@@ -78,16 +81,10 @@ module.exports = (plugin) => {
 
     const { id } = ctx.params;
     const { email, username, password } = ctx.request.body;
-
-    const loggedUserUserGroup = await strapi
-      .query("plugin::multi-tenant.user-group")
-      .findOne({
-        where: {
-          users: {
-            id: { $in: userId },
-          },
-        },
-      });
+    const loggedUserUserGroup = await getLoggedUserUserGroupWithId(
+      strapi,
+      userId
+    );
 
     const user = await getService("user").fetch(id);
     if (!user) {
@@ -158,16 +155,10 @@ module.exports = (plugin) => {
     await validateCreateUserBody(ctx.request.body);
 
     const { email, username, role } = ctx.request.body;
-
-    const loggedUserUserGroup = await strapi
-      .query("plugin::multi-tenant.user-group")
-      .findOne({
-        where: {
-          users: {
-            id: { $in: userId },
-          },
-        },
-      });
+    const loggedUserUserGroup = await getLoggedUserUserGroupWithId(
+      strapi,
+      userId
+    );
 
     const userWithSameUsername = await strapi
       .query("plugin::users-permissions.user")

@@ -1,4 +1,6 @@
 const url = require("url");
+const { getSubdomainFromRequest } = require("../shared/get-subdomain")
+const { getLoggedUserUserGroup } = require("../shared/get-logged-user-user-group")
 
 const createContact = async (
   email,
@@ -67,26 +69,15 @@ const updateUser = async (id, userGroup) => {
 module.exports = () => {
   return async (ctx, next) => {
     await next();
-    let subdomain = null;
-    // makes sense only when i am doing it on localhost, for production this should never work
-    // unless a hacker comes??
-    if (ctx.req.headers.host.includes("localhost")) {
-      subdomain = "seferware";
-    } else {
-      const host = ctx.req.headers.host;
-      subdomain = host.split(".")[0];
-    }
+    const subdomain = getSubdomainFromRequest(ctx.request);
     if (
       ctx.request.url.includes("/api/auth/local/register") &&
       ctx.response.status === 200
     ) {
-      const loggedUserUserGroup = await strapi
-        .query("plugin::multi-tenant.user-group")
-        .findOne({
-          where: {
-            name: { $eq: subdomain },
-          },
-        });
+      const loggedUserUserGroup = await getLoggedUserUserGroup(
+        strapi,
+        subdomain
+      );
 
       const email = ctx.response.body.user.email;
       const telephone = ctx.response.body.user.telephone;

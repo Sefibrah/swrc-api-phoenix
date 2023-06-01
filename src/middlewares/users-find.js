@@ -1,4 +1,7 @@
 const jwt_decode = require("jwt-decode");
+const {
+  getLoggedUserUserGroupWithId,
+} = require("../shared/get-logged-user-user-group");
 
 module.exports = () => {
   return async (ctx, next) => {
@@ -12,15 +15,10 @@ module.exports = () => {
       const decoded = jwt_decode(jwt);
       const userId = decoded?.id;
       if (userId != null) {
-        const loggedUserUserGroup = await strapi
-          .query("plugin::multi-tenant.user-group")
-          .findOne({
-            where: {
-              users: {
-                id: { $in: userId },
-              },
-            },
-          });
+        const loggedUserUserGroup = await getLoggedUserUserGroupWithId(
+          strapi,
+          userId
+        );
         if (loggedUserUserGroup != null && ctx.query != null) {
           ctx.query = {
             ...ctx.query,

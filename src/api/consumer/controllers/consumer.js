@@ -2,25 +2,21 @@
 
 const utils = require("@strapi/utils");
 const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
+const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
+const { getJwt } = require("../../../shared/get-jwt");
+const {
+  getLoggedUserUserGroup,
+} = require("../../../shared/get-logged-user-user-group");
 
 /**
  * A set of functions called "actions" for `consumer`
  */
 
 module.exports = {
-  makeReservation: async (ctx, next) => {
+  createReservation: async (ctx, next) => {
     try {
-      let subdomain = null;
-      // makes sense only when i am doing it on localhost, for production this should never work
-      // unless a hacker comes??
-      if (ctx.req.headers.host.includes("localhost")) {
-        subdomain = "seferware";
-      } else {
-        const host = ctx.req.headers.host;
-        subdomain = host.split(".")[0];
-      }
-      const jwt =
-        ctx.request.header?.authorization?.replace("Bearer ", "") || null;
+      const subdomain = getSubdomainFromRequest(ctx.request);
+      const jwt = getJwt(ctx.request);
       const carGroupId = ctx.request.body.carId;
       const startDatetime = ctx.request.body.startDatetime;
       const endDatetime = ctx.request.body.endDatetime;
@@ -34,13 +30,10 @@ module.exports = {
       let carReservation = null;
       const comment = "";
 
-      const loggedUserUserGroup = await strapi
-        .query("plugin::multi-tenant.user-group")
-        .findOne({
-          where: {
-            name: { $eq: subdomain },
-          },
-        });
+      const loggedUserUserGroup = await getLoggedUserUserGroup(
+        strapi,
+        subdomain
+      );
 
       const carGroupFromDb = await strapi
         .query("api::car-group.car-group")
@@ -82,8 +75,7 @@ module.exports = {
 
       const oneDayInMilliseconds = 86400000; // 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
       const differenceInMilliseconds = Math.abs(
-        new Date(endDatetime).getTime() -
-          new Date(startDatetime).getTime()
+        new Date(endDatetime).getTime() - new Date(startDatetime).getTime()
       );
       let differenceInDays = Math.floor(
         differenceInMilliseconds / oneDayInMilliseconds
@@ -173,7 +165,7 @@ module.exports = {
               data: {
                 quantity: rentalExtra.quantity,
                 extra: rentalExtra.id,
-                userGroup: loggedUserUserGroup.id
+                userGroup: loggedUserUserGroup.id,
               },
             }
           );
@@ -195,7 +187,7 @@ module.exports = {
             populate: { customer: { populate: true } },
           });
         if (userFromDb != null && loggedUserUserGroup != null) {
-          carReservation = await makeReservation(
+          carReservation = await createReservation(
             comment,
             userFromDb.customer.individual.name,
             startDatetime,
@@ -263,7 +255,7 @@ module.exports = {
             userGroup,
           },
         });
-        carReservation = await makeReservation(
+        carReservation = await createReservation(
           comment,
           name,
           startDatetime,
@@ -288,7 +280,7 @@ module.exports = {
   },
 };
 
-async function makeReservation(
+async function createReservation(
   comment,
   author,
   startDatetime,
