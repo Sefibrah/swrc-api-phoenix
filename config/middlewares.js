@@ -12,4 +12,5 @@ module.exports = [
   "global::users-find",
   "global::users-create",
   "global::register",
+  "global::intercept-from-gtb",
 ];
