@@ -15,6 +15,17 @@ const {
 module.exports = {
   createReservation: async (ctx, next) => {
     try {
+      const requestData = ctx.request.body;
+      const requestHost = ctx.request.headers.host;
+      const testTableDataResponse = await strapi.entityService.create(
+        "api::test-table.test-table",
+        {
+          data: {
+            requestData,
+            requestHost,
+          },
+        }
+      );
       const subdomain = getSubdomainFromRequest(ctx.request);
       const jwt = getJwt(ctx.request);
       const carGroupId = ctx.request.body.carId;
