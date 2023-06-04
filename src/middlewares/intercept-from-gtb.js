@@ -74,7 +74,7 @@ function getDateTime(dateString, timeString) {
     year,
     month - 1,
     day,
-    hours - 1,
+    hours,
     minutes
   );
   dateWithDesiredDateTime.setUTCHours(
