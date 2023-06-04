@@ -2,6 +2,7 @@ const {
   getLoggedUserUserGroup,
 } = require("../shared/get-logged-user-user-group");
 const { getSubdomainFromRequest } = require("../shared/get-subdomain");
+const { DateTime } = require("luxon");
 
 module.exports = (config, { strapi }) => {
   return async (ctx, next) => {
@@ -40,7 +41,10 @@ module.exports = (config, { strapi }) => {
         });
       const body = {
         carId: carGroupFromDb.id,
-        startDatetime: getDateTime(reservation.start_date, reservation.start_time),
+        startDatetime: getDateTime(
+          reservation.start_date,
+          reservation.start_time
+        ),
         endDatetime: getDateTime(reservation.end_date, reservation.end_time),
         startLocation: "SARAJEVO AIRPORT (SJJ)",
         endLocation: "SARAJEVO AIRPORT (SJJ)",
@@ -64,10 +68,8 @@ module.exports = (config, { strapi }) => {
 };
 
 function getDateTime(dateString, timeString) {
-  // Splitting the input date into year, month, and day components
-  const [year, month, day] = dateString.split("-");
-  const [hour, minute] = timeString.split(":");
-
-  // Creating a new Date object with the desired time
-  return new Date(year, month - 1, day, hour, minute).toLocaleString();
+  const combinedDateTime = `${dateString}T${timeString}`;
+  const dateTime = DateTime.fromISO(combinedDateTime);
+  const sarajevoDateTime = dateTime.setZone("Europe/Sarajevo");
+  return sarajevoDateTime.toISO();
 }
