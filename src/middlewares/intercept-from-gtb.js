@@ -40,8 +40,8 @@ module.exports = (config, { strapi }) => {
         });
       const body = {
         carId: carGroupFromDb.id,
-        startDatetime: `${reservation.start_date} ${reservation.start_time}`,
-        endDatetime: `${reservation.end_date} ${reservation.end_time}`,
+        startDatetime: `${reservation.start_date}T${reservation.start_time}-01:00`,
+        endDatetime: `${reservation.end_date}T${reservation.end_time}-01:00`,
         startLocation: "SARAJEVO AIRPORT (SJJ)",
         endLocation: "SARAJEVO AIRPORT (SJJ)",
         flightNumber: reservation.flight_no,
