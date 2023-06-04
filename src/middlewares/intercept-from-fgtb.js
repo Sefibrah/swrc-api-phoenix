@@ -9,7 +9,6 @@ module.exports = (config, { strapi }) => {
     if (
       ctx.request.method === "POST" &&
       ctx.request.url.includes("/api/consumer/reservation") &&
-      ctx.request.body?.car == null &&
       ctx.request.body?.renter != null &&
       ctx.request.body?.reservation != null &&
       ctx.request.body?.comment == "stiglo iz sistema"
@@ -20,11 +19,11 @@ module.exports = (config, { strapi }) => {
       const reservation = ctx.request.body.reservation;
       const comment = ctx.request.body.comment;
 
-      await strapi.entityService.create("api::test-table.test-table", {
-        data: {
-          requestBody: { renter, reservation, comment },
-        },
-      });
+      // await strapi.entityService.create("api::test-table.test-table", {
+      //   data: {
+      //     requestBody: { renter, reservation, comment },
+      //   },
+      // });
 
       // const loggedUserUserGroup = await getLoggedUserUserGroup(
       //   strapi,
