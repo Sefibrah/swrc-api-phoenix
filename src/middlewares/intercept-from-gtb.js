@@ -40,12 +40,8 @@ module.exports = (config, { strapi }) => {
         });
       const body = {
         carId: carGroupFromDb.id,
-        startDatetime: getSarajevoDateTime(
-          `${reservation.start_date}T${reservation.start_time}Z`
-        ),
-        endDatetime: getSarajevoDateTime(
-          `${reservation.end_date}T${reservation.end_time}Z`
-        ),
+        startDatetime: `${reservation.start_date} ${reservation.start_time}`,
+        endDatetime: `${reservation.end_date} ${reservation.end_time}`,
         startLocation: "SARAJEVO AIRPORT (SJJ)",
         endLocation: "SARAJEVO AIRPORT (SJJ)",
         flightNumber: reservation.flight_no,
@@ -66,10 +62,3 @@ module.exports = (config, { strapi }) => {
     return await next();
   };
 };
-
-function getSarajevoDateTime(dateTimeString) {
-  const sarajevoTime = DateTime.fromISO(dateTimeString, {
-    zone: "utc",
-  }).setZone("Europe/Sarajevo");
-  return sarajevoTime.toISO();
-}
