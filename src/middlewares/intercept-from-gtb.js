@@ -21,7 +21,7 @@ module.exports = (config, { strapi }) => {
         strapi,
         subdomain
       );
-
+      console.log(loggedUserUserGroup);
       const carGroupFromDb = await strapi
         .query("api::car-group.car-group")
         .findOne({
@@ -53,13 +53,6 @@ module.exports = (config, { strapi }) => {
         },
         comment: "stiglo iz gulftravelbosna.com",
       };
-
-      await strapi.entityService.create("api::test-table.test-table", {
-        data: {
-          requestBody: body,
-          requestHost: "idk",
-        },
-      });
       ctx.request.body = {
         ...ctx.request.body,
         ...body,
