@@ -16,12 +16,12 @@ module.exports = (config, { strapi }) => {
       const car = ctx.request.body.car;
       const renter = ctx.request.body.renter;
       const reservation = ctx.request.body.reservation;
+      const comment = ctx.request.body.comment;
 
       const loggedUserUserGroup = await getLoggedUserUserGroup(
         strapi,
         subdomain
       );
-      console.log(loggedUserUserGroup);
       const carGroupFromDb = await strapi
         .query("api::car-group.car-group")
         .findOne({
@@ -40,8 +40,8 @@ module.exports = (config, { strapi }) => {
         });
       const body = {
         carId: carGroupFromDb.id,
-        startDatetime: `${reservation.start_date}T${reservation.start_time}Z`,
-        endDatetime: `${reservation.end_date}T${reservation.end_time}Z`,
+        startDatetime: `${reservation.start_date}T${reservation.start_time}`,
+        endDatetime: `${reservation.end_date}T${reservation.end_time}`,
         startLocation: "SARAJEVO AIRPORT (SJJ)",
         endLocation: "SARAJEVO AIRPORT (SJJ)",
         flightNumber: reservation.flight_no,
@@ -51,7 +51,7 @@ module.exports = (config, { strapi }) => {
           email: renter.email,
           telephone: renter.phone,
         },
-        comment: "stiglo iz gulftravelbosna.com",
+        comment,
       };
       ctx.request.body = {
         ...ctx.request.body,
