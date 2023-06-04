@@ -77,8 +77,5 @@ function getDateTime(dateString, timeString) {
     hours,
     minutes
   );
-  dateWithDesiredDateTime.setUTCHours(
-    dateWithDesiredDateTime.getUTCHours() + 2
-  );
   return dateWithDesiredDateTime.toISOString();
 }
