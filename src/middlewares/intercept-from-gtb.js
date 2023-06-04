@@ -68,10 +68,16 @@ module.exports = (config, { strapi }) => {
 };
 
 function getDateTime(dateString, timeString) {
-  const combinedDateTime = `${dateString}T${timeString}`;
-  const dateTime = DateTime.fromISO(combinedDateTime, { zone: "utc" });
-  const sarajevoDateTime = dateTime.setZone("Europe/Sarajevo", {
-    keepLocalTime: true,
+  const [year, month, day] = dateString.split("-");
+  const [hours, minutes] = timeString.split(":");
+  const dateTime = DateTime.fromObject({
+    year: parseInt(year),
+    month: parseInt(month),
+    day: parseInt(day),
+    hour: parseInt(hours),
+    minute: parseInt(minutes),
+    zone: "Europe/Sarajevo",
+    offset: "+2", // Specify the offset directly to avoid DST adjustments
   });
-  return sarajevoDateTime.toISO();
+  return dateTime.toISO();
 }
