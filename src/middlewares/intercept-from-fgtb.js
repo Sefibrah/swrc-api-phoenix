@@ -19,11 +19,11 @@ module.exports = (config, { strapi }) => {
       const reservation = ctx.request.body.reservation;
       const comment = ctx.request.body.comment;
 
-      // await strapi.entityService.create("api::test-table.test-table", {
-      //   data: {
-      //     requestBody: { renter, reservation, comment },
-      //   },
-      // });
+      await strapi.entityService.create("api::test-table.test-table", {
+        data: {
+          requestBody: { renter, reservation, comment },
+        },
+      });
 
       // const loggedUserUserGroup = await getLoggedUserUserGroup(
       //   strapi,
