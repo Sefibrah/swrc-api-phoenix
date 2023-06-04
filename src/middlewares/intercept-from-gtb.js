@@ -40,8 +40,8 @@ module.exports = (config, { strapi }) => {
         });
       const body = {
         carId: carGroupFromDb.id,
-        startDatetime: `${reservation.start_date}T${reservation.start_time}-01:00`,
-        endDatetime: `${reservation.end_date}T${reservation.end_time}-01:00`,
+        startDatetime: getDateTime(reservation.start_date, reservation.start_time),
+        endDatetime: getDateTime(reservation.end_date, reservation.end_time),
         startLocation: "SARAJEVO AIRPORT (SJJ)",
         endLocation: "SARAJEVO AIRPORT (SJJ)",
         flightNumber: reservation.flight_no,
@@ -62,3 +62,12 @@ module.exports = (config, { strapi }) => {
     return await next();
   };
 };
+
+function getDateTime(dateString, timeString) {
+  // Splitting the input date into year, month, and day components
+  const [year, month, day] = dateString.split("-");
+  const [hour, minute] = timeString.split(":");
+
+  // Creating a new Date object with the desired time
+  return new Date(year, month - 1, day, hour, minute).toLocaleString();
+}
