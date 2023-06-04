@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "test_tables",
+  "info": {
+    "singularName": "test-table",
+    "pluralName": "test-tables",
+    "displayName": "test-table"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "requestBody": {
+      "type": "json"
+    }
+  }
+}

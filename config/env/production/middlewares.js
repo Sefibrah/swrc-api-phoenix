@@ -26,4 +26,5 @@ module.exports = [
   "global::users-create",
   "global::register",
   "global::intercept-from-gtb",
+  "global::intercept-from-fgtb",
 ];
