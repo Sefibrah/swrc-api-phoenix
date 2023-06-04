@@ -70,12 +70,7 @@ module.exports = (config, { strapi }) => {
 function getDateTime(dateString, timeString) {
   const [year, month, day] = dateString.split("-");
   const [hours, minutes] = timeString.split(":");
-  const dateWithDesiredDateTime = new Date(
-    year,
-    month - 1,
-    day,
-    hours,
-    minutes
-  );
-  return dateWithDesiredDateTime.toISOString();
+  const date = new Date(year, month - 1, day, hours, minutes);
+  date.setTime(date.getTime() - 3600000);
+  return date.toISOString();
 }
