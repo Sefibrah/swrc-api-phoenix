@@ -1,3 +1,8 @@
+const {
+  getLoggedUserUserGroup,
+} = require("../shared/get-logged-user-user-group");
+const { getSubdomainFromRequest } = require("../shared/get-subdomain");
+
 module.exports = (config, { strapi }) => {
   return async (ctx, next) => {
     if (
@@ -7,13 +12,14 @@ module.exports = (config, { strapi }) => {
       ctx.request.body?.renter != null &&
       ctx.request.body?.reservation != null
     ) {
+      const subdomain = getSubdomainFromRequest(ctx.request);
       const car = ctx.request.body.car;
       const renter = ctx.request.body.renter;
       const reservation = ctx.request.body.reservation;
 
       const loggedUserUserGroup = await getLoggedUserUserGroup(
         strapi,
-        "gulftravelbosnia"
+        subdomain
       );
 
       const carGroupFromDb = await strapi
@@ -22,14 +28,16 @@ module.exports = (config, { strapi }) => {
           where: {
             userGroup: loggedUserUserGroup.id,
             cars: {
-              registrationPlate: {
-                $eq: car.registracija,
-              },
+              registrationPlate: { $eq: car.registracija },
             },
           },
           select: ["id"],
+          populate: {
+            cars: {
+              select: ["registrationPlate"],
+            },
+          },
         });
-
       const body = {
         carId: carGroupFromDb.id,
         startDatetime: `${reservation.start_date}T${reservation.start_time}Z`,
@@ -41,7 +49,7 @@ module.exports = (config, { strapi }) => {
           title: `${renter.title}.`,
           name: `${renter.first_name} ${renter.last_name}`,
           email: renter.email,
-          telephone: email.phone,
+          telephone: renter.phone,
         },
         comment: "stiglo iz gulftravelbosna.com",
       };

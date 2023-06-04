@@ -23,7 +23,7 @@ module.exports = {
       const startLocation = ctx.request.body.startLocation;
       const endLocation = ctx.request.body.endLocation;
       const flightNumber = ctx.request.body.flightNumber;
-      const userInfo = ctx.request.body?.user;
+      const userInfo = ctx.request.body.user;
       const rentalExtras = ctx.request.body.extras;
       const user = { info: userInfo, jwt };
 
