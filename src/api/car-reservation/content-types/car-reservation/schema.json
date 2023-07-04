@@ -48,6 +48,9 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::rental-extra.rental-extra"
+    },
+    "code": {
+      "type": "string"
     }
   }
 }

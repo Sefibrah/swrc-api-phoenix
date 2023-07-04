@@ -127,6 +127,12 @@
       "relation": "oneToMany",
       "target": "api::organization-detail.organization-detail",
       "mappedBy": "userGroup"
+    },
+    "flightNumbers": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::flight-number.flight-number",
+      "mappedBy": "userGroup"
     }
   }
 }

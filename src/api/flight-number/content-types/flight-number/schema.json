@@ -4,7 +4,8 @@
   "info": {
     "singularName": "flight-number",
     "pluralName": "flight-numbers",
-    "displayName": "Flight Number"
+    "displayName": "Flight Number",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -19,6 +20,13 @@
       "relation": "manyToOne",
       "target": "plugin::multi-tenant.user-group",
       "inversedBy": "flightNumbers"
+    },
+    "time": {
+      "type": "string",
+      "regex": "^(?:[01][0-9]|2[0-4]):[0-5][0-9]$"
+    },
+    "code": {
+      "type": "string"
     }
   }
 }

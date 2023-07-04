@@ -57,5 +57,5 @@ Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/
 <sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
 
 ```
-mysqldump -u root -p swrcapidb > latest.sql --skip-comments --no-data
+mysqldump -u root -p swrcapic_db > latest.sql --skip-comments --no-data
 ```

@@ -13,7 +13,9 @@
   "pluginOptions": {},
   "attributes": {
     "discount": {
-      "type": "decimal"
+      "type": "decimal",
+      "min": 0,
+      "default": 0
     },
     "discountType": {
       "type": "enumeration",
@@ -24,22 +26,32 @@
       ]
     },
     "additionalCost": {
-      "type": "decimal"
+      "type": "decimal",
+      "min": 0,
+      "default": 0
     },
     "deposit": {
-      "type": "decimal"
+      "type": "decimal",
+      "default": 0,
+      "min": 0
     },
     "tax": {
-      "type": "decimal"
+      "type": "decimal",
+      "min": 0,
+      "default": 0
     },
     "paymentMethod": {
       "type": "string"
     },
     "totalWithTax": {
-      "type": "decimal"
+      "type": "decimal",
+      "min": 0,
+      "default": 0
     },
     "totalWithoutTax": {
-      "type": "decimal"
+      "type": "decimal",
+      "min": 0,
+      "default": 0
     },
     "userGroup": {
       "type": "relation",
@@ -48,7 +60,14 @@
       "inversedBy": "transactions"
     },
     "extrasPrice": {
-      "type": "decimal"
+      "type": "decimal",
+      "min": 0,
+      "default": 0
+    },
+    "pricePerDay": {
+      "type": "decimal",
+      "default": 0,
+      "min": 0
     }
   }
 }
