@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "organization_email_configs",
+  "info": {
+    "singularName": "organization-email-config",
+    "pluralName": "organization-email-configs",
+    "displayName": "Organization Email Config",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "host": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "organizationEmailConfigs"
+    },
+    "password": {
+      "type": "string"
+    }
+  }
+}

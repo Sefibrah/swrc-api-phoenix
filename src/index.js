@@ -887,6 +887,12 @@ module.exports = {
         target: "api::user-setting.user-setting",
         mappedBy: "userGroup",
       },
+      organizationEmailConfigs: {
+        type: "relation",
+        relation: "oneToMany",
+        target: "api::organization-email-config.organization-email-config",
+        mappedBy: "userGroup",
+      },
     };
   },
 

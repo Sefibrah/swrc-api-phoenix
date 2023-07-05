@@ -7,6 +7,8 @@ const { getJwt } = require("../../../shared/get-jwt");
 const {
   getLoggedUserUserGroup,
 } = require("../../../shared/get-logged-user-user-group");
+const fs = require("fs");
+const util = require("util");
 
 /**
  * A set of functions called "actions" for `consumer`
@@ -26,6 +28,8 @@ module.exports = {
       const userInfo = ctx.request.body.user;
       const rentalExtras = ctx.request.body.extras;
       const user = { info: userInfo, jwt };
+      const code = (Math.random() * 1000000).toString(36).replace(".", "");
+      let html = "";
 
       let carReservation = null;
       const comment = ctx.request.body?.comment;
@@ -69,6 +73,7 @@ module.exports = {
 
       if (carFromDbId == null) {
         ctx.body = new NotFoundError("CAR_IS_NOT_AVAILABLE");
+        return ctx.body;
       }
 
       // feat: will be used for price calculations for the reservation
@@ -101,6 +106,7 @@ module.exports = {
 
       if (latestPriceColumn == null) {
         ctx.body = new NotFoundError("CAR_DOESNT_HAVE_PRICE_COLUMNS");
+        return ctx.body;
       }
 
       let totalWithTax = latestPriceColumn.amount * days;
@@ -177,6 +183,7 @@ module.exports = {
       // procedure: making the reservation
 
       const userGroup = loggedUserUserGroup.id;
+      let recipient = "";
       if (user?.jwt != null) {
         const decoded = jwt_decode(user.jwt);
         const userId = decoded?.id;
@@ -186,6 +193,8 @@ module.exports = {
             where: { id: { $eq: userId } },
             populate: { customer: { populate: true } },
           });
+        // fixme: ovo testirati
+        recipient = userFromDb.email;
         if (userFromDb != null && loggedUserUserGroup != null) {
           carReservation = await createReservation(
             comment,
@@ -202,12 +211,14 @@ module.exports = {
             extrasPrice,
             flightNumber,
             carFromDbId,
-            userGroup
+            userGroup,
+            code
           );
         }
       } else {
         // fixme: idea: mozda je dobro da odradimo provjeru da li guest vec postoji?
         const name = user.info.title + " " + user.info.name;
+        recipient = user.info.email;
         const contact = await strapi.entityService.create(
           "api::contact.contact",
           {
@@ -270,9 +281,26 @@ module.exports = {
           extrasPrice,
           flightNumber,
           carFromDbId,
-          userGroup
+          userGroup,
+          code
         );
       }
+
+      const rawHtml = fs.readFileSync(
+        "src/shared/email/reservation-request-successful.html",
+        "utf8"
+      );
+      html = util.format(rawHtml, code);
+
+      await strapi
+        .service("api::send-email.send-email")
+        .sendEmail(
+          recipient,
+          html,
+          "You have made a reservation successfully!",
+          subdomain
+        );
+
       return carReservation;
     } catch (err) {
       ctx.body = err;
@@ -295,7 +323,8 @@ async function createReservation(
   extrasPrice,
   flightNumber,
   car,
-  userGroup
+  userGroup,
+  code
 ) {
   let agreementDetail = await strapi.entityService.create(
     "api::agreement-detail.agreement-detail",
@@ -345,6 +374,7 @@ async function createReservation(
     {
       data: {
         flightNumber,
+        code,
         car,
         rentalExtras,
         rentalAgreementDetail: rentalAgreementDetail.id,
