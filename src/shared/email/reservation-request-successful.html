@@ -3,9 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <style>
+      /* CSS styles for the HTML elements */
       body {
         font-family: Arial, sans-serif;
         line-height: 1.5;
+        width: 450px;
+        margin: 0 auto;
+        text-align: center;
       }
 
       h1 {
@@ -39,6 +43,16 @@
       .header-image img {
         width: 200px;
       }
+
+      /* CSS styles for RTL content */
+      .rtl-content {
+        direction: rtl;
+      }
+
+      /* CSS styles for LTR content */
+      .ltr-content {
+        direction: ltr;
+      }
     </style>
   </head>
   <body>
@@ -48,34 +62,34 @@
         alt="Gulf Travel Logo"
       />
     </div>
-    <h1>
-      Your reservation request has been received successfully! (تم استلام طلب
-      الحجز الخاص بك بنجاح!)
-    </h1>
-    <p>Your reservation code is: (رمز الحجز الخاص بك هو:)</p>
-    <div class="highlight">
-      <p>%s</p>
+    <div class="rtl-content">
+      <h1>لقد تم حجزكم بالنجاح</h1>
+      <p>
+        كي نضبط موعد استلام السيارة, نحتاج إلى معرفة موعد الوصول و المغادرة. لذا
+        يرجى منكم إرسال صورة تذكرة الطيران ذهاب و إياب, و صورة من جواز السفر و
+        رخصة القيادة على رقم الواتس 0038761479900
+      </p>
+      <p>شكرًا لاختيارك وكالة بالبوسنة ولاهرسك "Gulf Travel" لتأجير السيارات</p>
+      <p class="footer">
+        تحتفظ وكالة Gulf Travel Rent-A-Car بجميع الحقوق في إلغاء الحجوزات دون أي
+        التزام بتعويض الأضرار قبل وبعد الحجز
+      </p>
     </div>
-    <p>
-      Please send us a copy of your airline ticket, passport, and driver's
-      license to our WhatsApp number <strong>+38761479900</strong>. (يرجى إرسال
-      نسخة من تذكرة الطيران وجواز السفر ورخصة القيادة الخاصة بك إلى رقم الواتساب
-      الخاص بنا <strong>+38761479900</strong>.)
-    </p>
-    <p>
-      Booking confirmation and the method of payment for the vehicle will be
-      sent to you as soon as possible. (سيتم إرسال تأكيد الحجز وطريقة الدفع
-      للمركبة إليك في أقرب وقت ممكن.)
-    </p>
-    <p>
-      Thank you for choosing "Gulf Travel" Rent-A-Car agency. (شكرًا لاختيارك
-      وكالة "جولف ترافل" لتأجير السيارات.)
-    </p>
-    <p class="footer">
-      Gulf Travel Rent-A-Car Agency reserves all rights to cancel reservations
-      without any obligation to compensate for damage before and after booking!
-      (تحتفظ وكالة Gulf Travel Rent-A-Car بجميع الحقوق في إلغاء الحجوزات دون أي
-      التزام بتعويض الأضرار قبل وبعد الحجز!)
-    </p>
+    <div class="ltr-content">
+      <h1>Your reservation request has been received successfully!</h1>
+      <p>
+        Please send us a copy of your airline ticket, passport, and driver's
+        license to our WhatsApp number <strong>+38761479900</strong>.
+      </p>
+      <p>
+        Thank you for choosing "Gulf Travel" Rent-A-Car agency in Bosnia and
+        Herzegovina.
+      </p>
+      <p class="footer">
+        Gulf Travel Rent-A-Car Agency reserves all rights to cancel reservations
+        without any obligation to compensate for damage before and after
+        booking!
+      </p>
+    </div>
   </body>
 </html>

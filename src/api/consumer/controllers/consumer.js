@@ -292,12 +292,13 @@ module.exports = {
       );
       html = util.format(rawHtml, code);
 
+      // fixme: enable when actually ready!
       await strapi
         .service("api::send-email.send-email")
         .sendEmail(
           recipient,
           html,
-          "You have made a reservation successfully!",
+          "NEW: Your reservation request has been received successfully!",
           subdomain
         );
 
