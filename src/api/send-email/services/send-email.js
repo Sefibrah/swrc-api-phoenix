@@ -37,16 +37,18 @@ module.exports = ({ strapi }) => ({
       from: organizationEmailConfig.email,
       to: recipient,
       subject,
-      html
+      html,
     };
 
     // Send the email
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.log(error);
+        strapi.plugin("sentry").service("sentry").sendError(error);
         return error;
       }
       console.log(info);
+      strapi.plugin("sentry").service("sentry").sendError(info);
       return "Email sent successfully";
     });
   },
