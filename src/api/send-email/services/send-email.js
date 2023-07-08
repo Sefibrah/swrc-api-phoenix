@@ -24,8 +24,8 @@ module.exports = ({ strapi }) => ({
     // Create a Nodemailer transporter using SMTP settings
     const transporter = nodemailer.createTransport({
       host: organizationEmailConfig.host,
-      port: 465,
-      secure: true, // Enable SSL/TLS
+      port: 587,
+      secure: false,
       auth: {
         user: organizationEmailConfig.email,
         pass: organizationEmailConfig.password,
@@ -44,11 +44,17 @@ module.exports = ({ strapi }) => ({
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.log(error, organizationEmailConfig);
-        strapi.plugin("sentry").service("sentry").sendError(organizationEmailConfig);
+        strapi
+          .plugin("sentry")
+          .service("sentry")
+          .sendError(organizationEmailConfig);
         return error;
       }
       console.log(info, organizationEmailConfig);
-      strapi.plugin("sentry").service("sentry").sendError(organizationEmailConfig);
+      strapi
+        .plugin("sentry")
+        .service("sentry")
+        .sendError(organizationEmailConfig);
       return "Email sent successfully";
     });
   },
