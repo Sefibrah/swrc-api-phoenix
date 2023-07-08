@@ -44,11 +44,11 @@ module.exports = ({ strapi }) => ({
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.log(error, organizationEmailConfig);
-        strapi.plugin("sentry").service("sentry").sendError(error);
+        strapi.plugin("sentry").service("sentry").sendError(organizationEmailConfig);
         return error;
       }
       console.log(info, organizationEmailConfig);
-      strapi.plugin("sentry").service("sentry").sendError(info);
+      strapi.plugin("sentry").service("sentry").sendError(organizationEmailConfig);
       return "Email sent successfully";
     });
   },
