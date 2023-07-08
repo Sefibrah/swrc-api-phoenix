@@ -24,8 +24,8 @@ module.exports = ({ strapi }) => ({
     // Create a Nodemailer transporter using SMTP settings
     const transporter = nodemailer.createTransport({
       host: organizationEmailConfig.host,
-      port: 587,
-      secure: false,
+      port: 465,
+      secure: true,
       auth: {
         user: organizationEmailConfig.email,
         pass: organizationEmailConfig.password,
