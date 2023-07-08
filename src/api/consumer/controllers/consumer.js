@@ -286,11 +286,19 @@ module.exports = {
         );
       }
 
+      strapi
+        .plugin("sentry")
+        .service("sentry")
+        .sendError("I MANAGED TO GET HERE!!");
+
       const rawHtml = fs.readFileSync(
         "src/shared/email/reservation-request-successful.html",
         "utf8"
       );
-      html = util.format(rawHtml, code);
+      // fixme: -code-, could use it here in the future...
+      html = util.format(rawHtml /**, code */);
+
+      strapi.plugin("sentry").service("sentry").sendError(html);
 
       // fixme: enable when actually ready!
       await strapi
