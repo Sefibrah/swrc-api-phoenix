@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const {
   getSameUserGroupPolicyConfig,
@@ -10,6 +10,9 @@ const sameUserGroupPolicyConfig = getSameUserGroupPolicyConfig(
 );
 const routeConfig = getRouteConfig(sameUserGroupPolicyConfig);
 
-const { createCoreRouter } = require('@strapi/strapi').factories;
+const { createCoreRouter } = require("@strapi/strapi").factories;
 
-module.exports = createCoreRouter('api::car-reservation.car-reservation', routeConfig);
+module.exports = createCoreRouter(
+  "api::car-reservation.car-reservation",
+  routeConfig
+);

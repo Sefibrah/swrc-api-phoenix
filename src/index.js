@@ -45,6 +45,16 @@ const myOrganizationDetail = ["myDetail"];
 const myOrganizationDetailRestricted = ["myDetail", "update"];
 const availabilityNoLimits = ["available", "isAvailable"];
 const availabilityLimited = ["available"];
+const systemReservationsNoLimits = [
+  "createFullReservationFromSystem",
+  "updateFullReservationFromSystem",
+  "deleteFullReservationFromSystem",
+];
+const systemContractsNoLimits = [
+  "createFullContractFromSystem",
+  "updateFullContractFromSystem",
+  "deleteFullContractFromSystem",
+];
 
 const hashPassword = (password) => {
   return new Promise((resolve, reject) => {
@@ -187,6 +197,14 @@ const getReceptionistPermissions = () => {
     ],
     noRestrictions
   );
+  let systemReservationPermissions = combineActionWithService(
+    ["api::system.system-reservation"],
+    systemReservationsNoLimits
+  );
+  let systemContractPermissions = combineActionWithService(
+    ["api::system.system-contract"],
+    systemContractsNoLimits
+  );
   return [
     ...restrictedUserSettingPermissions,
     ...restrictedAvailableEndpointsPermissions,
@@ -199,6 +217,8 @@ const getReceptionistPermissions = () => {
     ...myOrganizationSkinPermissions,
     ...myOrganizationDetailPermissions,
     ...restrictedUserGroupPermissions,
+    ...systemReservationPermissions,
+    ...systemContractPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -365,6 +385,14 @@ const getManagerPermissions = () => {
     ["api::user-setting.user-setting"],
     restrictedUserSetting
   );
+  let systemReservationPermissions = combineActionWithService(
+    ["api::system.system-reservation"],
+    systemReservationsNoLimits
+  );
+  let systemContractPermissions = combineActionWithService(
+    ["api::system.system-contract"],
+    systemContractsNoLimits
+  );
   return [
     ...restrictedUserSettingPermissions,
     ...noRestrictionsAvailableEndpointsPermissions,
@@ -375,6 +403,8 @@ const getManagerPermissions = () => {
     ...restrictedUserPermissions,
     ...noLimitUploadPermissions,
     ...restrictedUserGroupPermissions,
+    ...systemReservationPermissions,
+    ...systemContractPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -453,6 +483,14 @@ const getAdminPermissions = () => {
     ["api::organization-detail.organization-detail"],
     myOrganizationDetailRestricted
   );
+  let systemReservationPermissions = combineActionWithService(
+    ["api::system.system-reservation"],
+    systemReservationsNoLimits
+  );
+  let systemContractPermissions = combineActionWithService(
+    ["api::system.system-contract"],
+    systemContractsNoLimits
+  );
   return [
     ...noRestrictionsAvailableEndpointsPermissions,
     ...myOrganizationSkinPermissions,
@@ -463,6 +501,8 @@ const getAdminPermissions = () => {
     ...noRestrictionUserPermissions,
     ...noLimitUploadPermissions,
     ...restrictedUserGroupPermissions,
+    ...systemReservationPermissions,
+    ...systemContractPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };

@@ -196,12 +196,54 @@ module.exports = {
         // fixme: ovo testirati
         recipient = userFromDb.email;
         if (userFromDb != null && loggedUserUserGroup != null) {
-          carReservation = await createReservation(
+          carReservation = await strapi
+            .service("api::consumer.consumer")
+            .createFullReservationFromConsumer(
+              comment,
+              userFromDb.customer.individual.name,
+              startDatetime,
+              endDatetime,
+              userFromDb.customer.id,
+              startLocation,
+              endLocation,
+              rentalExtraIds,
+              totalWithTax,
+              deposit,
+              discount,
+              extrasPrice,
+              flightNumber,
+              carFromDbId,
+              userGroup,
+              code
+            );
+        }
+      } else {
+        // fixme: idea: mozda je dobro da odradimo provjeru da li guest vec postoji?
+        const name = user.info.title + " " + user.info.name;
+        recipient = user.info.email;
+
+        const customer = await strapi
+          .service("api::customer.customer")
+          .createIndividualGuestCustomer(
+            userGroup,
+            {
+              email: user.info.email,
+              telephonePrimary: null,
+              telephoneSecondary: user.info.telephone,
+              website: null,
+            },
+            { civilNumber: null, dateOfBirth: null, documents: null },
+            { name, country: null, comment: null, isLocal: false }
+          );
+
+        carReservation = await strapi
+          .service("api::consumer.consumer")
+          .createFullReservationFromConsumer(
             comment,
-            userFromDb.customer.individual.name,
+            name,
             startDatetime,
             endDatetime,
-            userFromDb.customer.id,
+            customer.id,
             startLocation,
             endLocation,
             rentalExtraIds,
@@ -214,76 +256,6 @@ module.exports = {
             userGroup,
             code
           );
-        }
-      } else {
-        // fixme: idea: mozda je dobro da odradimo provjeru da li guest vec postoji?
-        const name = user.info.title + " " + user.info.name;
-        recipient = user.info.email;
-        const contact = await strapi.entityService.create(
-          "api::contact.contact",
-          {
-            data: {
-              email: user.info.email,
-              telephoneSecondary: user.info.telephone,
-              userGroup,
-            },
-          }
-        );
-        const individual = await strapi.entityService.create(
-          "api::individual.individual",
-          {
-            data: {
-              contact: contact.id,
-              // name,
-              userGroup,
-            },
-          }
-        );
-        const customer = await strapi.entityService.create(
-          "api::customer.customer",
-          {
-            data: {
-              individual: individual.id,
-              contact: contact.id,
-              userGroup,
-              name,
-              type: "GUEST",
-              isLocal: false,
-            },
-          }
-        );
-        const updatedIndividual = await strapi
-          .query("api::individual.individual")
-          .update({
-            where: { id: individual.id },
-            data: {
-              customer: customer.id,
-            },
-          });
-        const guest = await strapi.entityService.create("api::guest.guest", {
-          data: {
-            customer: customer.id,
-            userGroup,
-          },
-        });
-        carReservation = await createReservation(
-          comment,
-          name,
-          startDatetime,
-          endDatetime,
-          customer.id,
-          startLocation,
-          endLocation,
-          rentalExtraIds,
-          totalWithTax,
-          deposit,
-          discount,
-          extrasPrice,
-          flightNumber,
-          carFromDbId,
-          userGroup,
-          code
-        );
       }
 
       const rawHtml = fs.readFileSync(
@@ -293,7 +265,6 @@ module.exports = {
       // fixme: -code-, could use it here in the future...
       html = util.format(rawHtml /**, code */);
 
-      // fixme: enable when actually ready!
       await strapi
         .service("api::send-email.send-email")
         .sendEmail(
@@ -309,81 +280,3 @@ module.exports = {
     }
   },
 };
-
-async function createReservation(
-  comment,
-  author,
-  startDatetime,
-  endDatetime,
-  renter,
-  startLocation,
-  endLocation,
-  rentalExtras,
-  totalWithTax,
-  deposit,
-  discount,
-  extrasPrice,
-  flightNumber,
-  car,
-  userGroup,
-  code
-) {
-  let agreementDetail = await strapi.entityService.create(
-    "api::agreement-detail.agreement-detail",
-    {
-      data: {
-        comment,
-        author,
-        startDatetime,
-        endDatetime,
-        userGroup,
-      },
-    }
-  );
-  let rentalAgreementDetail = await strapi.entityService.create(
-    "api::rental-agreement-detail.rental-agreement-detail",
-    {
-      data: {
-        renter,
-        startLocation,
-        endLocation,
-        userGroup,
-      },
-    }
-  );
-  let taxRate = 0.17; // probably when going international this will need to be uplifted to the cloud
-  let tax = totalWithTax * taxRate;
-  let totalWithoutTax = totalWithTax - tax;
-  let transaction = await strapi.entityService.create(
-    "api::transaction.transaction",
-    {
-      data: {
-        totalWithTax,
-        deposit,
-        discount,
-        discountType: "FIXED", // FIXED = 0, PER_DAY = 1, PERCENTAGE = 2, fixme: now it's hardcoded, before the packages update...
-        additionalCost: 0,
-        tax,
-        paymentMethod: "CASH", // fixme: for now it's hardcoded, right?
-        totalWithoutTax,
-        extrasPrice,
-        userGroup,
-      },
-    }
-  );
-  return await strapi.entityService.create(
-    "api::car-reservation.car-reservation",
-    {
-      data: {
-        flightNumber,
-        code,
-        car,
-        rentalExtras,
-        rentalAgreementDetail: rentalAgreementDetail.id,
-        transaction: transaction.id,
-        agreementDetail: agreementDetail.id,
-        userGroup,
-      },
-    }
-  );
-}
