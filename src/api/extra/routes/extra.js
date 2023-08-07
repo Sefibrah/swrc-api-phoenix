@@ -1,15 +1,14 @@
-'use strict';
+"use strict";
 
 const {
   getSameUserGroupPolicyConfig,
   getRouteConfig,
 } = require("../../../shared/route-safety-policies");
 
-const sameUserGroupPolicyConfig = getSameUserGroupPolicyConfig(
-  "api::extra.extra"
-);
-const routeConfig = getRouteConfig(sameUserGroupPolicyConfig);
+const sameUserGroupPolicyConfig =
+  getSameUserGroupPolicyConfig("api::extra.extra");
+const routeConfig = getRouteConfig(sameUserGroupPolicyConfig, true);
 
-const { createCoreRouter } = require('@strapi/strapi').factories;
+const { createCoreRouter } = require("@strapi/strapi").factories;
 
-module.exports = createCoreRouter('api::extra.extra', routeConfig);
+module.exports = createCoreRouter("api::extra.extra", routeConfig);

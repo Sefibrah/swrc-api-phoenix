@@ -8,7 +8,7 @@ const {
 const sameUserGroupPolicyConfig = getSameUserGroupPolicyConfig(
   "api::location.location"
 );
-const routeConfig = getRouteConfig(sameUserGroupPolicyConfig);
+const routeConfig = getRouteConfig(sameUserGroupPolicyConfig, true);
 
 const { createCoreRouter } = require('@strapi/strapi').factories;
 

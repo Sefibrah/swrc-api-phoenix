@@ -1,4 +1,5 @@
 "use strict";
+const { getDays } = require("../../../shared/get-days");
 
 /**
  * consumer service
@@ -23,7 +24,7 @@ module.exports = ({ strapi }) => ({
     userGroup,
     code
   ) => {
-    let agreementDetail = await strapi.entityService.create(
+    const agreementDetail = await strapi.entityService.create(
       "api::agreement-detail.agreement-detail",
       {
         data: {
@@ -35,7 +36,7 @@ module.exports = ({ strapi }) => ({
         },
       }
     );
-    let rentalAgreementDetail = await strapi.entityService.create(
+    const rentalAgreementDetail = await strapi.entityService.create(
       "api::rental-agreement-detail.rental-agreement-detail",
       {
         data: {
@@ -46,16 +47,18 @@ module.exports = ({ strapi }) => ({
         },
       }
     );
-    let taxRate = 0.17; // probably when going international this will need to be uplifted to the cloud
-    let tax = totalWithTax * taxRate;
-    let totalWithoutTax = totalWithTax - tax;
-    let transaction = await strapi.entityService.create(
+    const taxRate = 0.17; // probably when going international this will need to be uplifted to the cloud
+    const tax = totalWithTax * taxRate;
+    const totalWithoutTax = totalWithTax - tax;
+    const days = getDays(startDatetime, endDatetime);
+    const transaction = await strapi.entityService.create(
       "api::transaction.transaction",
       {
         data: {
           totalWithTax,
           deposit,
           discount,
+          pricePerDay: totalWithTax / days,
           discountType: "FIXED", // FIXED = 0, PER_DAY = 1, PERCENTAGE = 2, fixme: now it's hardcoded, before the packages update...
           additionalCost: 0,
           tax,

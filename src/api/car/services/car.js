@@ -150,12 +150,12 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
     let carFilter = {
       userGroup: loggedUserUserGroup.id,
     };
-    if (carType != null) {
+    if (carType != null && carType != "") {
       carFilter = {
         ...carFilter,
         cars: {
           carType: {
-            $containsi: carType || null,
+            $eq: carType || null,
           },
         },
       };
@@ -179,11 +179,9 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
               "seats",
               "isAvailable",
             ],
-            populate: {
-              thumbnail: {
-                select: ["url"],
-              },
-            },
+          },
+          thumbnail: {
+            select: ["url"],
           },
         },
         where: carFilter,
@@ -325,6 +323,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
       const discount = carGroup.cars[0].discount || 0;
       return {
         ...carGroup.cars[0],
+        thumbnail: carGroup.thumbnail.url,
         name: carGroup.name,
         priceNoDiscount: carGroup.price,
         id: carGroup.id,

@@ -10,18 +10,22 @@ const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
 const { createCoreController } = require("@strapi/strapi").factories;
 
 const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
+const {
+  getStartAndEndDateTimeFromPayload,
+} = require("../../../shared/get-start-and-end-date-time-from-payload");
 
 module.exports = createCoreController("api::car.car", ({ strapi }) => ({
   isAvailable: async (ctx, next) => {
     try {
       const carId = ctx.params.id;
-      const startDatetime = new Date(ctx.request.query.startDatetime);
-      const endDatetime = new Date(ctx.request.query.endDatetime);
+      const { startDateTime, endDateTime } = getStartAndEndDateTimeFromPayload(
+        ctx.request.query
+      );
       const subdomain = getSubdomainFromRequest(ctx.request);
 
       const isAvailable = await strapi
         .service("api::car.car")
-        .isAvailable(carId, startDatetime, endDatetime, subdomain);
+        .isAvailable(carId, startDateTime, endDateTime, subdomain);
       ctx.body = isAvailable;
     } catch (err) {
       ctx.body = err;
@@ -29,14 +33,17 @@ module.exports = createCoreController("api::car.car", ({ strapi }) => ({
   },
 
   available: async (ctx, next) => {
-    const startDatetime = new Date(ctx.request.query.startDatetime);
-    const endDatetime = new Date(ctx.request.query.endDatetime);
-    const carType = ctx.request.query.carType;
+    console.log(ctx.request.query);
+    const { startDateTime, endDateTime } = getStartAndEndDateTimeFromPayload(
+      ctx.request.query
+    );
+    console.log(startDateTime, endDateTime);
+    const vehicleType = ctx.request.query.vehicleType;
     const subdomain = getSubdomainFromRequest(ctx.request);
 
     const availableCars = await strapi
       .service("api::car.car")
-      .available(startDatetime, endDatetime, carType, subdomain);
+      .available(startDateTime, endDateTime, vehicleType, subdomain);
 
     return availableCars;
   },

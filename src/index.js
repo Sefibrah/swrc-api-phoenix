@@ -533,6 +533,7 @@ const getAuthenticatedPermissions = () => {
       "api::extra.extra",
       "api::flight-number.flight-number",
       "api::vehicle-type.vehicle-type",
+      "api::location.location",
     ],
     restricted
   );
@@ -581,9 +582,9 @@ const getPublicPermissions = () => {
   );
   let restrictedPermissions = combineActionWithService(
     [
-      "api::extra.extra",
       "api::flight-number.flight-number",
       "api::vehicle-type.vehicle-type",
+      "api::location.location",
     ],
     restricted
   );
@@ -596,13 +597,13 @@ const getPublicPermissions = () => {
     myOrganizationDetail
   );
   return [
+    ...restrictedPermissions,
     ...availableEndpointsPermissions,
     ...myOrganizationSkinPermissions,
     ...myOrganizationDetailPermissions,
     ...restrictedAuthPermissions,
     ...restrictedUserPermissions,
     ...restrictedUserGroupPermissions,
-    ...restrictedPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };

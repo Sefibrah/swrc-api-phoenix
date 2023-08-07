@@ -11,18 +11,23 @@ const {
   getLoggedUserUserGroup,
 } = require("../../../shared/get-logged-user-user-group");
 
+const {
+  getStartAndEndDateTimeFromPayload,
+} = require("../../../shared/get-start-and-end-date-time-from-payload");
+
 module.exports = createCoreController("api::extra.extra", ({ strapi }) => ({
   isAvailable: async (ctx, next) => {
     try {
       const extraId = ctx.params.id;
-      const startDatetime = new Date(ctx.request.query.startDatetime);
-      const endDatetime = new Date(ctx.request.query.endDatetime);
+      const { startDateTime, endDateTime } = getStartAndEndDateTimeFromPayload(
+        ctx.request.query
+      );
       const quantity = ctx.request.query.quantity;
       const subdomain = getSubdomainFromRequest(ctx.request);
 
       const isAvailable = await strapi
         .service("api::extra.extra")
-        .isAvailable(extraId, startDatetime, endDatetime, quantity, subdomain);
+        .isAvailable(extraId, startDateTime, endDateTime, quantity, subdomain);
 
       return isAvailable;
     } catch (err) {
@@ -32,8 +37,9 @@ module.exports = createCoreController("api::extra.extra", ({ strapi }) => ({
 
   available: async (ctx, next) => {
     try {
-      const startDatetime = new Date(ctx.request.query.startDatetime);
-      const endDatetime = new Date(ctx.request.query.endDatetime);
+      const { startDateTime, endDateTime } = getStartAndEndDateTimeFromPayload(
+        ctx.request.query
+      );
       const subdomain = getSubdomainFromRequest(ctx.request);
       const loggedUserUserGroup = await getLoggedUserUserGroup(
         strapi,
@@ -48,11 +54,11 @@ module.exports = createCoreController("api::extra.extra", ({ strapi }) => ({
               {
                 agreementDetail: {
                   startDatetime: {
-                    $gte: startDatetime,
-                    $lte: endDatetime,
+                    $gte: startDateTime,
+                    $lte: endDateTime,
                   },
                   endDatetime: {
-                    $gte: endDatetime,
+                    $gte: endDateTime,
                   },
                 },
               },
@@ -63,11 +69,11 @@ module.exports = createCoreController("api::extra.extra", ({ strapi }) => ({
               {
                 agreementDetail: {
                   endDatetime: {
-                    $gte: startDatetime,
-                    $lte: endDatetime,
+                    $gte: startDateTime,
+                    $lte: endDateTime,
                   },
                   startDatetime: {
-                    $lte: endDatetime,
+                    $lte: endDateTime,
                   },
                 },
               },
@@ -78,12 +84,12 @@ module.exports = createCoreController("api::extra.extra", ({ strapi }) => ({
               {
                 agreementDetail: {
                   startDatetime: {
-                    $lte: startDatetime,
-                    $lte: endDatetime,
+                    $lte: startDateTime,
+                    $lte: endDateTime,
                   },
                   endDatetime: {
-                    $gte: endDatetime,
-                    $gte: startDatetime,
+                    $gte: endDateTime,
+                    $gte: startDateTime,
                   },
                 },
               },
@@ -158,19 +164,24 @@ module.exports = createCoreController("api::extra.extra", ({ strapi }) => ({
         where: {
           userGroup: loggedUserUserGroup.id,
         },
+        populate: {
+          thumbnail: {
+            select: ["url"],
+          },
+        },
       });
 
       return extras.map((extra) => {
-        const { id, name, description, quantity, price } = extra;
         const busyRentalExtraEquivalent = mergedBusyRentalExtras.find(
-          (rentalExtra) => rentalExtra.id == id
+          (rentalExtra) => rentalExtra.id == extra.id
         );
+        if (busyRentalExtraEquivalent == null) {
+          return { ...extra, thumbnail: extra.thumbnail.url };
+        }
         return {
-          id,
-          name,
-          description,
-          price,
-          quantity: quantity - busyRentalExtraEquivalent.quantity,
+          ...extra,
+          thumbnail: extra.thumbnail.url,
+          quantity: extra.quantity - busyRentalExtraEquivalent.quantity,
         };
       });
     } catch (err) {

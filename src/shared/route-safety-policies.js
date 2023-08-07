@@ -7,7 +7,7 @@ function getSameUserGroupPolicyConfig(contentType) {
   };
 }
 
-function getRouteConfig(sameUserGroupPolicyConfig) {
+function getRouteConfig(sameUserGroupPolicyConfig, withoutUser = false) {
   return {
     config: {
       update: {
@@ -22,7 +22,9 @@ function getRouteConfig(sameUserGroupPolicyConfig) {
       find: {
         middlewares: [
           {
-            name: "plugin::multi-tenant.find-same-user-group",
+            name: withoutUser
+              ? "api::consumer.find-same-user-group-without-user"
+              : "plugin::multi-tenant.find-same-user-group",
             config: {},
           },
         ],

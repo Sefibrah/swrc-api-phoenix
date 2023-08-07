@@ -10,7 +10,7 @@ module.exports = {
     },
     {
       method: "GET",
-      path: "/extra/available/:id",
+      path: "/extras/available/:id",
       handler: "extra.isAvailable",
       config: {
         auth: false

@@ -5,6 +5,10 @@ const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
 const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
 const { getJwt } = require("../../../shared/get-jwt");
 const {
+  getStartAndEndDateTimeFromPayload,
+} = require("../../../shared/get-start-and-end-date-time-from-payload");
+const { getDays } = require("../../../shared/get-days");
+const {
   getLoggedUserUserGroup,
 } = require("../../../shared/get-logged-user-user-group");
 const fs = require("fs");
@@ -15,13 +19,92 @@ const util = require("util");
  */
 
 module.exports = {
+  getReservationByCode: async (ctx, next) => {
+    try {
+      const code = ctx.request.params.code;
+      const subdomain = getSubdomainFromRequest(ctx.request);
+
+      const loggedUserUserGroup = await getLoggedUserUserGroup(
+        strapi,
+        subdomain
+      );
+
+      let carReservation = await strapi
+        .query("api::car-reservation.car-reservation")
+        .findOne({
+          where: { code: { $eq: code }, userGroup: loggedUserUserGroup.id },
+          select: ["flightNumber", "code"],
+          populate: {
+            rentalAgreementDetail: {
+              select: ["startLocation", "endLocation"],
+              populate: {
+                renter: {
+                  select: ["name"],
+                  populate: {
+                    contact: {
+                      select: ["email", "telephonePrimary", "telephoneSecondary"],
+                    },
+                  },
+                },
+              },
+            },
+            rentalExtras: {
+              select: ["quantity"],
+              populate: {
+                extra: {
+                  select: ["id"],
+                },
+              },
+            },
+            agreementDetail: {
+              select: ["startDatetime", "endDatetime"],
+            },
+            transaction: {
+              select: ["totalWithTax", "deposit", "extrasPrice", "pricePerDay"],
+            },
+            car: {
+              select: ["seats", "carType"],
+              populate: {
+                carGroup: {
+                  select: ["name"],
+                  populate: {
+                    thumbnail: {
+                      select: ["url"],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        });
+      carReservation = {
+        ...carReservation,
+        rentalExtras: carReservation.rentalExtras.map((rE) => ({
+          id: rE.extra.id,
+          quantity: rE.quantity,
+        })),
+        car: {
+          ...carReservation.car.carGroup,
+          thumbnail: carReservation.car.carGroup.thumbnail.url,
+          seats: carReservation.car.seats,
+          carType: carReservation.car.carType,
+          // largeBags: carReservation.car.largeBags,
+          // smallBags: carReservation.car.smallBags,
+        },
+      };
+      ctx.send(carReservation, 200);
+    } catch (err) {
+      ctx.send(err, 400);
+    }
+  },
   createReservation: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
       const jwt = getJwt(ctx.request);
       const carGroupId = ctx.request.body.carId;
-      const startDatetime = ctx.request.body.startDatetime;
-      const endDatetime = ctx.request.body.endDatetime;
+      const { startDateTime, endDateTime } = getStartAndEndDateTimeFromPayload(
+        ctx.request.body
+      );
       const startLocation = ctx.request.body.startLocation;
       const endLocation = ctx.request.body.endLocation;
       const flightNumber = ctx.request.body.flightNumber;
@@ -64,33 +147,23 @@ module.exports = {
         const car = carGroupFromDb.cars[i];
         const isAvailable = await strapi
           .service("api::car.car")
-          .isAvailable(car.id, startDatetime, endDatetime, subdomain);
+          .isAvailable(car.id, startDateTime, endDateTime, subdomain);
         if (isAvailable.message == "CAR_IS_AVAILABLE") {
           carFromDbId = car.id;
           break;
         }
       }
 
+      console.log("carFromDbId", carFromDbId);
+
       if (carFromDbId == null) {
-        ctx.body = new NotFoundError("CAR_IS_NOT_AVAILABLE");
+        ctx.send({ ...new NotFoundError("CAR_IS_NOT_AVAILABLE") }, 400);
         return ctx.body;
       }
 
       // feat: will be used for price calculations for the reservation
 
-      const oneDayInMilliseconds = 86400000; // 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
-      const differenceInMilliseconds = Math.abs(
-        new Date(endDatetime).getTime() - new Date(startDatetime).getTime()
-      );
-      let differenceInDays = Math.floor(
-        differenceInMilliseconds / oneDayInMilliseconds
-      );
-
-      if (differenceInMilliseconds % oneDayInMilliseconds >= 43200000) {
-        differenceInDays++;
-      }
-
-      const days = differenceInDays;
+      const days = getDays(startDateTime, endDateTime);
 
       // procedure: finding the latest price column for the reservation
 
@@ -105,7 +178,10 @@ module.exports = {
       }
 
       if (latestPriceColumn == null) {
-        ctx.body = new NotFoundError("CAR_DOESNT_HAVE_PRICE_COLUMNS");
+        ctx.send(
+          { ...new NotFoundError("CAR_DOESNT_HAVE_PRICE_COLUMNS") },
+          400
+        );
         return ctx.body;
       }
 
@@ -133,15 +209,16 @@ module.exports = {
           });
 
           if (extraFromDb == null) {
-            ctx.body = new NotFoundError("EXTRA_DOESNT_EXIST");
+            ctx.send(new NotFoundError("EXTRA_DOESNT_EXIST"), 400);
+            return;
           }
 
           const isAvailable = await strapi
             .service("api::extra.extra")
             .isAvailable(
               rentalExtra.id,
-              startDatetime,
-              endDatetime,
+              startDateTime,
+              endDateTime,
               rentalExtra.quantity,
               subdomain
             );
@@ -150,7 +227,7 @@ module.exports = {
             const extraPricePerDay = extraFromDb.price;
             extrasPrice += extraPricePerDay * days * rentalExtra.quantity;
           } else if (isAvailable?.error?.status == 404) {
-            ctx.body = new NotFoundError(isAvailable?.error?.message);
+            ctx.send(new NotFoundError(isAvailable?.error?.message), 400);
           }
         }
       }
@@ -201,8 +278,8 @@ module.exports = {
             .createFullReservationFromConsumer(
               comment,
               userFromDb.customer.individual.name,
-              startDatetime,
-              endDatetime,
+              startDateTime,
+              endDateTime,
               userFromDb.customer.id,
               startLocation,
               endLocation,
@@ -219,7 +296,7 @@ module.exports = {
         }
       } else {
         // fixme: idea: mozda je dobro da odradimo provjeru da li guest vec postoji?
-        const name = user.info.title + " " + user.info.name;
+        const name = user.info.name;
         recipient = user.info.email;
 
         const customer = await strapi
@@ -228,8 +305,8 @@ module.exports = {
             userGroup,
             {
               email: user.info.email,
-              telephonePrimary: null,
-              telephoneSecondary: user.info.telephone,
+              telephonePrimary: user.info.telephone,
+              telephoneSecondary: null,
               website: null,
             },
             { civilNumber: null, dateOfBirth: null, documents: null },
@@ -241,8 +318,8 @@ module.exports = {
           .createFullReservationFromConsumer(
             comment,
             name,
-            startDatetime,
-            endDatetime,
+            startDateTime,
+            endDateTime,
             customer.id,
             startLocation,
             endLocation,
@@ -274,9 +351,9 @@ module.exports = {
           subdomain
         );
 
-      return carReservation;
+      ctx.send(carReservation, 201);
     } catch (err) {
-      ctx.body = err;
+      ctx.send(err, 400);
     }
   },
 };

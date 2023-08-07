@@ -8,5 +8,13 @@ module.exports = {
         auth: false,
       },
     },
+    {
+      method: "GET",
+      path: "/consumer/reservation/:code",
+      handler: "consumer.getReservationByCode",
+      config: {
+        auth: false,
+      },
+    },
   ],
 };

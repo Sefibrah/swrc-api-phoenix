@@ -8,8 +8,11 @@ const {
 const sameUserGroupPolicyConfig = getSameUserGroupPolicyConfig(
   "api::flight-number.flight-number"
 );
-const routeConfig = getRouteConfig(sameUserGroupPolicyConfig);
+const routeConfig = getRouteConfig(sameUserGroupPolicyConfig, true);
 
 const { createCoreRouter } = require("@strapi/strapi").factories;
 
-module.exports = createCoreRouter("api::flight-number.flight-number", routeConfig);
+module.exports = createCoreRouter(
+  "api::flight-number.flight-number",
+  routeConfig
+);
