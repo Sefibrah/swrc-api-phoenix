@@ -137,7 +137,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
     }
   },
   available: async (startDatetime, endDatetime, carType, subdomain) => {
-    const days = getDays(startDatetime, endDatetime)
+    const days = getDays(startDatetime, endDatetime);
 
     const loggedUserUserGroup = await strapi
       .query("plugin::multi-tenant.user-group")
@@ -178,6 +178,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
               "doors",
               "seats",
               "isAvailable",
+              "registrationPlate",
             ],
           },
           thumbnail: {
@@ -287,7 +288,11 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
     // filter out vehicles that are busy!
     carGroups.forEach((carGroup) => {
       carGroup.cars = carGroup.cars.filter(
-        (car) => !uniqueBusyCarIds.includes(car.id) && car.isAvailable
+        (car) =>
+          !uniqueBusyCarIds.includes(car.id) &&
+          car.isAvailable &&
+          // fixme: ovo je takav hardcode fix znaci nije normalno
+          car.registrationPlate != "POMOCNOVOZILO"
       );
     });
     let availableCarGroups = carGroups.filter(
@@ -319,21 +324,19 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
     // fixme: kad se dodaju popusti, onda ovdje moraju da se reflect na neki nacin
     // ...
     // only return each group's first car child!
-    const response = availableCarGroups
-      .filter((carGroup) => carGroup.name != "POMOCNO VOZILO")
-      .map((carGroup) => {
-        const discount = carGroup.cars[0].discount || 0;
-        return {
-          ...carGroup.cars[0],
-          thumbnail: carGroup.thumbnail.url,
-          name: carGroup.name,
-          priceNoDiscount: carGroup.price,
-          id: carGroup.id,
-          price: carGroup.price - (carGroup.price * discount) / 100,
-          // add discount if it's during winter
-          discount,
-        };
-      });
+    const response = availableCarGroups.map((carGroup) => {
+      const discount = carGroup.cars[0].discount || 0;
+      return {
+        ...carGroup.cars[0],
+        thumbnail: carGroup.thumbnail.url,
+        name: carGroup.name,
+        priceNoDiscount: carGroup.price,
+        id: carGroup.id,
+        price: carGroup.price - (carGroup.price * discount) / 100,
+        // add discount if it's during winter
+        discount,
+      };
+    });
     return response;
   },
 }));

@@ -14,19 +14,19 @@ function getStartAndEndDateTimeFromPayload({
   doHour,
 }) {
   const startDateTime = getDateTimeFromObject({
-    puDay,
-    puMonth,
-    puYear,
-    puMinute,
-    puHour,
+    day: puDay,
+    month: puMonth,
+    year: puYear,
+    minute: puMinute,
+    hour: puHour,
   });
 
   const endDateTime = getDateTimeFromObject({
-    doDay,
-    doMonth,
-    doYear,
-    doMinute,
-    doHour,
+    day: doDay,
+    month: doMonth,
+    year: doYear,
+    minute: doMinute,
+    hour: doHour,
   });
   return { startDateTime, endDateTime };
 }

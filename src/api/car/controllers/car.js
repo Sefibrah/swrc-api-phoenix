@@ -33,11 +33,9 @@ module.exports = createCoreController("api::car.car", ({ strapi }) => ({
   },
 
   available: async (ctx, next) => {
-    console.log(ctx.request.query);
     const { startDateTime, endDateTime } = getStartAndEndDateTimeFromPayload(
       ctx.request.query
     );
-    console.log(startDateTime, endDateTime);
     const vehicleType = ctx.request.query.vehicleType;
     const subdomain = getSubdomainFromRequest(ctx.request);
 
