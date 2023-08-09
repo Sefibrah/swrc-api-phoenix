@@ -366,7 +366,7 @@ module.exports = {
         },
         select: ["id", "name"],
       });
-      if (renterFromDb.id == null) {
+      if (renterFromDb?.id == null) {
         renterFromDb = await strapi
           .service("api::customer.customer")
           .createIndividualGuestCustomer(
