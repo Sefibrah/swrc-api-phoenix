@@ -282,7 +282,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
       ...carContracts,
       ...carReservations,
       ...carMaintenances,
-    ].map((event) => event.car.id);
+    ].map((event) => event?.car?.id);
     const uniqueBusyCarIds = [...new Set(busyCarIds)];
     // filter out vehicles that are busy!
     carGroups.forEach((carGroup) => {
