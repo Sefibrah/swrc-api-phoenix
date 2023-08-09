@@ -1,4 +1,5 @@
 "use strict";
+const { getDays } = require("../../../shared/get-days");
 
 /**
  * car service.
@@ -136,8 +137,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
     }
   },
   available: async (startDatetime, endDatetime, carType, subdomain) => {
-    const diffTime = Math.abs(endDatetime - startDatetime);
-    const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const days = getDays(startDatetime, endDatetime)
 
     const loggedUserUserGroup = await strapi
       .query("plugin::multi-tenant.user-group")
@@ -319,19 +319,21 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
     // fixme: kad se dodaju popusti, onda ovdje moraju da se reflect na neki nacin
     // ...
     // only return each group's first car child!
-    const response = availableCarGroups.map((carGroup) => {
-      const discount = carGroup.cars[0].discount || 0;
-      return {
-        ...carGroup.cars[0],
-        thumbnail: carGroup.thumbnail.url,
-        name: carGroup.name,
-        priceNoDiscount: carGroup.price,
-        id: carGroup.id,
-        price: carGroup.price - (carGroup.price * discount) / 100,
-        // add discount if it's during winter
-        discount,
-      };
-    });
+    const response = availableCarGroups
+      .filter((carGroup) => carGroup.name != "POMOCNO VOZILO")
+      .map((carGroup) => {
+        const discount = carGroup.cars[0].discount || 0;
+        return {
+          ...carGroup.cars[0],
+          thumbnail: carGroup.thumbnail.url,
+          name: carGroup.name,
+          priceNoDiscount: carGroup.price,
+          id: carGroup.id,
+          price: carGroup.price - (carGroup.price * discount) / 100,
+          // add discount if it's during winter
+          discount,
+        };
+      });
     return response;
   },
 }));
