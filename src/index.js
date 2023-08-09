@@ -596,6 +596,10 @@ const getPublicPermissions = () => {
     ["api::organization-detail.organization-detail"],
     myOrganizationDetail
   );
+  let importPermissions = combineActionWithService(
+    ["api::import.import"],
+    ["importReservationFromGTRC", "importContractFromGTRC"]
+  );
   return [
     ...restrictedPermissions,
     ...availableEndpointsPermissions,
@@ -604,6 +608,7 @@ const getPublicPermissions = () => {
     ...restrictedAuthPermissions,
     ...restrictedUserPermissions,
     ...restrictedUserGroupPermissions,
+    ...importPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };

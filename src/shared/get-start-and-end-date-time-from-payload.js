@@ -1,4 +1,5 @@
 const { DateTime } = require("luxon");
+const { getDateTimeFromObject } = require("./get-date-time-from-object");
 
 function getStartAndEndDateTimeFromPayload({
   puDay,
@@ -12,27 +13,21 @@ function getStartAndEndDateTimeFromPayload({
   doMinute,
   doHour,
 }) {
-  const startDateTime = DateTime.fromObject(
-    {
-      day: puDay,
-      month: puMonth,
-      year: puYear,
-      minute: puMinute,
-      hour: puHour,
-    },
-    { zone: "Europe/Sarajevo" }
-  ).toJSDate();
+  const startDateTime = getDateTimeFromObject({
+    puDay,
+    puMonth,
+    puYear,
+    puMinute,
+    puHour,
+  });
 
-  const endDateTime = DateTime.fromObject(
-    {
-      day: doDay,
-      month: doMonth,
-      year: doYear,
-      minute: doMinute,
-      hour: doHour,
-    },
-    { zone: "Europe/Sarajevo" }
-  ).toJSDate();
+  const endDateTime = getDateTimeFromObject({
+    doDay,
+    doMonth,
+    doYear,
+    doMinute,
+    doHour,
+  });
   return { startDateTime, endDateTime };
 }
 

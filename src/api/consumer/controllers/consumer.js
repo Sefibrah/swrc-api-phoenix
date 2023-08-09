@@ -3,6 +3,7 @@
 const utils = require("@strapi/utils");
 const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
 const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
+const { getRandomString } = require("../../../shared/get-random-string");
 const { getJwt } = require("../../../shared/get-jwt");
 const {
   getStartAndEndDateTimeFromPayload,
@@ -42,7 +43,11 @@ module.exports = {
                   select: ["name"],
                   populate: {
                     contact: {
-                      select: ["email", "telephonePrimary", "telephoneSecondary"],
+                      select: [
+                        "email",
+                        "telephonePrimary",
+                        "telephoneSecondary",
+                      ],
                     },
                   },
                 },
@@ -111,7 +116,7 @@ module.exports = {
       const userInfo = ctx.request.body.user;
       const rentalExtras = ctx.request.body.extras;
       const user = { info: userInfo, jwt };
-      const code = (Math.random() * 1000000).toString(36).replace(".", "");
+      const code = getRandomString();
       let html = "";
 
       let carReservation = null;

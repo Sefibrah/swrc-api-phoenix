@@ -388,17 +388,19 @@ function checkDriverDocuments(driver, isPrimary) {
     return `${messagePrefix}_DRIVER_HAS_NO_DOCUMENTS`;
   }
   const DHasDriverLicense = DDocuments?.find(
-    (doc) =>
-      doc.type === "DRIVING" &&
-      new Date(doc.expiry).getTime() > new Date().getTime()
+    (doc) => doc.type === "DRIVING"
+    // fixme: temporarily disabled because of import
+    // &&
+    // new Date(doc.expiry).getTime() > new Date().getTime()
   );
   if (DHasDriverLicense == null) {
     return `${messagePrefix}_DRIVER_HAS_NO_DRIVER_LICENSE`;
   }
   const DHasValidID = DDocuments?.find(
-    (doc) =>
-      (doc.type === "IDENTITY" || doc.type === "PASSPORT") &&
-      new Date(doc.expiry).getTime() > new Date().getTime()
+    (doc) => doc.type === "IDENTITY" || doc.type === "PASSPORT"
+    // fixme: temporarily disabled because of import
+    // &&
+    // new Date(doc.expiry).getTime() > new Date().getTime()
   );
   if (DHasValidID == null) {
     return `${messagePrefix}_DRIVER_HAS_NO_ID`;

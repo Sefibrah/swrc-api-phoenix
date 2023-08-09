@@ -1,5 +1,6 @@
 "use strict";
 const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
+const { getRandomString } = require("../../../shared/get-random-string");
 const fs = require("fs");
 const util = require("util");
 
@@ -12,7 +13,7 @@ module.exports = {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
       const recipient = "ibrahim@seferware.com";
-      const code = (Math.random() * 1000000).toString(36).replace(".", "");
+      const code = getRandomString();
       const html = fs.readFileSync(
         "src/shared/email/reservation-request-successful.html",
         "utf8"
