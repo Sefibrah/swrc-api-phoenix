@@ -393,8 +393,8 @@ module.exports = {
 
       const comment = [
         reservationData.comment,
-        reservationData.extras,
-        reservationData.extras != null
+        reservationData.extras || null,
+        reservationData.extras != null || reservationData.extras != ""
           ? "total is correct, extras price is not"
           : null,
       ]
