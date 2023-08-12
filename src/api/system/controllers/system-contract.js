@@ -41,6 +41,7 @@ module.exports = {
         .service("api::system.system-contract")
         .updateFullContractFromSystem(
           contractId,
+          body.contract,
           body.rentalAgreementDetail,
           body.agreementDetail,
           body.transaction,

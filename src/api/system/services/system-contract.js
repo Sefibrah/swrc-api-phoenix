@@ -181,6 +181,7 @@ module.exports = ({ strapi }) => ({
 
   updateFullContractFromSystem: async (
     id,
+    contract,
     rentalAgreementDetail,
     agreementDetail,
     transaction,
@@ -233,6 +234,7 @@ module.exports = ({ strapi }) => ({
         data: {
           startLocation: rentalAgreementDetail.startLocation,
           endLocation: rentalAgreementDetail.endLocation,
+          renter: rentalAgreementDetail.renter,
           userGroup,
         },
       }
@@ -306,6 +308,8 @@ module.exports = ({ strapi }) => ({
           agreementDetail: agreementDetail.id,
           transaction: transaction.id,
           rentalExtras: rentalExtraIds,
+          primaryDriver: contract.primaryDriver,
+          secondaryDriver: contract.secondaryDriver,
           userGroup,
         },
         ...query,
