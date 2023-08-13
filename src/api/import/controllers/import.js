@@ -151,7 +151,7 @@ module.exports = {
               {
                 name: contractData.renter.name,
                 country: null,
-                comment: contractData.renter.comment,
+                comment: `${contractData.renter.comment};imported from old software`,
                 isLocal: false,
               }
             );
@@ -177,7 +177,7 @@ module.exports = {
               {
                 name: contractData.renter.name,
                 country: null,
-                comment: contractData.renter.comment,
+                comment: `${contractData.renter.comment};imported from old software`,
                 isLocal: false,
               }
             );
@@ -203,7 +203,7 @@ module.exports = {
             {
               name: contractData.primaryDriver.name,
               country: null,
-              comment: contractData.primaryDriver.comment,
+              comment: `${contractData.primaryDriver.comment};imported from old software`,
               isLocal: false,
             }
           );
@@ -256,7 +256,7 @@ module.exports = {
               {
                 name: contractData.secondaryDriver.name,
                 country: null,
-                comment: contractData.secondaryDriver.comment,
+                comment: `${contractData.secondaryDriver.comment};imported from old software`,
                 isLocal: false,
               }
             );
@@ -280,7 +280,7 @@ module.exports = {
           {
             startDatetime: startDateTime,
             endDatetime: endDateTime,
-            comment: contractData.extras,
+            comment: `${contractData.extras};imported from old software`,
             author: contractData.author,
           },
           {
@@ -385,7 +385,7 @@ module.exports = {
             {
               name: reservationData.renter.name,
               country: null,
-              comment: reservationData.renter.comment,
+              comment: `${reservationData.renter.comment};imported from old system`,
               isLocal: false,
             }
           );
@@ -393,10 +393,8 @@ module.exports = {
 
       const comment = [
         reservationData.comment,
-        reservationData.extras || null,
-        reservationData.extras != null || reservationData.extras != ""
-          ? "total is correct, extras price is not"
-          : null,
+        reservationData.extras,
+        'imported from old system'
       ]
         .filter((el) => el != null)
         .join(";");
@@ -424,7 +422,7 @@ module.exports = {
             startDatetime: startDateTime,
             endDatetime: endDateTime,
             comment,
-            author: "imported from old system",
+            author: "imported",
           },
           {
             discount: 0,
