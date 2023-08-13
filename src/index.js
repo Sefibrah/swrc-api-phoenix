@@ -132,6 +132,8 @@ const getReceptionistPermissions = () => {
       "api::location.location",
       "api::status.status",
       "api::transmission-type.transmission-type",
+      "api::invoice-place-of-issue.invoice-place-of-issue",
+      "api::payment-method.payment-method",
       "api::vehicle-type.vehicle-type",
       "api::discount.discount",
       "api::recurring-discount.recurring-discount",
@@ -238,6 +240,7 @@ const getMechanicPermissions = () => {
       "api::location.location",
       "api::status.status",
       "api::transmission-type.transmission-type",
+      "api::invoice-place-of-issue.invoice-place-of-issue",
       "api::vehicle-type.vehicle-type",
       "api::car-reservation.car-reservation",
       "api::car-contract.car-contract",
@@ -596,10 +599,10 @@ const getPublicPermissions = () => {
     ["api::organization-detail.organization-detail"],
     myOrganizationDetail
   );
-  let importPermissions = combineActionWithService(
-    ["api::import.import"],
-    ["importReservationFromGTRC", "importContractFromGTRC"]
-  );
+  // let importPermissions = combineActionWithService(
+  //   ["api::import.import"],
+  //   ["importReservationFromGTRC", "importContractFromGTRC"]
+  // );
   return [
     ...restrictedPermissions,
     ...availableEndpointsPermissions,
@@ -608,7 +611,7 @@ const getPublicPermissions = () => {
     ...restrictedAuthPermissions,
     ...restrictedUserPermissions,
     ...restrictedUserGroupPermissions,
-    ...importPermissions,
+    // ...importPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
