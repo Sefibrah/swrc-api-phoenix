@@ -180,7 +180,7 @@ module.exports = createCoreController("api::extra.extra", ({ strapi }) => ({
         }
         return {
           ...extra,
-          thumbnail: extra.thumbnail.url,
+          thumbnail: extra?.thumbnail?.url,
           quantity: extra.quantity - busyRentalExtraEquivalent.quantity,
         };
       });
