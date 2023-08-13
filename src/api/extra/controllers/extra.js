@@ -173,10 +173,10 @@ module.exports = createCoreController("api::extra.extra", ({ strapi }) => ({
 
       return extras.map((extra) => {
         const busyRentalExtraEquivalent = mergedBusyRentalExtras.find(
-          (rentalExtra) => rentalExtra.id == extra.id
+          (rentalExtra) => rentalExtra?.id == extra?.id
         );
         if (busyRentalExtraEquivalent == null) {
-          return { ...extra, thumbnail: extra.thumbnail.url };
+          return { ...extra, thumbnail: extra?.thumbnail?.url };
         }
         return {
           ...extra,
