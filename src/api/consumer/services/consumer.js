@@ -28,7 +28,7 @@ module.exports = ({ strapi }) => ({
       "api::agreement-detail.agreement-detail",
       {
         data: {
-          comment,
+          comment: `web`,
           author,
           startDatetime,
           endDatetime,

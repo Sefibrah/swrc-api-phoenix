@@ -59,3 +59,7 @@ Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/
 ```
 mysqldump -u root -p swrcapic_db > latest.sql --skip-comments --no-data
 ```
+
+
+https://www.descope.com/success-redirect
+ovo vjv ne bi bilo lose da koristim u buducnosti

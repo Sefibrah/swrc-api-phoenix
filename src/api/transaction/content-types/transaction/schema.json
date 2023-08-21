@@ -68,6 +68,14 @@
       "type": "decimal",
       "default": 0,
       "min": 0
+    },
+    "days": {
+      "type": "integer",
+      "min": 0
+    },
+    "totalPricePerDay": {
+      "type": "decimal",
+      "min": 0
     }
   }
 }
