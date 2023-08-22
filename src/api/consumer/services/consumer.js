@@ -58,11 +58,12 @@ module.exports = ({ strapi }) => ({
           totalWithTax,
           deposit,
           discount,
-          pricePerDay: totalWithTax / days,
+          pricePerDay: (totalWithTax - extrasPrice) / days,
+          totalPricePerDay: totalWithTax / days,
+          days,
           discountType: "FIXED", // FIXED = 0, PER_DAY = 1, PERCENTAGE = 2, fixme: now it's hardcoded, before the packages update...
           additionalCost: 0,
           tax,
-          paymentMethod: "CASH", // fixme: for now it's hardcoded, right?
           totalWithoutTax,
           extrasPrice,
           userGroup,

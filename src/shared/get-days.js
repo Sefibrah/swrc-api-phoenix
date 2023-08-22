@@ -7,6 +7,10 @@ function getDays(startDateTime, endDateTime) {
     differenceInMilliseconds / oneDayInMilliseconds
   );
 
+  if (differenceInMilliseconds <= oneDayInMilliseconds) {
+    return 1; // even if it's 1 millisecond, we will count it as a full day :)
+  }
+
   if (differenceInMilliseconds % oneDayInMilliseconds >= 43200000) {
     differenceInDays++;
   }
