@@ -59,7 +59,7 @@ module.exports = ({ strapi }) => ({
       }
     );
 
-    const taxRate = 0.17; // fixme: probably when going international this will need to be uplifted to the cloud
+    const taxRate = 0.145299; // fixme: probably when going international this will need to be uplifted to the cloud
     const tax = totalWithTax * taxRate;
     const totalWithoutTax = totalWithTax - tax;
     const transaction = await strapi.entityService.create(
@@ -178,7 +178,7 @@ module.exports = ({ strapi }) => ({
       }
     );
 
-    const taxRate = 0.17; // fixme: probably when going international this will need to be uplifted to the cloud
+    const taxRate = 0.145299; // fixme: probably when going international this will need to be uplifted to the cloud
     const tax = transaction.totalWithTax * taxRate;
     const totalWithoutTax = transaction.totalWithTax - tax;
     await strapi.entityService.update(
@@ -214,11 +214,11 @@ module.exports = ({ strapi }) => ({
       const i = reservationToUpdate.rentalExtras.findIndex(
         (rE) => rE.extra == rentalExtra.extra
       );
-      console.log('index', i);
-      console.log('rentalExtra', rentalExtra);
+      console.log("index", i);
+      console.log("rentalExtra", rentalExtra);
       if (i > -1) {
         const existingRentalExtraId = reservationToUpdate.rentalExtras[i].id;
-        console.log('existingRentalExtraId', existingRentalExtraId);
+        console.log("existingRentalExtraId", existingRentalExtraId);
         await strapi.entityService.update(
           "api::rental-extra.rental-extra",
           existingRentalExtraId,
@@ -242,7 +242,7 @@ module.exports = ({ strapi }) => ({
             },
           }
         );
-        console.log('rentalExtraFromDb', rentalExtraFromDb);
+        console.log("rentalExtraFromDb", rentalExtraFromDb);
         rentalExtraIds.push(rentalExtraFromDb.id);
       }
     });

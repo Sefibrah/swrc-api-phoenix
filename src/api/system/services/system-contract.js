@@ -127,7 +127,7 @@ module.exports = ({ strapi }) => ({
       }
     );
 
-    const taxRate = 0.17; // fixme: probably when going international this will need to be uplifted to the cloud
+    const taxRate = 0.145299; // fixme: probably when going international this will need to be uplifted to the cloud
     const tax = totalWithTax * taxRate;
     const totalWithoutTax = totalWithTax - tax;
     const transaction = await strapi.entityService.create(
@@ -244,7 +244,7 @@ module.exports = ({ strapi }) => ({
       }
     );
 
-    const taxRate = 0.17; // fixme: probably when going international this will need to be uplifted to the cloud
+    const taxRate = 0.145299; // fixme: probably when going international this will need to be uplifted to the cloud
     const tax = transaction.totalWithTax * taxRate;
     const totalWithoutTax = transaction.totalWithTax - tax;
     await strapi.entityService.update(

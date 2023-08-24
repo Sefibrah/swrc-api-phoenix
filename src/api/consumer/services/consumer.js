@@ -47,7 +47,7 @@ module.exports = ({ strapi }) => ({
         },
       }
     );
-    const taxRate = 0.17; // probably when going international this will need to be uplifted to the cloud
+    const taxRate = 0.145299; // probably when going international this will need to be uplifted to the cloud
     const tax = totalWithTax * taxRate;
     const totalWithoutTax = totalWithTax - tax;
     const days = getDays(startDatetime, endDatetime);
