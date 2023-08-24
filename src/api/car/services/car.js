@@ -298,15 +298,23 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
     let availableCarGroups = carGroups.filter(
       (carGroup) => carGroup.cars.length > 0
     );
+    console.log("days", days);
     // calculate the vehicle prices!!
     availableCarGroups = availableCarGroups.map((carGroup) => {
       let price = null;
       if (carGroup.prices.length > 0) {
-        let closestPriceColumn = carGroup.prices.reduce((prev, curr) =>
-          Math.abs(curr.minDays - days) < Math.abs(prev.minDays - days)
-            ? curr
-            : prev
-        );
+        let closestPriceColumn = null;
+        for (let i = 0; i < carGroup.prices.length; i++) {
+          const priceColumn = carGroup.prices[i];
+          if (
+            days >= carGroup.prices[i + 1].minDays &&
+            i <= carGroup.prices.length
+          ) {
+            continue;
+          }
+          closestPriceColumn = priceColumn;
+          break;
+        }
         price =
           carGroup.prices.find(
             (price) => closestPriceColumn.minDays === price.minDays
