@@ -15,6 +15,19 @@ const {
 } = require("../../../shared/get-start-and-end-date-time-from-payload");
 
 module.exports = createCoreController("api::car.car", ({ strapi }) => ({
+  relevantEventsList: async (ctx, next) => {
+    try {
+      const carId = ctx.params.id;
+      const subdomain = getSubdomainFromRequest(ctx.request);
+      const relevantEventsList = await strapi
+        .service("api::car.car")
+        .relevantEventsList(carId, subdomain);
+      ctx.body = relevantEventsList;
+    } catch (err) {
+      ctx.body = err;
+    }
+  },
+
   isAvailable: async (ctx, next) => {
     try {
       const carId = ctx.params.id;
