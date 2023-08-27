@@ -9,7 +9,7 @@ const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
 
 module.exports = ({ strapi }) => ({
   createFullContractFromSystem: async (
-    { car, primaryDriver, secondaryDriver },
+    { car, primaryDriver, secondaryDriver, addressOfStay },
     { startLocation, endLocation, renter },
     { startDatetime, endDatetime, comment, author },
     {
@@ -177,6 +177,7 @@ module.exports = ({ strapi }) => ({
         secondaryDriver,
         primaryDriverDocumentVersions: primaryDriverDocumentVersions.id,
         secondaryDriverDocumentVersions: secondaryDriverDocumentVersions?.id,
+        addressOfStay,
         userGroup,
       },
       ...query,
@@ -316,6 +317,7 @@ module.exports = ({ strapi }) => ({
           rentalExtras: rentalExtraIds,
           primaryDriver: contract.primaryDriver,
           secondaryDriver: contract.secondaryDriver,
+          addressOfStay: contract.addressOfStay,
           userGroup,
         },
         ...query,

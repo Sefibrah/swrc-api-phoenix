@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "address_of_stays",
+  "info": {
+    "singularName": "address-of-stay",
+    "pluralName": "address-of-stays",
+    "displayName": "Address Of Stay"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "addressOfStays"
+    }
+  }
+}
