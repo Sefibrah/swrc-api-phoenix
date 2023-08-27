@@ -215,8 +215,102 @@ module.exports = ({ strapi }) => ({
           "rentalAgreementDetail",
           "transaction",
           "rentalExtras",
+          "primaryDriver",
+          "secondaryDriver",
+          "primaryDriverDocumentVersions",
+          "secondaryDriverDocumentVersions",
         ],
       });
+
+    let primaryDriverDocumentVersions =
+      contractToUpdate.primaryDriverDocumentVersions;
+    if (contract.primaryDriver != contractToUpdate.primaryDriver.id) {
+      const primaryDriverFromDb = await strapi
+        .query("api::customer.customer")
+        .findOne({
+          where: {
+            id: contract.primaryDriver,
+            userGroup,
+          },
+          populate: {
+            individual: {
+              populate: ["documents"],
+            },
+          },
+        });
+
+      const arePrimaryDocsValid = checkDriverDocuments(
+        primaryDriverFromDb,
+        true
+      );
+
+      if (typeof arePrimaryDocsValid == "string") {
+        return new NotFoundError(arePrimaryDocsValid);
+      }
+
+      primaryDriverDocumentVersions = await strapi.entityService.create(
+        "api::document-connection.document-connection",
+        {
+          data: {
+            ...getDocumentIds(primaryDriverFromDb.individual.documents),
+            userGroup,
+          },
+        }
+      );
+
+      if (contractToUpdate?.primaryDriverDocumentVersions?.id != null) {
+        await strapi.entityService.delete(
+          "api::document-connection.document-connection",
+          contractToUpdate?.primaryDriverDocumentVersions?.id
+        );
+      }
+    }
+
+    let secondaryDriverDocumentVersions =
+      contractToUpdate?.secondaryDriverDocumentVersions;
+    if (
+      contract?.secondaryDriver != null &&
+      contract?.secondaryDriver != contractToUpdate?.secondaryDriver?.id
+    ) {
+      const secondaryDriverFromDb = await strapi
+        .query("api::customer.customer")
+        .findOne({
+          where: {
+            id: contract?.secondaryDriver,
+          },
+          populate: {
+            individual: {
+              populate: ["documents"],
+            },
+          },
+        });
+
+      const areSecondaryDocsValid = checkDriverDocuments(
+        secondaryDriverFromDb,
+        false
+      );
+
+      if (typeof areSecondaryDocsValid == "string") {
+        return new NotFoundError(areSecondaryDocsValid);
+      }
+
+      secondaryDriverDocumentVersions = await strapi.entityService.create(
+        "api::document-connection.document-connection",
+        {
+          data: {
+            ...getDocumentIds(secondaryDriverFromDb.individual.documents),
+            userGroup,
+          },
+        }
+      );
+
+      if (contractToUpdate?.secondaryDriverDocumentVersions?.id != null) {
+        await strapi.entityService.delete(
+          "api::document-connection.document-connection",
+          contractToUpdate?.secondaryDriverDocumentVersions?.id
+        );
+      }
+    }
 
     await strapi.entityService.update(
       "api::agreement-detail.agreement-detail",
@@ -317,6 +411,8 @@ module.exports = ({ strapi }) => ({
           rentalExtras: rentalExtraIds,
           primaryDriver: contract.primaryDriver,
           secondaryDriver: contract.secondaryDriver,
+          primaryDriverDocumentVersions: primaryDriverDocumentVersions?.id,
+          secondaryDriverDocumentVersions: secondaryDriverDocumentVersions?.id,
           addressOfStay: contract.addressOfStay,
           userGroup,
         },
