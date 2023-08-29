@@ -13,8 +13,10 @@ const {
 module.exports = createCoreService("api::car.car", ({ strapi }) => ({
   relevantEventsList: async (carId, subdomain) => {
     const loggedUserUserGroup = await getLoggedUserUserGroup(strapi, subdomain);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const $gte = new Date();
+    $gte.setHours(0, 0, 0, 0);
+    const $lte = new Date();
+    $lte.setHours(23, 59, 59, 0);
     const epicEventQuery = {
       userGroup: loggedUserUserGroup.id,
       car: {
@@ -26,11 +28,11 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
             {
               agreementDetail: {
                 startDatetime: {
-                  $gte: today,
-                  $lte: today,
+                  $gte,
+                  $lte,
                 },
                 endDatetime: {
-                  $gte: today,
+                  $gte,
                 },
               },
             },
@@ -41,11 +43,11 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
             {
               agreementDetail: {
                 endDatetime: {
-                  $gte: today,
-                  $lte: today,
+                  $gte,
+                  $lte,
                 },
                 startDatetime: {
-                  $lte: today,
+                  $lte,
                 },
               },
             },
@@ -56,12 +58,12 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
             {
               agreementDetail: {
                 startDatetime: {
-                  $lte: today,
-                  $lte: today,
+                  $lte,
+                  $lte,
                 },
                 endDatetime: {
-                  $gte: today,
-                  $gte: today,
+                  $gte,
+                  $gte,
                 },
               },
             },
