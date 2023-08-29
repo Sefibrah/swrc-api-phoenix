@@ -14,6 +14,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
   relevantEventsList: async (carId, subdomain) => {
     const loggedUserUserGroup = await getLoggedUserUserGroup(strapi, subdomain);
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const epicEventQuery = {
       userGroup: loggedUserUserGroup.id,
       car: {
@@ -126,7 +127,6 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
         },
         where: epicEventQuery,
       });
-    console.log(carContracts, carReservations, carMaintenances);
 
     return [
       ...carContracts.map((event) => {
