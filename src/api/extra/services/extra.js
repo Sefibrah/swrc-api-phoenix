@@ -1,14 +1,24 @@
-'use strict';
+"use strict";
 
 /**
  * extra service
  */
 
-const { createCoreService } = require('@strapi/strapi').factories;
-const { getLoggedUserUserGroup } = require("../../../shared/get-logged-user-user-group")
+const utils = require("@strapi/utils");
+const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
+const { createCoreService } = require("@strapi/strapi").factories;
+const {
+  getLoggedUserUserGroup,
+} = require("../../../shared/get-logged-user-user-group");
 
-module.exports = createCoreService('api::extra.extra', ({strapi}) => ({
-  isAvailable: async (extraId, startDatetime, endDatetime, quantity, subdomain) => {
+module.exports = createCoreService("api::extra.extra", ({ strapi }) => ({
+  isAvailable: async (
+    extraId,
+    startDatetime,
+    endDatetime,
+    quantity,
+    subdomain
+  ) => {
     try {
       const loggedUserUserGroup = await getLoggedUserUserGroup(
         strapi,
@@ -140,20 +150,9 @@ module.exports = createCoreService('api::extra.extra', ({strapi}) => ({
       const extraQuantity = extra.quantity;
       const availableExtrasCount = extraQuantity - busyExtraCount;
       if (availableExtrasCount >= quantity) {
-        return {
-          status: 202,
-          message: "EXTRA_IS_AVAILABLE",
-        };
+        ctx.send("EXTRA_IS_AVAILABLE", 200);
       } else {
-        return {
-          data: null,
-          error: {
-            status: 404,
-            name: "NotFoundError",
-            message: "EXTRA_IS_BUSY",
-            details: {},
-          },
-        };
+        ctx.send(new NotFoundError("EXTRA_IS_BUSY"), 404);
       }
     } catch (err) {
       return err;

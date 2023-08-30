@@ -24,7 +24,12 @@ module.exports = {
           query,
           subdomain
         );
-      ctx.body = { data: { id, attributes } };
+      if (attributes?.name === "NotFoundError") {
+        ctx.send({ ...attributes }, 404);
+      } else {
+        ctx.send({ data: { id, attributes } }, 201);
+      }
+      return ctx.body;
     } catch (err) {
       ctx.body = err;
     }
@@ -49,7 +54,11 @@ module.exports = {
           query,
           subdomain
         );
-      ctx.body = { data: { id, attributes } };
+      if (attributes.name === "NotFoundError") {
+        ctx.body = { ...attributes };
+      } else {
+        ctx.body = { data: { id, attributes } };
+      }
     } catch (err) {
       ctx.body = err;
     }

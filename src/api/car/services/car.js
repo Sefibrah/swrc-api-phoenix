@@ -5,6 +5,8 @@ const { getDays } = require("../../../shared/get-days");
  * car service.
  */
 
+const utils = require("@strapi/utils");
+const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
 const { createCoreService } = require("@strapi/strapi").factories;
 const {
   getLoggedUserUserGroup,
@@ -281,20 +283,9 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
       const isAvailable =
         [...carContracts, ...carReservations, ...carMaintenances].length === 0;
       if (isAvailable) {
-        return {
-          status: 202,
-          message: "CAR_IS_AVAILABLE",
-        };
+        ctx.send("CAR_IS_AVAILABLE", 200);
       } else {
-        return {
-          data: null,
-          error: {
-            status: 404,
-            name: "NotFoundError",
-            message: "CAR_IS_BUSY",
-            details: {},
-          },
-        };
+        ctx.send(new NotFoundError("CAR_IS_BUSY"), 404);
       }
     } catch (err) {
       return err;
