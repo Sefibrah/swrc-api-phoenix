@@ -283,9 +283,9 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
       const isAvailable =
         [...carContracts, ...carReservations, ...carMaintenances].length === 0;
       if (isAvailable) {
-        ctx.send("CAR_IS_AVAILABLE", 200);
+        return { message: "CAR_IS_AVAILABLE" };
       } else {
-        ctx.send(new NotFoundError("CAR_IS_BUSY"), 404);
+        return new NotFoundError("CAR_IS_BUSY");
       }
     } catch (err) {
       return err;

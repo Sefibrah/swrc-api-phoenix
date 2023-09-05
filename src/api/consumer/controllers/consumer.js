@@ -145,6 +145,8 @@ module.exports = {
           },
         });
 
+      console.log(carGroupFromDb);
+
       // procedure: finding an available car for the reservation
       let carFromDbId = null;
 
@@ -153,6 +155,7 @@ module.exports = {
         const isAvailable = await strapi
           .service("api::car.car")
           .isAvailable(car.id, startDateTime, endDateTime, subdomain);
+        console.log(car, isAvailable);
         if (isAvailable.message == "CAR_IS_AVAILABLE") {
           carFromDbId = car.id;
           break;
@@ -352,7 +355,7 @@ module.exports = {
         .sendEmail(
           recipient,
           html,
-          "NEW: Your reservation request has been received successfully!",
+          "Your reservation request has been received successfully!",
           subdomain
         );
 
