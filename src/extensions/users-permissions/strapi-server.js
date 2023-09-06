@@ -11,6 +11,9 @@ const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
 const {
   getLoggedUserUserGroupWithId,
 } = require("../../shared/get-logged-user-user-group");
+const {
+  getIdAndAttributes,
+} = require("../../shared/get-id-and-attributes");
 
 module.exports = (plugin) => {
   const sanitizeOutput = (user) => {
@@ -211,23 +214,6 @@ module.exports = (plugin) => {
 
   return plugin;
 };
-
-function getIdAndAttributes(obj) {
-  if (obj == null) return null;
-  const { id, ...attributes } = obj;
-  const result = {
-    id,
-    attributes: {},
-  };
-  for (const [key, value] of Object.entries(attributes)) {
-    if (typeof value === "object" && value !== null) {
-      result.attributes[key] = getIdAndAttributes(value);
-    } else {
-      result.attributes[key] = value;
-    }
-  }
-  return result;
-}
 
 function organizeUser(user) {
   let organizedUser = getIdAndAttributes(user);

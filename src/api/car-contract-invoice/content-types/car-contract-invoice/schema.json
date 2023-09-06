@@ -4,7 +4,8 @@
   "info": {
     "singularName": "car-contract-invoice",
     "pluralName": "car-contract-invoices",
-    "displayName": "Car Contract Invoice"
+    "displayName": "Car Contract Invoice",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -14,7 +15,8 @@
     "carContract": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::car-contract.car-contract"
+      "target": "api::car-contract.car-contract",
+      "inversedBy": "carContractInvoice"
     },
     "invoice": {
       "type": "relation",

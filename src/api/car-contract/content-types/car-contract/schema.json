@@ -65,6 +65,12 @@
     },
     "addressOfStay": {
       "type": "string"
+    },
+    "carContractInvoice": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::car-contract-invoice.car-contract-invoice",
+      "inversedBy": "carContract"
     }
   }
 }

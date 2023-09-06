@@ -139,6 +139,12 @@
       "relation": "oneToMany",
       "target": "api::organization-email-config.organization-email-config",
       "mappedBy": "userGroup"
+    },
+    "agreementDetails": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::car-contract-invoice.car-contract-invoice",
+      "mappedBy": "userGroup"
     }
   }
 }

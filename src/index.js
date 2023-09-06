@@ -45,6 +45,7 @@ const myOrganizationDetail = ["myDetail"];
 const myOrganizationDetailRestricted = ["myDetail", "update"];
 const availabilityNoLimits = ["available", "isAvailable"];
 const availabilityLimited = ["available"];
+const systemInvoiceNoLimits = ["createInvoiceFromContract", "getLatestInvoice"];
 const systemReservationsNoLimits = [
   "createFullReservationFromSystem",
   "updateFullReservationFromSystem",
@@ -404,6 +405,10 @@ const getManagerPermissions = () => {
     ["api::system.system-contract"],
     systemContractsNoLimits
   );
+  let systemInvoicePermissions = combineActionWithService(
+    ["api::system.system-invoice"],
+    systemInvoiceNoLimits
+  );
   return [
     ...restrictedUserSettingPermissions,
     ...noRestrictionsAvailableEndpointsPermissions,
@@ -416,6 +421,7 @@ const getManagerPermissions = () => {
     ...restrictedUserGroupPermissions,
     ...systemReservationPermissions,
     ...systemContractPermissions,
+    ...systemInvoicePermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -503,6 +509,10 @@ const getAdminPermissions = () => {
     ["api::system.system-contract"],
     systemContractsNoLimits
   );
+  let systemInvoicePermissions = combineActionWithService(
+    ["api::system.system-invoice"],
+    systemInvoiceNoLimits
+  );
   return [
     ...noRestrictionsAvailableEndpointsPermissions,
     ...myOrganizationSkinPermissions,
@@ -515,6 +525,7 @@ const getAdminPermissions = () => {
     ...restrictedUserGroupPermissions,
     ...systemReservationPermissions,
     ...systemContractPermissions,
+    ...systemInvoicePermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -580,6 +591,10 @@ const getPublicPermissions = () => {
     ["api::car.car", "api::extra.extra"],
     availabilityLimited
   );
+  let systemInvoicePermissions = combineActionWithService(
+    ["api::system.system-invoice"],
+    systemInvoiceNoLimits
+  );
   let restrictedAuthPermissions = combineActionWithService(
     ["plugin::users-permissions.auth"],
     noRestrictionsAuth
@@ -615,6 +630,7 @@ const getPublicPermissions = () => {
   return [
     ...restrictedPermissions,
     ...availableEndpointsPermissions,
+    ...systemInvoicePermissions,
     ...myOrganizationSkinPermissions,
     ...myOrganizationDetailPermissions,
     ...restrictedAuthPermissions,

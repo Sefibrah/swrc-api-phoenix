@@ -7,6 +7,7 @@ const url = require("url");
 const { createCoreController } = require("@strapi/strapi").factories;
 const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
 const { getLoggedUserUserGroup } = require("../../../shared/get-logged-user-user-group")
+const { getIdAndAttributes } = require("../../../shared/get-id-and-attributes")
 
 module.exports = createCoreController(
   "api::organization-skin.organization-skin",
@@ -75,12 +76,3 @@ module.exports = createCoreController(
     },
   })
 );
-
-function getIdAndAttributes(obj) {
-  if (obj == null) return null;
-  const { id, ...attributes } = obj;
-  return {
-    id,
-    attributes,
-  };
-}
