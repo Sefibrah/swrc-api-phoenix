@@ -2,7 +2,7 @@
 const url = require("url");
 
 const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
-const { getIdAndAttributes } = require("../../../shared/get-id-and-attributes");
+const { getIdAndAttributesSimple } = require("../../../shared/get-id-and-attributes");
 const {
   getLoggedUserUserGroup,
 } = require("../../../shared/get-logged-user-user-group");
@@ -65,10 +65,10 @@ module.exports = createCoreController(
               userGroup: loggedUserUserGroup.id,
             },
           });
-        const myDetail = getIdAndAttributes(myDetailRaw);
-        const address = getIdAndAttributes(myDetail.attributes.address);
-        const contact = getIdAndAttributes(myDetail.attributes.contact);
-        const paymentDetail = getIdAndAttributes(
+        const myDetail = getIdAndAttributesSimple(myDetailRaw);
+        const address = getIdAndAttributesSimple(myDetail.attributes.address);
+        const contact = getIdAndAttributesSimple(myDetail.attributes.contact);
+        const paymentDetail = getIdAndAttributesSimple(
           myDetail.attributes.paymentDetail
         );
         ctx.body = {

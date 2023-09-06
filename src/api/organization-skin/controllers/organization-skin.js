@@ -7,7 +7,7 @@ const url = require("url");
 const { createCoreController } = require("@strapi/strapi").factories;
 const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
 const { getLoggedUserUserGroup } = require("../../../shared/get-logged-user-user-group")
-const { getIdAndAttributes } = require("../../../shared/get-id-and-attributes")
+const { getIdAndAttributesSimple } = require("../../../shared/get-id-and-attributes")
 
 module.exports = createCoreController(
   "api::organization-skin.organization-skin",
@@ -41,11 +41,11 @@ module.exports = createCoreController(
               userGroup: loggedUserUserGroup.id,
             },
           });
-        const mySkin = getIdAndAttributes(mySkinRaw);
-        const iconDark = getIdAndAttributes(mySkin.attributes.iconDark);
-        const iconLight = getIdAndAttributes(mySkin.attributes.iconLight);
-        const logoDark = getIdAndAttributes(mySkin.attributes.logoDark);
-        const logoLight = getIdAndAttributes(mySkin.attributes.logoLight);
+        const mySkin = getIdAndAttributesSimple(mySkinRaw);
+        const iconDark = getIdAndAttributesSimple(mySkin.attributes.iconDark);
+        const iconLight = getIdAndAttributesSimple(mySkin.attributes.iconLight);
+        const logoDark = getIdAndAttributesSimple(mySkin.attributes.logoDark);
+        const logoLight = getIdAndAttributesSimple(mySkin.attributes.logoLight);
         ctx.body = {
           data: {
             id: mySkin.id,
