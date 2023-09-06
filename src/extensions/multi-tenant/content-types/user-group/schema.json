@@ -80,6 +80,12 @@
       "target": "api::car-contract.car-contract",
       "mappedBy": "userGroup"
     },
+    "carContractInvoices": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::car-contract-invoice.car-contract-invoice",
+      "mappedBy": "userGroup"
+    },
     "carReservations": {
       "type": "relation",
       "relation": "oneToMany",
@@ -143,7 +149,7 @@
     "agreementDetails": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::car-contract-invoice.car-contract-invoice",
+      "target": "api::agreement-detail.agreement-detail",
       "mappedBy": "userGroup"
     }
   }
