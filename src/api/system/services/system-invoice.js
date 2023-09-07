@@ -59,7 +59,7 @@ module.exports = {
         where: {
           userGroup: loggedUserUserGroup.id,
         },
-        orderBy: { id: "desc" },
+        orderBy: { invoice: { fiscalNumber: "desc" } },
         limit: 1,
         populate: {
           select: ["id"],
