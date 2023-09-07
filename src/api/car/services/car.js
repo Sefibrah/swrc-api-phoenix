@@ -1,5 +1,5 @@
 "use strict";
-const { getDays } = require("../../../shared/get-days");
+const { getDays } = require("../../../shared/functions/get-days");
 
 /**
  * car service.
@@ -10,7 +10,7 @@ const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
 const { createCoreService } = require("@strapi/strapi").factories;
 const {
   getLoggedUserUserGroup,
-} = require("../../../shared/get-logged-user-user-group");
+} = require("../../../shared/functions/get-logged-user-user-group");
 
 module.exports = createCoreService("api::car.car", ({ strapi }) => ({
   relevantEventsList: async (carId, subdomain) => {

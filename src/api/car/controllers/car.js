@@ -9,10 +9,10 @@ const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
 
 const { createCoreController } = require("@strapi/strapi").factories;
 
-const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
+const { getSubdomainFromRequest } = require("../../../shared/functions/get-subdomain");
 const {
   getStartAndEndDateTimeFromPayload,
-} = require("../../../shared/get-start-and-end-date-time-from-payload");
+} = require("../../../shared/functions/get-start-and-end-date-time-from-payload");
 
 module.exports = createCoreController("api::car.car", ({ strapi }) => ({
   relevantEventsList: async (ctx, next) => {

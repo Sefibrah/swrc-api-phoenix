@@ -2,16 +2,16 @@
 
 const utils = require("@strapi/utils");
 const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
-const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
-const { getRandomString } = require("../../../shared/get-random-string");
-const { getJwt } = require("../../../shared/get-jwt");
+const { getSubdomainFromRequest } = require("../../../shared/functions/get-subdomain");
+const { getRandomString } = require("../../../shared/functions/get-random-string");
+const { getJwt } = require("../../../shared/functions/get-jwt");
 const {
   getStartAndEndDateTimeFromPayload,
-} = require("../../../shared/get-start-and-end-date-time-from-payload");
-const { getDays } = require("../../../shared/get-days");
+} = require("../../../shared/functions/get-start-and-end-date-time-from-payload");
+const { getDays } = require("../../../shared/functions/get-days");
 const {
   getLoggedUserUserGroup,
-} = require("../../../shared/get-logged-user-user-group");
+} = require("../../../shared/functions/get-logged-user-user-group");
 const fs = require("fs");
 const util = require("util");
 

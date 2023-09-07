@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "radar_numbers",
+  "info": {
+    "singularName": "radar-number",
+    "pluralName": "radar-numbers",
+    "displayName": "Radar Number"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "radarNumbers"
+    }
+  }
+}

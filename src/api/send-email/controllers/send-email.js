@@ -1,6 +1,6 @@
 "use strict";
-const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
-const { getRandomString } = require("../../../shared/get-random-string");
+const { getSubdomainFromRequest } = require("../../../shared/functions/get-subdomain");
+const { getRandomString } = require("../../../shared/functions/get-random-string");
 const fs = require("fs");
 const util = require("util");
 

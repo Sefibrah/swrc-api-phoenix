@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "police_stations",
+  "info": {
+    "singularName": "police-station",
+    "pluralName": "police-stations",
+    "displayName": "Police Station"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "richtext"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "policeStations"
+    }
+  }
+}

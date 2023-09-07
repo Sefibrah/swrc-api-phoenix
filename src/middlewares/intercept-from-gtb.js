@@ -1,7 +1,7 @@
 const {
   getLoggedUserUserGroup,
-} = require("../shared/get-logged-user-user-group");
-const { getSubdomainFromRequest } = require("../shared/get-subdomain");
+} = require("../shared/functions/get-logged-user-user-group");
+const { getSubdomainFromRequest } = require("../shared/functions/get-subdomain");
 
 module.exports = (config, { strapi }) => {
   return async (ctx, next) => {

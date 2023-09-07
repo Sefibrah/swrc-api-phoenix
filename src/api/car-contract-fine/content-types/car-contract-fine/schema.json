@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "car_contract_fines",
+  "info": {
+    "singularName": "car-contract-fine",
+    "pluralName": "car-contract-fines",
+    "displayName": "Car Contract Fine",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "fine": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::fine.fine"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "carContractFines"
+    },
+    "carContract": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::car-contract.car-contract",
+      "inversedBy": "fines"
+    }
+  }
+}

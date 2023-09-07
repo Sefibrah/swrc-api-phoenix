@@ -1,13 +1,13 @@
 "use strict";
-const { getRandomString } = require("../../../shared/get-random-string");
+const { getRandomString } = require("../../../shared/functions/get-random-string");
 const {
   getDateTimeFromObject,
-} = require("../../../shared/get-date-time-from-object");
-const { getDays } = require("../../../shared/get-days");
-const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
+} = require("../../../shared/functions/get-date-time-from-object");
+const { getDays } = require("../../../shared/functions/get-days");
+const { getSubdomainFromRequest } = require("../../../shared/functions/get-subdomain");
 const {
   getLoggedUserUserGroup,
-} = require("../../../shared/get-logged-user-user-group");
+} = require("../../../shared/functions/get-logged-user-user-group");
 
 /**
  * A set of functions called "actions" for `import`

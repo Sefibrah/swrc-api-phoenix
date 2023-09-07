@@ -9,7 +9,7 @@ const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
 const { createCoreService } = require("@strapi/strapi").factories;
 const {
   getLoggedUserUserGroup,
-} = require("../../../shared/get-logged-user-user-group");
+} = require("../../../shared/functions/get-logged-user-user-group");
 
 module.exports = createCoreService("api::extra.extra", ({ strapi }) => ({
   isAvailable: async (

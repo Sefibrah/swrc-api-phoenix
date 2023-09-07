@@ -3,11 +3,9 @@
 const {
   getSameUserGroupPolicyConfig,
   getRouteConfig,
-} = require("../../../shared/route-safety-policies");
+} = require("../../../shared/functions/route-safety-policies");
 
-const sameUserGroupPolicyConfig = getSameUserGroupPolicyConfig(
-  "api::car.car"
-);
+const sameUserGroupPolicyConfig = getSameUserGroupPolicyConfig("api::car.car");
 const routeConfig = getRouteConfig(sameUserGroupPolicyConfig);
 
 const { createCoreRouter } = require("@strapi/strapi").factories;

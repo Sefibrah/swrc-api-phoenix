@@ -151,6 +151,12 @@
       "relation": "oneToMany",
       "target": "api::agreement-detail.agreement-detail",
       "mappedBy": "userGroup"
+    },
+    "carContractFines": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::car-contract-fine.car-contract-fine",
+      "mappedBy": "userGroup"
     }
   }
 }

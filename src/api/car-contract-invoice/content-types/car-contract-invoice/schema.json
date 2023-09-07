@@ -12,12 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "carContract": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::car-contract.car-contract",
-      "inversedBy": "carContractInvoice"
-    },
     "invoice": {
       "type": "relation",
       "relation": "oneToOne",
@@ -28,6 +22,12 @@
       "relation": "manyToOne",
       "target": "plugin::multi-tenant.user-group",
       "inversedBy": "agreementDetails"
+    },
+    "carContract": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::car-contract.car-contract",
+      "mappedBy": "invoice"
     }
   }
 }

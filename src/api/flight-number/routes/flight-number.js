@@ -3,7 +3,7 @@
 const {
   getSameUserGroupPolicyConfig,
   getRouteConfig,
-} = require("../../../shared/route-safety-policies");
+} = require("../../../shared/functions/route-safety-policies");
 
 const sameUserGroupPolicyConfig = getSameUserGroupPolicyConfig(
   "api::flight-number.flight-number"

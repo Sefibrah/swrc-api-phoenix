@@ -1,7 +1,7 @@
 const jwt_decode = require("jwt-decode");
 const {
   getLoggedUserUserGroupWithId,
-} = require("../shared/get-logged-user-user-group");
+} = require("../shared/functions/get-logged-user-user-group");
 
 module.exports = (config, { strapi }) => {
   return async (ctx, next) => {

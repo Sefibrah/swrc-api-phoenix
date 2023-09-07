@@ -1,6 +1,6 @@
 "use strict";
 
-const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
+const { getSubdomainFromRequest } = require("../../../shared/functions/get-subdomain");
 
 /**
  * A set of functions called "actions" for `system`

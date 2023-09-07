@@ -1,4 +1,4 @@
-const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
+const { getSubdomainFromRequest } = require("../../../shared/functions/get-subdomain");
 
 module.exports = (config, { strapi }) => {
   return async (ctx, next) => {

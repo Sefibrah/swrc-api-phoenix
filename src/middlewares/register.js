@@ -1,6 +1,6 @@
 const url = require("url");
-const { getSubdomainFromRequest } = require("../shared/get-subdomain")
-const { getLoggedUserUserGroup } = require("../shared/get-logged-user-user-group")
+const { getSubdomainFromRequest } = require("../shared/functions/get-subdomain")
+const { getLoggedUserUserGroup } = require("../shared/functions/get-logged-user-user-group")
 
 const createContact = async (
   email,

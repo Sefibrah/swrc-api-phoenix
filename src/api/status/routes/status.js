@@ -3,11 +3,10 @@
 const {
   getSameUserGroupPolicyConfig,
   getRouteConfig,
-} = require("../../../shared/route-safety-policies");
+} = require("../../../shared/functions/route-safety-policies");
 
-const sameUserGroupPolicyConfig = getSameUserGroupPolicyConfig(
-  "api::status.status"
-);
+const sameUserGroupPolicyConfig =
+  getSameUserGroupPolicyConfig("api::status.status");
 const routeConfig = getRouteConfig(sameUserGroupPolicyConfig);
 
 const { createCoreRouter } = require("@strapi/strapi").factories;

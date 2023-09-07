@@ -2,7 +2,12 @@
 
 const utils = require("@strapi/utils");
 const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
-const { getIdAndAttributes } = require("../../../shared/get-id-and-attributes");
+const {
+  getLoggedUserUserGroup,
+} = require("../../../shared/functions/get-logged-user-user-group");
+const {
+  getIdAndAttributes,
+} = require("../../../shared/functions/get-id-and-attributes");
 
 /**
  * system service
@@ -10,13 +15,7 @@ const { getIdAndAttributes } = require("../../../shared/get-id-and-attributes");
 
 module.exports = {
   createInvoiceFromContract: async (contractId, invoice, subdomain) => {
-    const loggedUserUserGroup = await strapi
-      .query("plugin::multi-tenant.user-group")
-      .findOne({
-        where: {
-          name: { $eq: subdomain },
-        },
-      });
+    const loggedUserUserGroup = await getLoggedUserUserGroup(strapi, subdomain);
 
     const userGroup = loggedUserUserGroup.id;
 
@@ -45,13 +44,7 @@ module.exports = {
   },
 
   getLatestInvoice: async (subdomain) => {
-    const loggedUserUserGroup = await strapi
-      .query("plugin::multi-tenant.user-group")
-      .findOne({
-        where: {
-          name: { $eq: subdomain },
-        },
-      });
+    const loggedUserUserGroup = await getLoggedUserUserGroup(strapi, subdomain);
 
     const latest = await strapi
       .query("api::car-contract-invoice.car-contract-invoice")

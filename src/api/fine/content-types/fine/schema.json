@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "fines",
+  "info": {
+    "singularName": "fine",
+    "pluralName": "fines",
+    "displayName": "Fine",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "policeStation": {
+      "type": "richtext"
+    },
+    "noticeNumber": {
+      "type": "string"
+    },
+    "radarNumber": {
+      "type": "string"
+    },
+    "dateOfIssue": {
+      "type": "datetime"
+    },
+    "dateOfIncident": {
+      "type": "datetime"
+    },
+    "dateOfSending": {
+      "type": "datetime"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "fines"
+    }
+  }
+}

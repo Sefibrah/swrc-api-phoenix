@@ -6,14 +6,14 @@
 
 const { createCoreController } = require("@strapi/strapi").factories;
 
-const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
+const { getSubdomainFromRequest } = require("../../../shared/functions/get-subdomain");
 const {
   getLoggedUserUserGroup,
-} = require("../../../shared/get-logged-user-user-group");
+} = require("../../../shared/functions/get-logged-user-user-group");
 
 const {
   getStartAndEndDateTimeFromPayload,
-} = require("../../../shared/get-start-and-end-date-time-from-payload");
+} = require("../../../shared/functions/get-start-and-end-date-time-from-payload");
 
 module.exports = createCoreController("api::extra.extra", ({ strapi }) => ({
   isAvailable: async (ctx, next) => {

@@ -66,11 +66,17 @@
     "addressOfStay": {
       "type": "string"
     },
-    "carContractInvoice": {
+    "invoice": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::car-contract-invoice.car-contract-invoice",
       "inversedBy": "carContract"
+    },
+    "fines": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::car-contract-fine.car-contract-fine",
+      "mappedBy": "carContract"
     }
   }
 }

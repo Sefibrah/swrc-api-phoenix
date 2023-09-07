@@ -1,5 +1,5 @@
 "use strict";
-const { getDays } = require("../../../shared/get-days");
+const { getDays } = require("../../../shared/functions/get-days");
 
 /**
  * consumer service

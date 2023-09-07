@@ -5,9 +5,9 @@ const url = require("url");
  */
 
 const { createCoreController } = require("@strapi/strapi").factories;
-const { getSubdomainFromRequest } = require("../../../shared/get-subdomain");
-const { getLoggedUserUserGroup } = require("../../../shared/get-logged-user-user-group")
-const { getIdAndAttributesSimple } = require("../../../shared/get-id-and-attributes")
+const { getSubdomainFromRequest } = require("../../../shared/functions/get-subdomain");
+const { getLoggedUserUserGroup } = require("../../../shared/functions/get-logged-user-user-group")
+const { getIdAndAttributesSimple } = require("../../../shared/functions/get-id-and-attributes")
 
 module.exports = createCoreController(
   "api::organization-skin.organization-skin",

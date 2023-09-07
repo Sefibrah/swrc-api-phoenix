@@ -10,10 +10,10 @@ const { getService } = require("@strapi/plugin-users-permissions/server/utils");
 const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
 const {
   getLoggedUserUserGroupWithId,
-} = require("../../shared/get-logged-user-user-group");
+} = require("../../shared/functions/get-logged-user-user-group");
 const {
   getIdAndAttributes,
-} = require("../../shared/get-id-and-attributes");
+} = require("../../shared/functions/get-id-and-attributes");
 
 module.exports = (plugin) => {
   const sanitizeOutput = (user) => {

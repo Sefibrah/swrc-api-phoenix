@@ -1,15 +1,18 @@
-'use strict';
+"use strict";
 
 const {
   getSameUserGroupPolicyConfig,
   getRouteConfig,
-} = require("../../../shared/route-safety-policies");
+} = require("../../../shared/functions/route-safety-policies");
 
 const sameUserGroupPolicyConfig = getSameUserGroupPolicyConfig(
   "api::vehicle-type.vehicle-type"
 );
 const routeConfig = getRouteConfig(sameUserGroupPolicyConfig, true);
 
-const { createCoreRouter } = require('@strapi/strapi').factories;
+const { createCoreRouter } = require("@strapi/strapi").factories;
 
-module.exports = createCoreRouter('api::vehicle-type.vehicle-type', routeConfig);
+module.exports = createCoreRouter(
+  "api::vehicle-type.vehicle-type",
+  routeConfig
+);
