@@ -35,6 +35,13 @@
       "relation": "manyToOne",
       "target": "plugin::multi-tenant.user-group",
       "inversedBy": "fines"
+    },
+    "dateOfCreation": {
+      "type": "datetime"
+    },
+    "showSecondsInDateOfIncident": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

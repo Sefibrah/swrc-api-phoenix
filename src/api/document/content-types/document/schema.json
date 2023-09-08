@@ -35,6 +35,10 @@
       "relation": "manyToOne",
       "target": "plugin::multi-tenant.user-group",
       "inversedBy": "documents"
+    },
+    "unlimited": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
