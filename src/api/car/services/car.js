@@ -462,7 +462,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
         for (let i = 0; i < carGroup.prices.length; i++) {
           const priceColumn = carGroup.prices[i];
           if (
-            days >= carGroup.prices[i + 1].minDays &&
+            days >= carGroup.prices[i + 1]?.minDays &&
             i <= carGroup.prices.length
           ) {
             continue;
