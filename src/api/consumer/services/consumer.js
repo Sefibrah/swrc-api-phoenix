@@ -18,6 +18,7 @@ module.exports = ({ strapi }) => ({
     totalWithTax,
     deposit,
     discount,
+    discountType,
     extrasPrice,
     flightNumber,
     car,
@@ -57,11 +58,11 @@ module.exports = ({ strapi }) => ({
         data: {
           totalWithTax,
           deposit,
-          discount,
           pricePerDay: (totalWithTax - extrasPrice) / days,
           totalPricePerDay: totalWithTax / days,
           days,
-          discountType: "FIXED", // FIXED = 0, PER_DAY = 1, PERCENTAGE = 2, fixme: now it's hardcoded, before the packages update...
+          discount,
+          discountType,
           additionalCost: 0,
           tax,
           totalWithoutTax,

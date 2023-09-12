@@ -11,6 +11,9 @@ const { createCoreService } = require("@strapi/strapi").factories;
 const {
   getLoggedUserUserGroup,
 } = require("../../../shared/functions/get-logged-user-user-group");
+const {
+  getLatestPriceColumn,
+} = require("../../../shared/functions/get-latest-price-column");
 
 module.exports = createCoreService("api::car.car", ({ strapi }) => ({
   relevantEventsList: async (carId, subdomain) => {
@@ -294,13 +297,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
   available: async (startDatetime, endDatetime, carType, subdomain) => {
     const days = getDays(startDatetime, endDatetime);
 
-    const loggedUserUserGroup = await strapi
-      .query("plugin::multi-tenant.user-group")
-      .findOne({
-        where: {
-          name: { $eq: subdomain },
-        },
-      });
+    const loggedUserUserGroup = await getLoggedUserUserGroup(strapi, subdomain);
 
     let carFilter = {
       userGroup: loggedUserUserGroup.id,
@@ -456,25 +453,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
     console.log("days", days);
     // calculate the vehicle prices!!
     availableCarGroups = availableCarGroups.map((carGroup) => {
-      let price = null;
-      if (carGroup.prices.length > 0) {
-        let closestPriceColumn = null;
-        for (let i = 0; i < carGroup.prices.length; i++) {
-          const priceColumn = carGroup.prices[i];
-          if (
-            days >= carGroup.prices[i + 1]?.minDays &&
-            i <= carGroup.prices.length
-          ) {
-            continue;
-          }
-          closestPriceColumn = priceColumn;
-          break;
-        }
-        price =
-          carGroup.prices.find(
-            (price) => closestPriceColumn.minDays === price.minDays
-          ).amount * days;
-      }
+      let price = getLatestPriceColumn(carGroup, days);
       // we don't need to show the client the entire price column
       delete carGroup.prices;
       return {
@@ -487,19 +466,41 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
     // fixme: kad se dodaju popusti, onda ovdje moraju da se reflect na neki nacin
     // ...
     // only return each group's first car child!
-    const response = availableCarGroups.map((carGroup) => {
-      const discount = carGroup.cars[0].discount || 0;
-      return {
+    let response = [];
+    for (let i = 0; i < availableCarGroups.length; i++) {
+      const carGroup = availableCarGroups[i];
+      const recurringDiscount = await strapi
+        .service("api::recurring-discount.recurring-discount")
+        .doesCarGroupHaveDiscountInGivenPeriod(
+          carGroup.id,
+          startDatetime,
+          endDatetime,
+          subdomain
+        );
+      const temporaryDiscount = await strapi
+        .service("api::temporary-discount.temporary-discount")
+        .doesCarGroupHaveDiscountInGivenPeriod(
+          carGroup.id,
+          startDatetime,
+          endDatetime,
+          subdomain
+        );
+      const discount =
+        recurringDiscount.fixedDiscount > temporaryDiscount.fixedDiscount
+          ? recurringDiscount.fixedDiscount
+          : temporaryDiscount.fixedDiscount;
+      const carGroupResponse = {
         ...carGroup.cars[0],
         thumbnail: carGroup.thumbnail.url,
         name: carGroup.name,
         priceNoDiscount: carGroup.price,
         id: carGroup.id,
-        price: carGroup.price - (carGroup.price * discount) / 100,
+        price: carGroup.price - discount,
         // add discount if it's during winter
         discount,
       };
-    });
+      response.push(carGroupResponse);
+    }
     return response;
   },
 }));

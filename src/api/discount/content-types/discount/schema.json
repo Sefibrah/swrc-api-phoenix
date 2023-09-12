@@ -21,13 +21,23 @@
     "amount": {
       "type": "decimal"
     },
-    "type": {
-      "type": "string"
-    },
     "userGroup": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::multi-tenant.user-group"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "FIXED",
+        "PER_DAY",
+        "PERCENTAGE"
+      ]
+    },
+    "carGroups": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::car-group.car-group"
     }
   }
 }

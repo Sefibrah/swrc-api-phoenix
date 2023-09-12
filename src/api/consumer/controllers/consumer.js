@@ -2,8 +2,12 @@
 
 const utils = require("@strapi/utils");
 const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
-const { getSubdomainFromRequest } = require("../../../shared/functions/get-subdomain");
-const { getRandomString } = require("../../../shared/functions/get-random-string");
+const {
+  getSubdomainFromRequest,
+} = require("../../../shared/functions/get-subdomain");
+const {
+  getRandomString,
+} = require("../../../shared/functions/get-random-string");
 const { getJwt } = require("../../../shared/functions/get-jwt");
 const {
   getStartAndEndDateTimeFromPayload,
@@ -14,6 +18,9 @@ const {
 } = require("../../../shared/functions/get-logged-user-user-group");
 const fs = require("fs");
 const util = require("util");
+const {
+  getLatestPriceColumn,
+} = require("../../../shared/functions/get-latest-price-column");
 
 /**
  * A set of functions called "actions" for `consumer`
@@ -198,7 +205,36 @@ module.exports = {
 
       // procedure: calculating system discounts, for now, not implemented, so always zero
 
-      const discount = 0;
+      const recurringDiscount = await strapi
+        .service("api::recurring-discount.recurring-discount")
+        .doesCarGroupHaveDiscountInGivenPeriod(
+          carGroupId,
+          startDateTime,
+          endDateTime,
+          subdomain
+        );
+      const temporaryDiscount = await strapi
+        .service("api::temporary-discount.temporary-discount")
+        .doesCarGroupHaveDiscountInGivenPeriod(
+          carGroupId,
+          startDateTime,
+          endDateTime,
+          subdomain
+        );
+      const discount =
+        recurringDiscount.fixedDiscount > temporaryDiscount.fixedDiscount
+          ? recurringDiscount.discount
+          : temporaryDiscount.discount;
+      const fixedDiscount =
+        recurringDiscount.fixedDiscount > temporaryDiscount.fixedDiscount
+          ? recurringDiscount.fixedDiscount
+          : temporaryDiscount.fixedDiscount;
+      const discountType =
+        recurringDiscount.fixedDiscount > temporaryDiscount.fixedDiscount
+          ? recurringDiscount.type
+          : temporaryDiscount.type;
+
+      totalWithTax -= fixedDiscount;
 
       // procedure: calculating the extras price for the reservation
 
@@ -295,6 +331,7 @@ module.exports = {
               totalWithTax,
               deposit,
               discount,
+              discountType,
               extrasPrice,
               flightNumber,
               carFromDbId,
@@ -335,6 +372,7 @@ module.exports = {
             totalWithTax,
             deposit,
             discount,
+            discountType,
             extrasPrice,
             flightNumber,
             carFromDbId,
