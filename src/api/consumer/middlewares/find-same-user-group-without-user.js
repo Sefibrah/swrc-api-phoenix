@@ -1,17 +1,19 @@
-const { getSubdomainFromRequest } = require("../../../shared/functions/get-subdomain");
+const {
+  getLoggedUserUserGroup,
+} = require("../../../shared/functions/get-logged-user-user-group");
+const {
+  getSubdomainFromRequest,
+} = require("../../../shared/functions/get-subdomain");
 
 module.exports = (config, { strapi }) => {
   return async (ctx, next) => {
     const subdomain = getSubdomainFromRequest(ctx.request);
     console.log(subdomain);
     if (subdomain != null) {
-      const loggedUserUserGroup = await strapi
-        .query("plugin::multi-tenant.user-group")
-        .findOne({
-          where: {
-            name: { $eq: subdomain },
-          },
-        });
+      const loggedUserUserGroup = await getLoggedUserUserGroup(
+        strapi,
+        subdomain
+      );
 
       ctx.query = {
         ...ctx.query,

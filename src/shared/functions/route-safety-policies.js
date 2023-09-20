@@ -1,13 +1,15 @@
-function getSameUserGroupPolicyConfig(contentType) {
+function getSameUserGroupPolicyConfig(contentType, withoutUser = true) {
   return {
-    name: "plugin::multi-tenant.is-same-user-group",
+    name: withoutUser
+      ? "api::consumer.is-same-user-group-without-user"
+      : "plugin::multi-tenant.is-same-user-group",
     config: {
       contentType,
     },
   };
 }
 
-function getRouteConfig(sameUserGroupPolicyConfig, withoutUser = false) {
+function getRouteConfig(sameUserGroupPolicyConfig, withoutUser = true) {
   return {
     config: {
       update: {
@@ -32,7 +34,9 @@ function getRouteConfig(sameUserGroupPolicyConfig, withoutUser = false) {
       create: {
         middlewares: [
           {
-            name: "plugin::multi-tenant.add-same-user-group",
+            name: withoutUser
+              ? "api::consumer.add-same-user-group-without-user"
+              : "plugin::multi-tenant.add-same-user-group",
             config: {},
           },
         ],

@@ -10,7 +10,7 @@ module.exports = {
     },
     {
       method: "GET",
-      path: "/car/available/:id",
+      path: "/cars/available/:id",
       handler: "car.isAvailable",
       config: {
         auth: false
