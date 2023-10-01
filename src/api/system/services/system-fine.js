@@ -15,28 +15,40 @@ const {
 
 module.exports = {
   createFromContract: async (contractId, fine, subdomain) => {
-    const loggedUserUserGroup = await getLoggedUserUserGroup(strapi, subdomain);
+    try {
+      const loggedUserUserGroup = await getLoggedUserUserGroup(
+        strapi,
+        subdomain
+      );
 
-    const userGroup = loggedUserUserGroup.id;
-
-    const newFine = await strapi.entityService.create("api::fine.fine", {
-      data: {
-        ...fine,
-        userGroup,
-      },
-    });
-
-    const carContractFine = await strapi.entityService.create(
-      "api::car-contract-fine.car-contract-fine",
-      {
+      const userGroup = loggedUserUserGroup.id;
+      const newFine = await strapi.entityService.create("api::fine.fine", {
         data: {
-          fine: newFine.id,
-          carContract: contractId,
+          ...fine,
           userGroup,
         },
-      }
-    );
+      });
 
-    return getIdAndAttributes(carContractFine);
+      const carContractFine = await strapi.entityService.create(
+        "api::car-contract-fine.car-contract-fine",
+        {
+          data: {
+            fine: newFine.id,
+            carContract: contractId,
+            userGroup,
+          },
+        }
+      );
+
+      return getIdAndAttributes(carContractFine);
+    } catch (err) {
+      if (err.name == "ValidationError") {
+        return new ValidationError(err.message, err.details);
+      } else if (err.name == "NotFoundError") {
+        return new NotFoundError(err.message, err.details);
+      } else {
+        return new ApplicationError(err.message, err.details);
+      }
+    }
   },
 };
