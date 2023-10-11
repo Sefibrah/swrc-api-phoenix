@@ -4,20 +4,25 @@ const {
   getSubdomainFromRequest,
 } = require("../../../shared/functions/get-subdomain");
 
+const {
+  parseBody,
+} = require("@strapi/strapi/lib/core-api/controller/transform");
+
 /**
  * A set of functions called "actions" for `system`
  */
 
 module.exports = {
-  createCarContractFine: async (ctx, next) => {
+  createCarGroup: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
-      const contractId = ctx.request.body.carContract;
-      const fineBody = ctx.request.body.fine;
-      console.log("ctx.request.body", ctx.request.body);
+
+      const { data, files } = parseBody(ctx);
+      console.log("data", data, "files", files);
+
       const response = await strapi
-        .service("api::system.system-fine")
-        .createCarContractFine(contractId, fineBody, subdomain);
+        .service("api::system.system-car-group")
+        .createCarGroup(data, files, subdomain);
       console.log("response", response);
       if (
         response?.name == "NotFoundError" ||
@@ -31,17 +36,18 @@ module.exports = {
       ctx.body = err;
     }
   },
-  updateCarContractFine: async (ctx, next) => {
+  updateCarGroup: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
-      const contractId = ctx.request.body.carContract;
-      const fineBody = ctx.request.body.fine;
-      console.log("ctx.request.body", ctx.request.body);
+
+      const { data, files } = parseBody(ctx);
+      console.log("data", data, "files", files);
+
       const id = ctx.request.params.id;
 
       const response = await strapi
-        .service("api::system.system-fine")
-        .updateCarContractFine(id, contractId, fineBody, subdomain);
+        .service("api::system.system-car-group")
+        .updateCarGroup(id, data, files, subdomain);
       console.log("response", response);
       if (
         response?.name == "NotFoundError" ||
@@ -55,14 +61,14 @@ module.exports = {
       ctx.body = err;
     }
   },
-  deleteCarContractFine: async (ctx, next) => {
+  deleteCarGroup: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
       const id = ctx.request.params.id;
 
       const response = await strapi
-        .service("api::system.system-fine")
-        .deleteCarContractFine(id, subdomain);
+        .service("api::system.system-car-group")
+        .deleteCarGroup(id, subdomain);
       console.log("response", response);
       if (
         response?.name == "NotFoundError" ||

@@ -14,33 +14,33 @@ const {
  */
 
 module.exports = {
-  createCarContractFine: async (contractId, fine, subdomain) => {
+  createTemporaryDiscount: async (data, subdomain) => {
     try {
       const loggedUserUserGroup = await getLoggedUserUserGroup(
         strapi,
         subdomain
       );
 
-      const userGroup = loggedUserUserGroup.id;
-      const newFine = await strapi.entityService.create("api::fine.fine", {
-        data: {
-          ...fine,
-          userGroup,
-        },
-      });
-
-      const carContractFine = await strapi.entityService.create(
-        "api::car-contract-fine.car-contract-fine",
+      const discount = await strapi.entityService.create(
+        "api::discount.discount",
         {
           data: {
-            fine: newFine.id,
-            carContract: contractId,
-            userGroup,
+            ...data.discount,
           },
         }
       );
 
-      return getIdAndAttributes(carContractFine);
+      const temporaryDiscount = await strapi.entityService.create(
+        "api::recurring-discount.recurring-discount",
+        {
+          data: {
+            ...data.temporaryDiscount,
+            discount: discount.id,
+          },
+        }
+      );
+
+      return getIdAndAttributes(temporaryDiscount);
     } catch (err) {
       if (err.name == "ValidationError") {
         return new ValidationError(err.message, err.details);
@@ -51,43 +51,36 @@ module.exports = {
       }
     }
   },
-  updateCarContractFine: async (id, contractId, fineBody, subdomain) => {
+  updateTemporaryDiscount: async (id, data, subdomain) => {
     try {
       const loggedUserUserGroup = await getLoggedUserUserGroup(
         strapi,
         subdomain
       );
 
-      let carContractFine = await strapi.entityService.findOne(
-        "api::car-contract-fine.car-contract-fine",
-        id,
-        { populate: { fine: { fields: ["id"] } } }
-      );
-
-      console.log("carContractFine", carContractFine);
+      let temporaryDiscount = await getTemporaryDiscount(strapi, id);
 
       await strapi.entityService.update(
-        "api::fine.fine",
-        carContractFine.fine.id,
+        "api::discount.discount",
+        temporaryDiscount.discount.id,
         {
           data: {
-            ...fineBody,
+            ...data.discount,
           },
         }
       );
 
-      carContractFine = await strapi.entityService.update(
-        "api::car-contract-fine.car-contract-fine",
+      temporaryDiscount = await strapi.entityService.update(
+        "api::temporary-discount.temporary-discount",
         id,
         {
           data: {
-            fine: carContractFine.fine.id,
-            carContract: contractId,
+            ...data.temporaryDiscount,
           },
         }
       );
 
-      return getIdAndAttributes(carContractFine);
+      return getIdAndAttributes(await getTemporaryDiscount(strapi, id));
     } catch (err) {
       if (err.name == "ValidationError") {
         return new ValidationError(err.message, err.details);
@@ -98,30 +91,26 @@ module.exports = {
       }
     }
   },
-  deleteCarContractFine: async (id, fineId, subdomain) => {
+  deleteTemporaryDiscount: async (id, subdomain) => {
     try {
       const loggedUserUserGroup = await getLoggedUserUserGroup(
         strapi,
         subdomain
       );
 
-      const carContractFine = await strapi.entityService.findOne(
-        "api::car-contract-fine.car-contract-fine",
-        id,
-        { populate: { fine: { fields: ["id"] } } }
+      const temporaryDiscount = await getTemporaryDiscount(strapi, id);
+
+      await strapi.entityService.delete(
+        "api::discount.discount",
+        temporaryDiscount.discount.id
       );
 
       await strapi.entityService.delete(
-        "api::fine.fine",
-        carContractFine.fine.id
-      );
-
-      await strapi.entityService.delete(
-        "api::car-contract-fine.car-contract-fine",
+        "api::temporary-discount.temporary-discount",
         id
       );
 
-      return getIdAndAttributes(carContractFine);
+      return getIdAndAttributes(temporaryDiscount);
     } catch (err) {
       if (err.name == "ValidationError") {
         return new ValidationError(err.message, err.details);
@@ -133,3 +122,15 @@ module.exports = {
     }
   },
 };
+
+async function getTemporaryDiscount(strapi, id) {
+  return await strapi.entityService.findOne(
+    "api::temporary-discount.temporary-discount",
+    id,
+    {
+      populate: {
+        discount: { fields: ["id"] },
+      },
+    }
+  );
+}

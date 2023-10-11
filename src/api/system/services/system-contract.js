@@ -23,6 +23,7 @@ module.exports = ({ strapi }) => ({
       days,
       extrasPrice,
       pricePerDay,
+      includeTimeAsExtraDay,
     },
     rentalExtras,
     query,
@@ -146,6 +147,7 @@ module.exports = ({ strapi }) => ({
           paymentMethod,
           totalWithoutTax,
           extrasPrice,
+          includeTimeAsExtraDay,
           userGroup,
         },
       }
@@ -359,6 +361,7 @@ module.exports = ({ strapi }) => ({
           paymentMethod: transaction.paymentMethod,
           totalWithoutTax,
           extrasPrice: transaction.extrasPrice,
+          includeTimeAsExtraDay: transaction.includeTimeAsExtraDay,
           userGroup,
         },
       }

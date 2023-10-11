@@ -6,7 +6,11 @@ function getIdAndAttributes(obj) {
     attributes: {},
   };
   for (const [key, value] of Object.entries(attributes)) {
-    if (typeof value === "object" && value !== null) {
+    if (
+      typeof value === "object" &&
+      value !== null &&
+      !(value instanceof Array)
+    ) {
       result.attributes[key] = getIdAndAttributes(value);
     } else {
       result.attributes[key] = value;

@@ -59,6 +59,31 @@ const systemContractsNoLimits = [
   "updateFullContractFromSystem",
   "deleteFullContractFromSystem",
 ];
+const systemCustomerIndividualsNoLimits = [
+  "createGuestIndividual",
+  "updateGuestIndividual",
+  "deleteGuestIndividual",
+];
+const systemCarGroupsNoLimits = [
+  "createCarGroup",
+  "updateCarGroup",
+  "deleteCarGroup",
+];
+const systemCarContractFinesNoLimits = [
+  "createCarContractFine",
+  "updateCarContractFine",
+  "deleteCarContractFine",
+];
+const systemRecurringDiscountsNoLimits = [
+  "createRecurringDiscount",
+  "updateRecurringDiscount",
+  "deleteRecurringDiscount",
+];
+const systemTemporaryDiscountsNoLimits = [
+  "createTemporaryDiscount",
+  "updateTemporaryDiscount",
+  "deleteTemporaryDiscount",
+];
 
 const hashPassword = (password) => {
   return new Promise((resolve, reject) => {
@@ -212,6 +237,26 @@ const getReceptionistPermissions = () => {
     ["api::system.system-contract"],
     systemContractsNoLimits
   );
+  let systemCustomerIndividualsPermissions = combineActionWithService(
+    ["api::system.system-customer"],
+    systemCustomerIndividualsNoLimits
+  );
+  let systemCarGroupsPermissions = combineActionWithService(
+    ["api::system.system-car-group"],
+    systemCarGroupsNoLimits
+  );
+  let systemCarContractFinesPermissions = combineActionWithService(
+    ["api::system.system-fine"],
+    systemCarContractFinesNoLimits
+  );
+  let systemRecurringDiscountsPermissions = combineActionWithService(
+    ["api::system.system-recurring-discount"],
+    systemRecurringDiscountsNoLimits
+  );
+  let systemTemporaryDiscountsPermissions = combineActionWithService(
+    ["api::system.system-temporary-discount"],
+    systemTemporaryDiscountsNoLimits
+  );
   return [
     ...restrictedUserSettingPermissions,
     ...restrictedAvailableEndpointsPermissions,
@@ -226,6 +271,11 @@ const getReceptionistPermissions = () => {
     ...restrictedUserGroupPermissions,
     ...systemReservationPermissions,
     ...systemContractPermissions,
+    ...systemCustomerIndividualsPermissions,
+    ...systemCarGroupsPermissions,
+    ...systemCarContractFinesPermissions,
+    ...systemRecurringDiscountsPermissions,
+    ...systemTemporaryDiscountsPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -412,9 +462,29 @@ const getManagerPermissions = () => {
     ["api::system.system-contract"],
     systemContractsNoLimits
   );
+  let systemCustomerIndividualsPermissions = combineActionWithService(
+    ["api::system.system-customer"],
+    systemCustomerIndividualsNoLimits
+  );
   let systemInvoicePermissions = combineActionWithService(
     ["api::system.system-invoice"],
     systemInvoiceNoLimits
+  );
+  let systemCarGroupsPermissions = combineActionWithService(
+    ["api::system.system-car-group"],
+    systemCarGroupsNoLimits
+  );
+  let systemCarContractFinesPermissions = combineActionWithService(
+    ["api::system.system-fine"],
+    systemCarContractFinesNoLimits
+  );
+  let systemRecurringDiscountsPermissions = combineActionWithService(
+    ["api::system.system-recurring-discount"],
+    systemRecurringDiscountsNoLimits
+  );
+  let systemTemporaryDiscountsPermissions = combineActionWithService(
+    ["api::system.system-temporary-discount"],
+    systemTemporaryDiscountsNoLimits
   );
   return [
     ...restrictedUserSettingPermissions,
@@ -429,6 +499,11 @@ const getManagerPermissions = () => {
     ...systemReservationPermissions,
     ...systemContractPermissions,
     ...systemInvoicePermissions,
+    ...systemCustomerIndividualsPermissions,
+    ...systemCarGroupsPermissions,
+    ...systemCarContractFinesPermissions,
+    ...systemRecurringDiscountsPermissions,
+    ...systemTemporaryDiscountsPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -520,9 +595,29 @@ const getAdminPermissions = () => {
     ["api::system.system-contract"],
     systemContractsNoLimits
   );
+  let systemCustomerIndividualsPermissions = combineActionWithService(
+    ["api::system.system-customer"],
+    systemCustomerIndividualsNoLimits
+  );
   let systemInvoicePermissions = combineActionWithService(
     ["api::system.system-invoice"],
     systemInvoiceNoLimits
+  );
+  let systemCarGroupsPermissions = combineActionWithService(
+    ["api::system.system-car-group"],
+    systemCarGroupsNoLimits
+  );
+  let systemCarContractFinesPermissions = combineActionWithService(
+    ["api::system.system-fine"],
+    systemCarContractFinesNoLimits
+  );
+  let systemRecurringDiscountsPermissions = combineActionWithService(
+    ["api::system.system-recurring-discount"],
+    systemRecurringDiscountsNoLimits
+  );
+  let systemTemporaryDiscountsPermissions = combineActionWithService(
+    ["api::system.system-temporary-discount"],
+    systemTemporaryDiscountsNoLimits
   );
   return [
     ...noRestrictionsAvailableEndpointsPermissions,
@@ -534,9 +629,14 @@ const getAdminPermissions = () => {
     ...noRestrictionUserPermissions,
     ...noLimitUploadPermissions,
     ...restrictedUserGroupPermissions,
+    ...systemCustomerIndividualsPermissions,
     ...systemReservationPermissions,
     ...systemContractPermissions,
     ...systemInvoicePermissions,
+    ...systemCarGroupsPermissions,
+    ...systemCarContractFinesPermissions,
+    ...systemRecurringDiscountsPermissions,
+    ...systemTemporaryDiscountsPermissions,
     ...getCustomEndpointPermissions(),
   ];
 };
@@ -638,8 +738,63 @@ const getPublicPermissions = () => {
     ["api::import.import"],
     ["importReservationFromGTRC", "importContractFromGTRC"]
   );
+  // let noRestrictionPermissions = combineActionWithService(
+  //   [
+  //     "api::car.car",
+  //     "api::car-contract.car-contract",
+  //     "api::car-group.car-group",
+  //     "api::price.price",
+  //     "api::color.color",
+  //     "api::flight-number.flight-number",
+  //     "api::fuel-type.fuel-type",
+  //     "api::location.location",
+  //     "api::contact.contact",
+  //     "api::service-location.service-location",
+  //     "api::status.status",
+  //     "api::transmission-type.transmission-type",
+  //     "api::type-of-service.type-of-service",
+  //     "api::vehicle-type.vehicle-type",
+  //     "api::car-maintenance.car-maintenance",
+  //     "api::car-reservation.car-reservation",
+  //     "api::customer.customer",
+  //     "api::document.document",
+  //     "api::document-connection.document-connection",
+  //     "api::guest.guest",
+  //     "api::individual.individual",
+  //     "api::organisation.organisation",
+  //     "api::place-of-issue.place-of-issue",
+  //     "api::address-of-stay.address-of-stay",
+  //     "api::invoice-place-of-issue.invoice-place-of-issue",
+  //     "api::invoice.invoice",
+  //     "api::discount.discount",
+  //     "api::recurring-discount.recurring-discount",
+  //     "api::temporary-discount.temporary-discount",
+  //     "api::price.price",
+  //     "api::payment-method.payment-method",
+  //     "api::transaction.transaction",
+  //     "api::rental-agreement-detail.rental-agreement-detail",
+  //     "api::agreement-detail.agreement-detail",
+  //     "api::car-contract-invoice.car-contract-invoice",
+  //     "api::car-contract-fine.car-contract-fine",
+  //     "api::fine.fine",
+  //     "api::police-station.police-station",
+  //     "api::radar-number.radar-number",
+  //     "api::rental-extra.rental-extra",
+  //     "api::extra.extra",
+  //     "api::payment-detail.payment-detail",
+  //     "api::address.address",
+  //     "api::user-setting.user-setting",
+  //   ],
+  //   noRestrictions
+  // );
+  let noLimitUploadPermissions = combineActionWithService(
+    ["plugin::upload.content-api"],
+    noLimitsUpload
+  );
   return [
+    // ...noRestrictionPermissions,
     ...restrictedPermissions,
+    ...noLimitUploadPermissions,
     ...availableEndpointsPermissions,
     ...systemInvoicePermissions,
     ...myOrganizationSkinPermissions,

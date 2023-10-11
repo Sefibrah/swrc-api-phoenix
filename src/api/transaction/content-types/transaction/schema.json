@@ -76,6 +76,10 @@
     "totalPricePerDay": {
       "type": "decimal",
       "min": 0
+    },
+    "includeTimeAsExtraDay": {
+      "type": "boolean",
+      "default": true
     }
   }
 }

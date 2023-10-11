@@ -7,7 +7,7 @@ const {
 
 const sameUserGroupPolicyConfig =
   getSameUserGroupPolicyConfig("api::extra.extra");
-const routeConfig = getRouteConfig(sameUserGroupPolicyConfig, true);
+const routeConfig = getRouteConfig(sameUserGroupPolicyConfig);
 
 const { createCoreRouter } = require("@strapi/strapi").factories;
 
