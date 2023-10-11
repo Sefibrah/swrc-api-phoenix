@@ -1,4 +1,4 @@
-function getSameUserGroupPolicyConfig(contentType, withoutUser = true) {
+function getSameUserGroupPolicyConfig(contentType, withoutUser = false) {
   return {
     name: withoutUser
       ? "api::consumer.is-same-user-group-without-user"
@@ -9,7 +9,7 @@ function getSameUserGroupPolicyConfig(contentType, withoutUser = true) {
   };
 }
 
-function getRouteConfig(sameUserGroupPolicyConfig, withoutUser = true) {
+function getRouteConfig(sameUserGroupPolicyConfig, withoutUser = false) {
   return {
     config: {
       update: {
