@@ -18,6 +18,7 @@
     "@strapi/plugin-users-permissions": "^4.7.0",
     "@strapi/provider-upload-cloudinary": "^4.7.0",
     "@strapi/strapi": "^4.7.0",
+    "assert-strict": "^0.0.2",
     "better-sqlite3": "7.4.6",
     "codemirror": "5.65.11",
     "dotenv": "^16.0.3",
