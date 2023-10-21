@@ -66,6 +66,8 @@ module.exports = {
 
       console.log("carContractFine", carContractFine);
 
+      console.log("fineBody", fineBody);
+
       await strapi.entityService.update(
         "api::fine.fine",
         carContractFine.fine.id,

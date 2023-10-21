@@ -48,7 +48,12 @@ const myOrganizationDetail = ["myDetail"];
 const myOrganizationDetailRestricted = ["myDetail", "update"];
 const availabilityNoLimits = ["available", "isAvailable"];
 const availabilityLimited = ["available"];
-const systemInvoiceNoLimits = ["createInvoiceFromContract", "getLatestInvoice"];
+const systemInvoiceNoLimits = [
+  "createCarContractInvoice",
+  "updateCarContractInvoice",
+  "deleteCarContractInvoice",
+  "getLatestInvoice",
+];
 const systemReservationsNoLimits = [
   "createFullReservationFromSystem",
   "updateFullReservationFromSystem",
@@ -467,7 +472,7 @@ const getManagerPermissions = () => {
     systemCustomerIndividualsNoLimits
   );
   let systemInvoicePermissions = combineActionWithService(
-    ["api::system.system-invoice"],
+    ["api::system.system-car-contract-invoice"],
     systemInvoiceNoLimits
   );
   let systemCarGroupsPermissions = combineActionWithService(
@@ -600,7 +605,7 @@ const getAdminPermissions = () => {
     systemCustomerIndividualsNoLimits
   );
   let systemInvoicePermissions = combineActionWithService(
-    ["api::system.system-invoice"],
+    ["api::system.system-car-contract-invoice"],
     systemInvoiceNoLimits
   );
   let systemCarGroupsPermissions = combineActionWithService(
