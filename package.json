@@ -45,6 +45,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/luxon": "^3.3.1"
+    "@types/luxon": "^3.3.1",
+    "assert-strict": "^0.0.2"
   }
 }
