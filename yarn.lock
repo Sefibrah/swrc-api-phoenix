@@ -3947,11 +3947,6 @@
     "minimalistic-assert" "^1.0.0"
     "safer-buffer" "^2.1.0"
 
-"assert-strict@^0.0.2":
-  "integrity" "sha512-UwTYyjLQI9vb19KTN3/DABDnfyWepUOA/3IWrNfAt4sToZVE1lZxatWitHljEKEDpQ+q6MllWQMcOHW+Op6cWQ=="
-  "resolved" "https://registry.npmjs.org/assert-strict/-/assert-strict-0.0.2.tgz"
-  "version" "0.0.2"
-
 "assign-symbols@^1.0.0":
   "integrity" "sha512-Q+JC7Whu8HhmTdBph/Tq59IoRtoy6KAm5zzPv00WdujX82lbAL8K7WVjne7vdCsAmbF4AYaDOPyO3k0kl8qIrw=="
   "resolved" "https://registry.npmjs.org/assign-symbols/-/assign-symbols-1.0.0.tgz"
