@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkstrapi=self.webpackChunkstrapi||[]).push([[2492],{9452:(O,e,t)=>{t.r(e),t.d(e,{default:()=>a});var s=t(53547),E=t(56127),n=t(86706),r=t(99369),_=t(53219);const a=()=>{const P=(0,n.v9)(r._);return s.createElement(E.O4,{permissions:P.settings["transfer-tokens"].read},s.createElement(_.Z,null))}}}]);
