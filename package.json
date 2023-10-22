@@ -1,15 +1,19 @@
 {
   "name": "strapi",
-  "private": true,
   "version": "0.1.0",
+  "private": true,
   "description": "A Strapi application",
+  "license": "MIT",
+  "author": {
+    "name": "A Strapi developer"
+  },
   "scripts": {
+    "build": "strapi build",
     "develop": "strapi develop",
+    "postinstall": "patch-package",
     "prod": "strapi production",
     "start": "strapi start",
-    "build": "strapi build",
-    "strapi": "strapi",
-    "postinstall": "patch-package"
+    "strapi": "strapi"
   },
   "dependencies": {
     "@strapi/plugin-graphql": "^4.14.0",
@@ -34,16 +38,12 @@
     "strapi-plugin-init-admin-user": "^0.2.2",
     "strapi-plugin-multi-tenant": "^1.0.4"
   },
-  "author": {
-    "name": "A Strapi developer"
+  "devDependencies": {
+    "@types/luxon": "^3.3.1"
   },
-  "strapi": {},
   "engines": {
     "node": ">=18.x.x <=20.x.x",
     "npm": ">=9.0.0 <= 10.0.0"
   },
-  "license": "MIT",
-  "devDependencies": {
-    "@types/luxon": "^3.3.1"
-  }
+  "strapi": {}
 }
