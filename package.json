@@ -1,50 +1,46 @@
 {
   "name": "strapi",
-  "private": true,
   "version": "0.1.0",
+  "private": true,
   "description": "A Strapi application",
-  "scripts": {
-    "develop": "strapi develop",
-    "prod": "strapi production",
-    "start": "strapi start",
-    "build": "strapi build",
-    "strapi": "strapi",
-    "postinstall": "patch-package"
-  },
-  "dependencies": {
-    "@strapi/plugin-graphql": "4.7.0-beta.0",
-    "@strapi/plugin-i18n": "4.7.0-beta.0",
-    "@strapi/plugin-sentry": "^4.8.2",
-    "@strapi/plugin-users-permissions": "4.7.0-beta.0",
-    "@strapi/provider-upload-cloudinary": "4.7.0-beta.0",
-    "@strapi/strapi": "4.7.0-beta.0",
-    "better-sqlite3": "7.4.6",
-    "codemirror": "5.65.11",
-    "dotenv": "^16.0.3",
-    "find-config": "^1.0.0",
-    "jwt-decode": "^3.1.2",
-    "luxon": "^3.3.0",
-    "mysql": "^2.18.1",
-    "nodemailer": "^6.9.3",
-    "npm": "^9.5.0",
-    "patch-package": "^6.5.1",
-    "pg": "^8.8.0",
-    "pg-connection-string": "^2.5.0",
-    "postinstall-postinstall": "^2.1.0",
-    "qs": "^6.11.1",
-    "strapi-plugin-init-admin-user": "^0.2.1",
-    "strapi-plugin-multi-tenant": "^1.0.4"
-  },
+  "license": "MIT",
   "author": {
     "name": "A Strapi developer"
   },
-  "strapi": {},
-  "engines": {
-    "node": ">=12.x.x <=16.x.x",
-    "npm": ">=6.0.0"
+  "scripts": {
+    "build": "strapi build",
+    "develop": "strapi develop",
+    "postinstall": "patch-package",
+    "prod": "strapi production",
+    "start": "strapi start",
+    "strapi": "strapi"
   },
-  "license": "MIT",
-  "devDependencies": {
-    "@types/luxon": "^3.3.1"
-  }
+  "dependencies": {
+    "@strapi/plugin-graphql": "^4.14.0",
+    "@strapi/plugin-i18n": "^4.14.0",
+    "@strapi/plugin-sentry": "^4.14.0",
+    "@strapi/plugin-users-permissions": "^4.14.0",
+    "@strapi/provider-upload-cloudinary": "^4.14.0",
+    "@strapi/strapi": "^4.14.0",
+    "better-sqlite3": "7.4.6",
+    "codemirror": "5.65.15",
+    "dotenv": "^16.3.1",
+    "jwt-decode": "^3.1.2",
+    "luxon": "^3.4.2",
+    "mysql": "^2.18.1",
+    "nodemailer": "^6.9.6",
+    "patch-package": "^8.0.0",
+    "pg": "^8.11.3",
+    "pg-connection-string": "^2.6.2",
+    "postinstall-postinstall": "^2.1.0",
+    "qs": "^6.11.2",
+    "sharp": "^0.32.6",
+    "strapi-plugin-init-admin-user": "^0.2.2",
+    "strapi-plugin-multi-tenant": "^1.0.4"
+  },
+  "engines": {
+    "node": ">=18.x.x <=20.x.x",
+    "npm": ">=9.0.0 <= 10.0.0"
+  },
+  "strapi": {}
 }

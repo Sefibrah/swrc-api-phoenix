@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkstrapi=self.webpackChunkstrapi||[]).push([[5398],{81965:p=>{p.exports=JSON.parse('{"plugin.description.long":"\u5C07 Strapi \u932F\u8AA4\u4E8B\u4EF6\u50B3\u9001\u81F3 Sentry\u3002","plugin.description.short":"\u5C07 Strapi \u932F\u8AA4\u4E8B\u4EF6\u50B3\u9001\u81F3 Sentry\u3002","plugin.name":"Sentry"}')}}]);
