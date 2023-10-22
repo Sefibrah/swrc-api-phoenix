@@ -7,7 +7,7 @@
 const { createCoreService } = require("@strapi/strapi").factories;
 const {
   transformResponse,
-} = require("@strapi/strapi/lib/core-api/controller/transform.js");
+} = require("@strapi/strapi/dist/core-api/controller/transform.js");
 
 module.exports = createCoreService("api::customer.customer", ({ strapi }) => ({
   createIndividualGuestCustomer: async (

@@ -1,7 +1,6 @@
-module.exports = ({ env }) => ({
-  host: env('HOST', '0.0.0.0'),
-  port: env.int('PORT', 1337),
-  // app: {
-  //   keys: env.array('APP_KEYS'),
-  // },
-});
+const strapi = require('@strapi/strapi');
+
+if (process.env.NODE_ENV == "development")
+    strapi({"autoReload": { "enabled": true }}).start();
+else
+    strapi().start();

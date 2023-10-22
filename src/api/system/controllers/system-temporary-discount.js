@@ -6,7 +6,7 @@ const {
 
 const {
   parseBody,
-} = require("@strapi/strapi/lib/core-api/controller/transform");
+} = require("@strapi/strapi/dist/core-api/controller/transform.js");
 
 /**
  * A set of functions called "actions" for `system`
