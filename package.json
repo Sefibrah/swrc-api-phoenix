@@ -39,8 +39,8 @@
   },
   "strapi": {},
   "engines": {
-    "node": ">=16.x.x <=18.x.x",
-    "npm": ">=8.0.0 <= 9.0.0"
+    "node": ">=18.x.x <=20.x.x",
+    "npm": ">=9.0.0 <= 10.0.0"
   },
   "license": "MIT",
   "devDependencies": {

@@ -15,6 +15,7 @@ const {
 
 module.exports = {
   createCarContractInvoice: async (body, subdomain) => {
+    console.log("body", body);
     const loggedUserUserGroup = await getLoggedUserUserGroup(strapi, subdomain);
 
     const userGroup = loggedUserUserGroup.id;
@@ -23,7 +24,7 @@ module.exports = {
       "api::invoice.invoice",
       {
         data: {
-          ...invoice,
+          ...body.invoice,
           userGroup,
         },
       }
@@ -34,7 +35,7 @@ module.exports = {
       {
         data: {
           invoice: newInvoice.id,
-          carContract: contractId,
+          carContract: body.carContract,
           userGroup,
         },
       }

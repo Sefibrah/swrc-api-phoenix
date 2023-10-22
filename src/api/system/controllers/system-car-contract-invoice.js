@@ -13,6 +13,7 @@ module.exports = {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
       const body = ctx.request.body;
+      console.log("body", body);
       const response = await strapi
         .service("api::system.system-car-contract-invoice")
         .createCarContractInvoice(body, subdomain);
