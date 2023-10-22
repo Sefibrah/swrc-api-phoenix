@@ -30,6 +30,7 @@
     "pg-connection-string": "^2.6.2",
     "postinstall-postinstall": "^2.1.0",
     "qs": "^6.11.2",
+    "sharp": "^0.32.6",
     "strapi-plugin-init-admin-user": "^0.2.2",
     "strapi-plugin-multi-tenant": "^1.0.4"
   },
