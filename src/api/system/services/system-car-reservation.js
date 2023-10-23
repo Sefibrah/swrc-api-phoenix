@@ -5,7 +5,7 @@
  */
 
 module.exports = ({ strapi }) => ({
-  createFullReservationFromSystem: async (
+  createCarReservation: async (
     { car, flightNumber, status, code },
     { startLocation, endLocation, renter },
     { startDatetime, endDatetime, comment, author },
@@ -84,6 +84,7 @@ module.exports = ({ strapi }) => ({
     );
 
     let rentalExtraIds = [];
+    console.log("rentalExtras", rentalExtras);
     rentalExtras.forEach(async (rentalExtra) => {
       const rentalExtraFromDb = await strapi.entityService.create(
         "api::rental-extra.rental-extra",
@@ -117,7 +118,7 @@ module.exports = ({ strapi }) => ({
     );
   },
 
-  updateFullReservationFromSystem: async (
+  updateCarReservation: async (
     id,
     reservation,
     rentalAgreementDetail,
@@ -143,12 +144,83 @@ module.exports = ({ strapi }) => ({
           id,
           userGroup,
         },
-        populate: [
-          "agreementDetail",
-          "rentalAgreementDetail",
-          "transaction",
-          "rentalExtras",
-        ],
+        populate: {
+          transaction: {
+            fields: [
+              "days",
+              "totalWithTax",
+              "totalWithoutTax",
+              "additionalCost",
+              "tax",
+              "deposit",
+              "discount",
+              "discountType",
+              "extrasPrice",
+              "pricePerDay",
+              "totalPricePerDay",
+            ],
+          },
+          agreementDetail: {
+            fields: ["startDatetime", "endDatetime", "comment", "author"],
+          },
+          rentalExtras: {
+            fields: ["quantity"],
+            populate: {
+              extra: {
+                populate: {
+                  thumbnail: {
+                    fields: ["url"],
+                  },
+                },
+                fields: ["id", "name", "price", "quantity"],
+              },
+            },
+          },
+          rentalAgreementDetail: {
+            fields: ["startLocation", "endLocation"],
+            populate: {
+              renter: {
+                fields: ["name"],
+                populate: {
+                  contact: {
+                    fields: ["email", "telephonePrimary", "telephoneSecondary"],
+                  },
+                  individual: {
+                    populate: {},
+                    documents: {
+                      fields: [
+                        "id",
+                        "number",
+                        "issuedBy",
+                        "expiry",
+                        "unlimited",
+                      ],
+                    },
+                  },
+                  organisation: {
+                    fields: ["*"],
+                  },
+                },
+              },
+            },
+          },
+          car: {
+            fields: ["registrationPlate"],
+            populate: {
+              carGroup: {
+                fields: ["id"],
+                populate: {
+                  prices: {
+                    fields: ["minDays", "amount"],
+                  },
+                  inspectionImages: {
+                    fields: ["url"],
+                  },
+                },
+              },
+            },
+          },
+        },
       });
 
     await strapi.entityService.update(
@@ -212,7 +284,7 @@ module.exports = ({ strapi }) => ({
 
     rentalExtras.forEach(async (rentalExtra) => {
       const i = reservationToUpdate.rentalExtras.findIndex(
-        (rE) => rE.extra == rentalExtra.extra
+        (rE) => rE.extra.id == rentalExtra.extra
       );
       console.log("index", i);
       console.log("rentalExtra", rentalExtra);
@@ -225,8 +297,6 @@ module.exports = ({ strapi }) => ({
           {
             data: {
               quantity: rentalExtra.quantity,
-              extra: rentalExtra.extra,
-              userGroup,
             },
           }
         );
@@ -245,6 +315,7 @@ module.exports = ({ strapi }) => ({
         console.log("rentalExtraFromDb", rentalExtraFromDb);
         rentalExtraIds.push(rentalExtraFromDb.id);
       }
+      console.log("rentalExtraIds", rentalExtraIds);
     });
     console.log("rentalExtraIds", rentalExtraIds);
 
@@ -268,7 +339,7 @@ module.exports = ({ strapi }) => ({
     );
   },
 
-  deleteFullReservationFromSystem: async (id, subdomain) => {
+  deleteCarReservation: async (id, subdomain) => {
     const loggedUserUserGroup = await strapi
       .query("plugin::multi-tenant.user-group")
       .findOne({

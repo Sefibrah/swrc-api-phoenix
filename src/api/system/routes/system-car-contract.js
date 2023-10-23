@@ -3,25 +3,25 @@ module.exports = {
     {
       method: "POST",
       path: "/system/car-contracts",
-      handler: "system-contract.createFullContractFromSystem",
+      handler: "system-car-contract.createCarContract",
       config: {
-        auth: false
+        auth: false,
       },
     },
     {
       method: "PUT",
       path: "/system/car-contracts/:id",
-      handler: "system-contract.updateFullContractFromSystem",
+      handler: "system-car-contract.updateCarContract",
       config: {
-        auth: false
+        auth: false,
       },
     },
     {
       method: "DELETE",
       path: "/system/car-contracts/:id",
-      handler: "system-contract.deleteFullContractFromSystem",
+      handler: "system-car-contract.deleteCarContract",
       config: {
-        auth: false
+        auth: false,
       },
     },
   ],

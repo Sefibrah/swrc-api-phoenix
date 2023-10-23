@@ -1,24 +1,24 @@
 "use strict";
 
-const { getSubdomainFromRequest } = require("../../../shared/functions/get-subdomain");
+const {
+  getSubdomainFromRequest,
+} = require("../../../shared/functions/get-subdomain");
 
 /**
  * A set of functions called "actions" for `system`
  */
 
 module.exports = {
-  createFullReservationFromSystem: async (ctx, next) => {
+  createCarContract: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
       const body = ctx.request.body;
       const query = ctx.request.query;
 
-      console.log(body, query, subdomain);
-
       const { id, ...attributes } = await strapi
-        .service("api::system.system-reservation")
-        .createFullReservationFromSystem(
-          body.reservation,
+        .service("api::system.system-car-contract")
+        .createCarContract(
+          body.contract,
           body.rentalAgreementDetail,
           body.agreementDetail,
           body.transaction,
@@ -26,24 +26,29 @@ module.exports = {
           query,
           subdomain
         );
-      ctx.body = { data: { id, attributes } };
+      if (attributes?.name === "NotFoundError") {
+        ctx.send({ ...attributes }, 404);
+      } else {
+        ctx.send({ data: { id, attributes } }, 201);
+      }
+      return ctx.body;
     } catch (err) {
       ctx.body = err;
     }
   },
-  updateFullReservationFromSystem: async (ctx, next) => {
+  updateCarContract: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
       const body = ctx.request.body;
       const query = ctx.request.query;
 
-      const reservationId = ctx.request.params.id;
+      const contractId = ctx.request.params.id;
 
       const { id, ...attributes } = await strapi
-        .service("api::system.system-reservation")
-        .updateFullReservationFromSystem(
-          reservationId,
-          body.reservation,
+        .service("api::system.system-car-contract")
+        .updateCarContract(
+          contractId,
+          body.contract,
           body.rentalAgreementDetail,
           body.agreementDetail,
           body.transaction,
@@ -51,19 +56,23 @@ module.exports = {
           query,
           subdomain
         );
-      ctx.body = { data: { id, attributes } };
+      if (attributes.name === "NotFoundError") {
+        ctx.body = { ...attributes };
+      } else {
+        ctx.body = { data: { id, attributes } };
+      }
     } catch (err) {
       ctx.body = err;
     }
   },
-  deleteFullReservationFromSystem: async (ctx, next) => {
+  deleteCarContract: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
-      const reservationId = ctx.request.params.id;
+      const contractId = ctx.request.params.id;
 
       await strapi
-        .service("api::system.system-reservation")
-        .deleteFullReservationFromSystem(reservationId, subdomain);
+        .service("api::system.system-car-contract")
+        .deleteCarContract(contractId, subdomain);
       ctx.body = { data: {}, isSuccess: true };
     } catch (err) {
       ctx.body = err;

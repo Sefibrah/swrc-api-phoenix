@@ -55,14 +55,14 @@ const systemInvoiceNoLimits = [
   "getLatestInvoice",
 ];
 const systemReservationsNoLimits = [
-  "createFullReservationFromSystem",
-  "updateFullReservationFromSystem",
-  "deleteFullReservationFromSystem",
+  "createCarReservation",
+  "updateCarReservation",
+  "deleteCarReservation",
 ];
 const systemContractsNoLimits = [
-  "createFullContractFromSystem",
-  "updateFullContractFromSystem",
-  "deleteFullContractFromSystem",
+  "createCarContract",
+  "updateCarContract",
+  "deleteCarContract",
 ];
 const systemCustomerIndividualsNoLimits = [
   "createGuestIndividual",
@@ -235,11 +235,11 @@ const getReceptionistPermissions = () => {
     noRestrictions
   );
   let systemReservationPermissions = combineActionWithService(
-    ["api::system.system-reservation"],
+    ["api::system.system-car-reservation"],
     systemReservationsNoLimits
   );
   let systemContractPermissions = combineActionWithService(
-    ["api::system.system-contract"],
+    ["api::system.system-car-contract"],
     systemContractsNoLimits
   );
   let systemCustomerIndividualsPermissions = combineActionWithService(
@@ -460,11 +460,11 @@ const getManagerPermissions = () => {
     restrictedUserSetting
   );
   let systemReservationPermissions = combineActionWithService(
-    ["api::system.system-reservation"],
+    ["api::system.system-car-reservation"],
     systemReservationsNoLimits
   );
   let systemContractPermissions = combineActionWithService(
-    ["api::system.system-contract"],
+    ["api::system.system-car-contract"],
     systemContractsNoLimits
   );
   let systemCustomerIndividualsPermissions = combineActionWithService(
@@ -593,11 +593,11 @@ const getAdminPermissions = () => {
     myOrganizationDetailRestricted
   );
   let systemReservationPermissions = combineActionWithService(
-    ["api::system.system-reservation"],
+    ["api::system.system-car-reservation"],
     systemReservationsNoLimits
   );
   let systemContractPermissions = combineActionWithService(
-    ["api::system.system-contract"],
+    ["api::system.system-car-contract"],
     systemContractsNoLimits
   );
   let systemCustomerIndividualsPermissions = combineActionWithService(

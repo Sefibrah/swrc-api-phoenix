@@ -3,7 +3,7 @@ module.exports = {
     {
       method: "POST",
       path: "/system/car-reservations",
-      handler: "system-reservation.createFullReservationFromSystem",
+      handler: "system-car-reservation.createCarReservation",
       config: {
         auth: false
       },
@@ -11,7 +11,7 @@ module.exports = {
     {
       method: "PUT",
       path: "/system/car-reservations/:id",
-      handler: "system-reservation.updateFullReservationFromSystem",
+      handler: "system-car-reservation.updateCarReservation",
       config: {
         auth: false
       },
@@ -19,7 +19,7 @@ module.exports = {
     {
       method: "DELETE",
       path: "/system/car-reservations/:id",
-      handler: "system-reservation.deleteFullReservationFromSystem",
+      handler: "system-car-reservation.deleteCarReservation",
       config: {
         auth: false
       },

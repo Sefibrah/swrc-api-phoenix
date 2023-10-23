@@ -8,7 +8,7 @@ const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
  */
 
 module.exports = ({ strapi }) => ({
-  createFullContractFromSystem: async (
+  createCarContract: async (
     { car, primaryDriver, secondaryDriver, addressOfStay },
     { startLocation, endLocation, renter },
     { startDatetime, endDatetime, comment, author },
@@ -186,7 +186,7 @@ module.exports = ({ strapi }) => ({
     });
   },
 
-  updateFullContractFromSystem: async (
+  updateCarContract: async (
     id,
     contract,
     rentalAgreementDetail,
@@ -212,16 +212,121 @@ module.exports = ({ strapi }) => ({
           id,
           userGroup,
         },
-        populate: [
-          "agreementDetail",
-          "rentalAgreementDetail",
-          "transaction",
-          "rentalExtras",
-          "primaryDriver",
-          "secondaryDriver",
-          "primaryDriverDocumentVersions",
-          "secondaryDriverDocumentVersions",
-        ],
+        populate: {
+          transaction: {
+            fields: [
+              "days",
+              "totalWithTax",
+              "totalWithoutTax",
+              "additionalCost",
+              "tax",
+              "deposit",
+              "discount",
+              "discountType",
+              "paymentMethod",
+              "extrasPrice",
+              "pricePerDay",
+              "totalPricePerDay",
+            ],
+          },
+          invoice: {
+            fields: ["id"],
+          },
+          agreementDetail: {
+            fields: ["startDatetime", "endDatetime", "comment", "author"],
+          },
+          rentalExtras: {
+            fields: ["quantity"],
+            populate: {
+              extra: {
+                populate: {
+                  thumbnail: {
+                    fields: ["url"],
+                  },
+                },
+                fields: ["name", "price", "quantity"],
+              },
+            },
+          },
+          rentalAgreementDetail: {
+            fields: ["startLocation", "endLocation"],
+            populate: {
+              renter: {
+                fields: ["name"],
+                populate: {
+                  contact: {
+                    fields: ["email", "telephonePrimary", "telephoneSecondary"],
+                  },
+                  individual: {
+                    populate: {},
+                    documents: {
+                      fields: [
+                        "id",
+                        "number",
+                        "issuedBy",
+                        "expiry",
+                        "unlimited",
+                      ],
+                    },
+                  },
+                  organisation: {
+                    fields: ["*"],
+                  },
+                },
+              },
+            },
+          },
+          car: {
+            fields: ["registrationPlate"],
+            populate: {
+              carGroup: {
+                fields: ["id"],
+                populate: {
+                  prices: {
+                    fields: ["minDays", "amount"],
+                  },
+                  inspectionImages: {
+                    fields: ["url"],
+                  },
+                },
+              },
+            },
+          },
+          primaryDriver: {
+            fields: ["name", "country"],
+            populate: {
+              contact: {
+                fields: ["email", "telephonePrimary", "telephoneSecondary"],
+              },
+              individual: {
+                populate: {},
+                documents: {
+                  fields: ["id", "number", "issuedBy", "expiry", "unlimited"],
+                },
+              },
+            },
+          },
+          secondaryDriver: {
+            fields: ["name", "country"],
+            populate: {
+              contact: {
+                fields: ["email", "telephonePrimary", "telephoneSecondary"],
+              },
+              individual: {
+                populate: {},
+                documents: {
+                  fields: ["id", "number", "issuedBy", "expiry", "unlimited"],
+                },
+              },
+            },
+          },
+          primaryDriverDocumentVersions: {
+            populate: ["passport", "identityLicence", "driverLicence"],
+          },
+          secondaryDriverDocumentVersions: {
+            populate: ["passport", "identityLicence", "driverLicence"],
+          },
+        },
       });
 
     let primaryDriverDocumentVersions =
@@ -369,9 +474,12 @@ module.exports = ({ strapi }) => ({
 
     let rentalExtraIds = [];
 
+    console.log("rentalExtras", rentalExtras);
+    console.log("contractToUpdate.rentalExtras", contractToUpdate.rentalExtras);
+
     rentalExtras.forEach(async (rentalExtra) => {
       const i = contractToUpdate.rentalExtras.findIndex(
-        (rE) => rE.extra == rentalExtra.extra
+        (rE) => rE.extra.id == rentalExtra.extra
       );
       if (i > -1) {
         const existingRentalExtraId = contractToUpdate.rentalExtras[i].id;
@@ -381,8 +489,6 @@ module.exports = ({ strapi }) => ({
           {
             data: {
               quantity: rentalExtra.quantity,
-              extra: rentalExtra.extra,
-              userGroup,
             },
           }
         );
@@ -424,7 +530,7 @@ module.exports = ({ strapi }) => ({
     );
   },
 
-  deleteFullContractFromSystem: async (id, subdomain) => {
+  deleteCarContract: async (id, subdomain) => {
     const loggedUserUserGroup = await strapi
       .query("plugin::multi-tenant.user-group")
       .findOne({
