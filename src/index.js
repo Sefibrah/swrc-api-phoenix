@@ -74,6 +74,7 @@ const systemCarGroupsNoLimits = [
   "updateCarGroup",
   "deleteCarGroup",
 ];
+const systemExtrasNoLimits = ["createExtra", "updateExtra", "deleteExtra"];
 const systemCarContractFinesNoLimits = [
   "createCarContractFine",
   "updateCarContractFine",
@@ -250,6 +251,10 @@ const getReceptionistPermissions = () => {
     ["api::system.system-car-group"],
     systemCarGroupsNoLimits
   );
+  let systemExtrasPermissions = combineActionWithService(
+    ["api::system.system-extra"],
+    systemExtrasNoLimits
+  );
   let systemCarContractFinesPermissions = combineActionWithService(
     ["api::system.system-fine"],
     systemCarContractFinesNoLimits
@@ -263,6 +268,7 @@ const getReceptionistPermissions = () => {
     systemTemporaryDiscountsNoLimits
   );
   return [
+    ...systemExtrasPermissions,
     ...restrictedUserSettingPermissions,
     ...restrictedAvailableEndpointsPermissions,
     ...restrictedPermissions,
@@ -479,6 +485,10 @@ const getManagerPermissions = () => {
     ["api::system.system-car-group"],
     systemCarGroupsNoLimits
   );
+  let systemExtrasPermissions = combineActionWithService(
+    ["api::system.system-extra"],
+    systemExtrasNoLimits
+  );
   let systemCarContractFinesPermissions = combineActionWithService(
     ["api::system.system-fine"],
     systemCarContractFinesNoLimits
@@ -492,6 +502,7 @@ const getManagerPermissions = () => {
     systemTemporaryDiscountsNoLimits
   );
   return [
+    ...systemExtrasPermissions,
     ...restrictedUserSettingPermissions,
     ...noRestrictionsAvailableEndpointsPermissions,
     ...myOrganizationSkinPermissions,
@@ -612,6 +623,10 @@ const getAdminPermissions = () => {
     ["api::system.system-car-group"],
     systemCarGroupsNoLimits
   );
+  let systemExtrasPermissions = combineActionWithService(
+    ["api::system.system-extra"],
+    systemExtrasNoLimits
+  );
   let systemCarContractFinesPermissions = combineActionWithService(
     ["api::system.system-fine"],
     systemCarContractFinesNoLimits
@@ -625,6 +640,7 @@ const getAdminPermissions = () => {
     systemTemporaryDiscountsNoLimits
   );
   return [
+    ...systemExtrasPermissions,
     ...noRestrictionsAvailableEndpointsPermissions,
     ...myOrganizationSkinPermissions,
     ...myOrganizationDetailPermissions,

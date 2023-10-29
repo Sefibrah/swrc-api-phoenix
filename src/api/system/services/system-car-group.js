@@ -26,7 +26,7 @@ module.exports = {
       const carGroup = await strapi.entityService.create(
         "api::car-group.car-group",
         {
-          data,
+          data: { ...data, userGroup: loggedUserUserGroup.id },
           files,
         }
       );
