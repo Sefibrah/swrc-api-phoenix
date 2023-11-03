@@ -78,7 +78,6 @@ module.exports = {
         id,
         {
           data: {
-            invoice: carContractInvoice.invoice.id,
             carContract: body.carContract,
           },
         }
