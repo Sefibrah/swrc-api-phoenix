@@ -18,6 +18,20 @@
         margin-bottom: 20px;
       }
 
+      pre {
+        padding: 10px;
+        background: rgb(239, 239, 239);
+        border: 1px solid violet;
+      }
+
+      a {
+        padding: 10px;
+        font-size: 15px;
+        background: rgb(239, 239, 239);
+        display: block;
+        border: 1px solid violet;
+      }
+
       p {
         color: #555;
         font-size: 16px;
@@ -64,11 +78,16 @@
     </div>
     <div class="rtl-content">
       <h1>لقد تم حجزكم بنجاح!!!</h1>
+      <p>هذا هو رمز الحجز الخاص بك:</p>
+      <pre>{code}</pre>
+      <p>وهذا هو الرابط لتأكيد الحجز الخاص بك:</p>
+      <a href="{link}" target="_blank"> {link} </a>
       <p>
         كي نضبط موعد استلام السيارة, نحتاج إلى معرفة موعد الوصول و المغادرة. لذا
         يرجى منكم إرسال صورة تذكرة الطيران ذهاب و إياب, و صورة من جواز السفر و
         رخصة القيادة على رقم الواتس 0038761479900
       </p>
+
       <p>شكرا لاختياركم وكالة "Gulf Travel" لتأجير السيارات بالبوسنة والهرسك</p>
       <p class="footer">
         تحتفظ وكالة Gulf Travel Rent-A-Car بجميع الحقوق في إلغاء الحجوزات دون أي
@@ -77,6 +96,10 @@
     </div>
     <div class="ltr-content">
       <h1>Your reservation request has been received successfully!</h1>
+      <p>This is your booking code:</p>
+      <pre>{code}</pre>
+      <p>And this is the link to your booking confirmation:</p>
+      <a href="{link}" target="_blank"> {link} </a>
       <p>
         Please send us a copy of your airline ticket, passport, and driver's
         license to our WhatsApp number <strong>+38761479900</strong>.

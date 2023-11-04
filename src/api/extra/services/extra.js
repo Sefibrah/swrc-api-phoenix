@@ -150,9 +150,9 @@ module.exports = createCoreService("api::extra.extra", ({ strapi }) => ({
       const extraQuantity = extra.quantity;
       const availableExtrasCount = extraQuantity - busyExtraCount;
       if (availableExtrasCount >= quantity) {
-        ctx.send("EXTRA_IS_AVAILABLE", 200);
+        return { message: "EXTRA_IS_AVAILABLE", code: 200 };
       } else {
-        ctx.send(new NotFoundError("EXTRA_IS_BUSY"), 404);
+        return new NotFoundError("EXTRA_IS_BUSY");
       }
     } catch (err) {
       return err;

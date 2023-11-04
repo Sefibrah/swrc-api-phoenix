@@ -3,7 +3,7 @@ module.exports = {
     {
       method: "POST",
       path: "/system/customers/individuals",
-      handler: "system-customer.createGuestIndividual",
+      handler: "system-customer-individual.createGuestIndividual",
       config: {
         auth: false,
       },
@@ -11,7 +11,7 @@ module.exports = {
     {
       method: "PUT",
       path: "/system/customers/individuals/:id",
-      handler: "system-customer.updateGuestIndividual",
+      handler: "system-customer-individual.updateGuestIndividual",
       config: {
         auth: false,
       },
@@ -19,7 +19,7 @@ module.exports = {
     {
       method: "DELETE",
       path: "/system/customers/individuals/:id",
-      handler: "system-customer.deleteGuestIndividual",
+      handler: "system-customer-individual.deleteGuestIndividual",
       config: {
         auth: false,
       },

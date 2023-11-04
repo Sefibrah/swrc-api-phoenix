@@ -240,6 +240,8 @@ module.exports = {
 
       let extrasPrice = 0;
 
+      console.log("rentalExtras", rentalExtras);
+
       if (rentalExtras != null && rentalExtras.length > 0) {
         for (let i = 0; i < rentalExtras.length; i++) {
           const rentalExtra = rentalExtras[i];
@@ -251,6 +253,8 @@ module.exports = {
             },
             select: ["price"],
           });
+
+          console.log("extraFromDb", extraFromDb);
 
           if (extraFromDb == null) {
             ctx.send(new NotFoundError("EXTRA_DOESNT_EXIST"), 400);
@@ -267,14 +271,22 @@ module.exports = {
               subdomain
             );
 
+          console.log("isAvailable", isAvailable);
+
           if (isAvailable?.message == "EXTRA_IS_AVAILABLE") {
             const extraPricePerDay = extraFromDb.price;
             extrasPrice += extraPricePerDay * days * rentalExtra.quantity;
+
+            console.log(
+              `extrasPrice += ${extraPricePerDay} * ${days} * ${rentalExtra.quantity};`
+            );
           } else if (isAvailable?.error?.status == 404) {
             ctx.send(new NotFoundError(isAvailable?.error?.message), 400);
           }
         }
       }
+
+      console.log("extrasPrice", extrasPrice);
 
       totalWithTax += extrasPrice;
 
@@ -385,9 +397,12 @@ module.exports = {
         "src/shared/email/reservation-request-successful.html",
         "utf8"
       );
-      // fixme: -code-, could use it here in the future...
-      html = util.format(rawHtml /**, code */);
+      html = formatString(rawHtml, {
+        code,
+        link: `https://gulftravelbosnia.com/booking-confirmation/${code}`,
+      });
 
+      // ovo prebaciti u web stranicu od gulftravelbosnia.com ... ovome nije mjesto ovdje ...
       await strapi
         .service("api::send-email.send-email")
         .sendEmail(
@@ -403,3 +418,15 @@ module.exports = {
     }
   },
 };
+
+function formatString(template, data) {
+  // Use a regular expression to match all occurrences of {key}
+  const regex = /{(\w+)}/g;
+
+  // Replace each matched placeholder with the corresponding value from the data object
+  const formattedString = template.replace(regex, (match, key) => {
+    return data[key] || match; // Use the value from data or keep the placeholder if not found
+  });
+
+  return formattedString;
+}

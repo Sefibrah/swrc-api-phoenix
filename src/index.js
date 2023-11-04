@@ -69,6 +69,11 @@ const systemCustomerIndividualsNoLimits = [
   "updateGuestIndividual",
   "deleteGuestIndividual",
 ];
+const systemCustomerOrganisationsNoLimits = [
+  "createGuestOrganisation",
+  "updateGuestOrganisation",
+  "deleteGuestOrganisation",
+];
 const systemCarGroupsNoLimits = [
   "createCarGroup",
   "updateCarGroup",
@@ -244,8 +249,12 @@ const getReceptionistPermissions = () => {
     systemContractsNoLimits
   );
   let systemCustomerIndividualsPermissions = combineActionWithService(
-    ["api::system.system-customer"],
+    ["api::system.system-customer-individual"],
     systemCustomerIndividualsNoLimits
+  );
+  let systemCustomerOrganisationsPermissions = combineActionWithService(
+    ["api::system.system-customer-organisation"],
+    systemCustomerOrganisationsNoLimits
   );
   let systemCarGroupsPermissions = combineActionWithService(
     ["api::system.system-car-group"],
@@ -268,6 +277,7 @@ const getReceptionistPermissions = () => {
     systemTemporaryDiscountsNoLimits
   );
   return [
+    ...systemCustomerOrganisationsPermissions,
     ...systemExtrasPermissions,
     ...restrictedUserSettingPermissions,
     ...restrictedAvailableEndpointsPermissions,
@@ -474,8 +484,12 @@ const getManagerPermissions = () => {
     systemContractsNoLimits
   );
   let systemCustomerIndividualsPermissions = combineActionWithService(
-    ["api::system.system-customer"],
+    ["api::system.system-customer-individual"],
     systemCustomerIndividualsNoLimits
+  );
+  let systemCustomerOrganisationsPermissions = combineActionWithService(
+    ["api::system.system-customer-organisation"],
+    systemCustomerOrganisationsNoLimits
   );
   let systemInvoicePermissions = combineActionWithService(
     ["api::system.system-car-contract-invoice"],
@@ -502,6 +516,7 @@ const getManagerPermissions = () => {
     systemTemporaryDiscountsNoLimits
   );
   return [
+    ...systemCustomerOrganisationsPermissions,
     ...systemExtrasPermissions,
     ...restrictedUserSettingPermissions,
     ...noRestrictionsAvailableEndpointsPermissions,
@@ -612,8 +627,12 @@ const getAdminPermissions = () => {
     systemContractsNoLimits
   );
   let systemCustomerIndividualsPermissions = combineActionWithService(
-    ["api::system.system-customer"],
+    ["api::system.system-customer-individual"],
     systemCustomerIndividualsNoLimits
+  );
+  let systemCustomerOrganisationsPermissions = combineActionWithService(
+    ["api::system.system-customer-organisation"],
+    systemCustomerOrganisationsNoLimits
   );
   let systemInvoicePermissions = combineActionWithService(
     ["api::system.system-car-contract-invoice"],
@@ -640,6 +659,7 @@ const getAdminPermissions = () => {
     systemTemporaryDiscountsNoLimits
   );
   return [
+    ...systemCustomerOrganisationsPermissions,
     ...systemExtrasPermissions,
     ...noRestrictionsAvailableEndpointsPermissions,
     ...myOrganizationSkinPermissions,
