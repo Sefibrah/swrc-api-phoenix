@@ -415,13 +415,6 @@ module.exports = {
           subdomain
         );
 
-      console.log("trying to send the mail!", email);
-
-      strapi
-        .plugin("sentry")
-        .service("sentry")
-        .sendError("im here give me the logs");
-
       ctx.send(carReservation, 201);
     } catch (err) {
       ctx.send(err, 400);

@@ -51,6 +51,10 @@ module.exports = ({ strapi }) => ({
         return error;
       }
       console.log(info);
+      strapi
+        .plugin("sentry")
+        .service("sentry")
+        .sendError("im here give me the logs");
       return "Email sent successfully";
     });
   },
