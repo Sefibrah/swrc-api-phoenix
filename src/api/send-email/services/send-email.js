@@ -21,6 +21,8 @@ module.exports = ({ strapi }) => ({
         },
         select: ["host", "email", "password"],
       });
+
+    console.log("organizationEmailConfig", organizationEmailConfig);
     // Create a Nodemailer transporter using SMTP settings
     const transporter = nodemailer.createTransport({
       host: organizationEmailConfig.host,
@@ -31,6 +33,7 @@ module.exports = ({ strapi }) => ({
         pass: organizationEmailConfig.password,
       },
     });
+    console.log("transporter", transporter);
 
     // Email options
     const mailOptions = {
@@ -39,6 +42,7 @@ module.exports = ({ strapi }) => ({
       subject,
       html,
     };
+    console.log("mailOptions", mailOptions);
 
     // Send the email
     transporter.sendMail(mailOptions, (error, info) => {
