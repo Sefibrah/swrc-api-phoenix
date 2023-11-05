@@ -406,7 +406,7 @@ module.exports = {
       console.log("html", html);
 
       // ovo prebaciti u web stranicu od gulftravelbosnia.com ... ovome nije mjesto ovdje ...
-      const email = await strapi
+      await strapi
         .service("api::send-email.send-email")
         .sendEmail(
           recipient,

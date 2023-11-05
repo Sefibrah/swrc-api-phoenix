@@ -44,20 +44,18 @@ module.exports = ({ strapi }) => ({
     };
     console.log("mailOptions", mailOptions);
 
-    // Send the email
-    transporter.sendMail(mailOptions, (error, info) => {
+    try {
+      // Send the email
+      const info = await transporter.sendMail(mailOptions);
+      console.log("Email sent successfully:", info.response);
+      return "Email sent successfully";
+    } catch (error) {
+      console.error("Error sending email:", error);
       strapi
         .plugin("sentry")
         .service("sentry")
-        .sendError(
-          `error: ${JSON.stringify(error)}, info: ${JSON.stringify(info)}`
-        );
-      if (error) {
-        console.log(error);
-        return error;
-      }
-      console.log(info);
-      return "Email sent successfully";
-    });
+        .sendError(`error: ${JSON.stringify(error)}`);
+      return error;
+    }
   },
 });
