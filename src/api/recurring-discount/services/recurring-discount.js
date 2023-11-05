@@ -134,8 +134,8 @@ module.exports = createCoreService(
         }
 
         const targetTime = startDatetime.getTime();
-        const startOfDiscountPeriod = startDateFromRecurringDiscount.getTime();
-        const endOfDiscountPeriod = endDateFromRecurringDiscount.getTime();
+        const startOfDiscountPeriod = startDateFromRecurringDiscount?.getTime();
+        const endOfDiscountPeriod = endDateFromRecurringDiscount?.getTime();
 
         const isStartDatetimeWithinThePeriod =
           startOfDiscountPeriod <= targetTime &&
