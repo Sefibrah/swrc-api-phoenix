@@ -392,6 +392,7 @@ module.exports = {
             code
           );
       }
+      console.log("carReservation", carReservation);
 
       const rawHtml = fs.readFileSync(
         "src/shared/email/reservation-request-successful.html",
@@ -402,8 +403,10 @@ module.exports = {
         link: `https://gulftravelbosnia.com/booking-confirmation/${code}`,
       });
 
+      console.log("html", html);
+
       // ovo prebaciti u web stranicu od gulftravelbosnia.com ... ovome nije mjesto ovdje ...
-      await strapi
+      const email = await strapi
         .service("api::send-email.send-email")
         .sendEmail(
           recipient,
@@ -411,6 +414,13 @@ module.exports = {
           "Your reservation request has been received successfully!",
           subdomain
         );
+
+      console.log("trying to send the mail!", email);
+
+      strapi
+        .plugin("sentry")
+        .service("sentry")
+        .sendError("im here give me the logs");
 
       ctx.send(carReservation, 201);
     } catch (err) {
