@@ -411,7 +411,7 @@ module.exports = {
         .sendEmail(
           recipient,
           html,
-          "Your reservation request has been received successfully!",
+          "Your booking request has been received successfully!",
           subdomain
         );
 

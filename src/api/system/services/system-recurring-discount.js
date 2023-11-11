@@ -26,6 +26,7 @@ module.exports = {
         {
           data: {
             ...data.discount,
+            userGroup: loggedUserUserGroup.id,
           },
         }
       );
@@ -36,6 +37,7 @@ module.exports = {
           data: {
             ...data.recurringDiscount,
             discount: discount.id,
+            userGroup: loggedUserUserGroup.id,
           },
         }
       );
@@ -100,10 +102,15 @@ module.exports = {
 
       const recurringDiscount = await getRecurringDiscount(strapi, id);
 
-      await strapi.entityService.delete(
-        "api::discount.discount",
-        recurringDiscount.discount.id
-      );
+      console.log("id", id);
+      console.log("recurringDiscount", recurringDiscount);
+
+      if (recurringDiscount?.discount?.id != null) {
+        await strapi.entityService.delete(
+          "api::discount.discount",
+          recurringDiscount?.discount?.id
+        );
+      }
 
       await strapi.entityService.delete(
         "api::recurring-discount.recurring-discount",

@@ -2,7 +2,7 @@ module.exports = {
   routes: [
     {
       method: "POST",
-      path: "/system/discounts/temporary-discounts",
+      path: "/system/discounts/temporary",
       handler: "system-temporary-discount.createTemporaryDiscount",
       config: {
         auth: false,
@@ -10,7 +10,7 @@ module.exports = {
     },
     {
       method: "PUT",
-      path: "/system/discounts/temporary-discounts/:id",
+      path: "/system/discounts/temporary/:id",
       handler: "system-temporary-discount.updateTemporaryDiscount",
       config: {
         auth: false,
@@ -18,7 +18,7 @@ module.exports = {
     },
     {
       method: "DELETE",
-      path: "/system/discounts/temporary-discounts/:id",
+      path: "/system/discounts/temporary/:id",
       handler: "system-temporary-discount.deleteTemporaryDiscount",
       config: {
         auth: false,

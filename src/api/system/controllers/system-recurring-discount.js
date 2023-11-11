@@ -40,6 +40,7 @@ module.exports = {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
 
+      console.log(ctx.body);
       const { data } = parseBody(ctx);
       console.log("data", data);
 
@@ -65,6 +66,8 @@ module.exports = {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
       const id = ctx.request.params.id;
+
+      console.log("ctx.request.params", ctx.request.params);
 
       const response = await strapi
         .service("api::system.system-recurring-discount")
