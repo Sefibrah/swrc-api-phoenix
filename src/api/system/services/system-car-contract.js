@@ -477,11 +477,12 @@ module.exports = ({ strapi }) => ({
     console.log("rentalExtras", rentalExtras);
     console.log("contractToUpdate.rentalExtras", contractToUpdate.rentalExtras);
 
-    rentalExtras.forEach(async (rentalExtra) => {
-      const i = contractToUpdate.rentalExtras.findIndex(
+    for (let i = 0; i < rentalExtras.length; i++) {
+      const rentalExtra = rentalExtras[i];
+      const index = contractToUpdate.rentalExtras.findIndex(
         (rE) => rE.extra.id == rentalExtra.extra
       );
-      if (i > -1) {
+      if (index > -1) {
         const existingRentalExtraId = contractToUpdate.rentalExtras[i].id;
         await strapi.entityService.update(
           "api::rental-extra.rental-extra",
@@ -506,7 +507,7 @@ module.exports = ({ strapi }) => ({
         );
         rentalExtraIds.push(rentalExtraFromDb.id);
       }
-    });
+    }
 
     return await strapi.entityService.update(
       "api::car-contract.car-contract",

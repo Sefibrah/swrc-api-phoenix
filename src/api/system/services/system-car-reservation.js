@@ -277,39 +277,37 @@ module.exports = ({ strapi }) => ({
 
     let rentalExtraIds = [];
 
-    await Promise.all(
-      rentalExtras.map(async (rentalExtra) => {
-        const i = reservationToUpdate.rentalExtras.findIndex(
-          (rE) => rE.extra.id == rentalExtra.extra
+    for (let i = 0; i < rentalExtras.length; i++) {
+      const rentalExtra = rentalExtras[i];
+      const index = reservationToUpdate.rentalExtras.findIndex(
+        (rE) => rE.extra.id == rentalExtra.extra
+      );
+      if (index > -1) {
+        const existingRentalExtraId = reservationToUpdate.rentalExtras[i].id;
+        await strapi.entityService.update(
+          "api::rental-extra.rental-extra",
+          existingRentalExtraId,
+          {
+            data: {
+              quantity: rentalExtra.quantity,
+            },
+          }
         );
-
-        if (i > -1) {
-          const existingRentalExtraId = reservationToUpdate.rentalExtras[i].id;
-          await strapi.entityService.update(
-            "api::rental-extra.rental-extra",
-            existingRentalExtraId,
-            {
-              data: {
-                quantity: rentalExtra.quantity,
-              },
-            }
-          );
-          rentalExtraIds.push(existingRentalExtraId);
-        } else {
-          const rentalExtraFromDb = await strapi.entityService.create(
-            "api::rental-extra.rental-extra",
-            {
-              data: {
-                quantity: rentalExtra.quantity,
-                extra: rentalExtra.extra,
-                userGroup,
-              },
-            }
-          );
-          rentalExtraIds.push(rentalExtraFromDb.id);
-        }
-      })
-    );
+        rentalExtraIds.push(existingRentalExtraId);
+      } else {
+        const rentalExtraFromDb = await strapi.entityService.create(
+          "api::rental-extra.rental-extra",
+          {
+            data: {
+              quantity: rentalExtra.quantity,
+              extra: rentalExtra.extra,
+              userGroup,
+            },
+          }
+        );
+        rentalExtraIds.push(rentalExtraFromDb.id);
+      }
+    }
 
     console.log("rentalExtraIds", rentalExtraIds);
 
