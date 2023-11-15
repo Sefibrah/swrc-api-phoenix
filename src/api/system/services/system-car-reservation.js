@@ -301,8 +301,7 @@ module.exports = ({ strapi }) => ({
             },
           }
         );
-        rentalExtraIds = [...rentalExtraIds, existingRentalExtraId];
-        console.log("rentalExtraIds", rentalExtraIds);
+        rentalExtraIds = [...(rentalExtraIds || []), existingRentalExtraId];
       } else {
         console.log("doesnt exist!", i);
         const rentalExtraFromDb = await strapi.entityService.create(
@@ -315,11 +314,11 @@ module.exports = ({ strapi }) => ({
             },
           }
         );
-        console.log("rentalExtraFromDb", rentalExtraFromDb);
-        rentalExtraIds = [...rentalExtraIds, rentalExtraFromDb.id];
-        console.log("rentalExtraIds", rentalExtraIds);
+        console.log("rentalExtraFromDb.id", rentalExtraFromDb.id);
+        rentalExtraIds = [...(rentalExtraIds || []), rentalExtraFromDb.id];
       }
     });
+    console.log("rentalExtraIds", rentalExtraIds);
 
     strapi
       .plugin("sentry")
