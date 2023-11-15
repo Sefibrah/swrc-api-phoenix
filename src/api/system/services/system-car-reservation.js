@@ -164,7 +164,7 @@ module.exports = ({ strapi }) => ({
             fields: ["startDatetime", "endDatetime", "comment", "author"],
           },
           rentalExtras: {
-            fields: ["quantity"],
+            fields: ["id", "quantity"],
             populate: {
               extra: {
                 populate: {
@@ -289,6 +289,7 @@ module.exports = ({ strapi }) => ({
       console.log("index", i);
       console.log("rentalExtra", rentalExtra);
       if (i > -1) {
+        console.log("does exist", i);
         const existingRentalExtraId = reservationToUpdate.rentalExtras[i].id;
         console.log("existingRentalExtraId", existingRentalExtraId);
         await strapi.entityService.update(
@@ -302,6 +303,7 @@ module.exports = ({ strapi }) => ({
         );
         rentalExtraIds.push(existingRentalExtraId);
       } else {
+        console.log("doesnt exist!", i);
         const rentalExtraFromDb = await strapi.entityService.create(
           "api::rental-extra.rental-extra",
           {
@@ -315,9 +317,13 @@ module.exports = ({ strapi }) => ({
         console.log("rentalExtraFromDb", rentalExtraFromDb);
         rentalExtraIds.push(rentalExtraFromDb.id);
       }
-      console.log("rentalExtraIds", rentalExtraIds);
     });
     console.log("rentalExtraIds", rentalExtraIds);
+
+    strapi
+      .plugin("sentry")
+      .service("sentry")
+      .sendError(`please give me console logs`);
 
     return await strapi.entityService.update(
       "api::car-reservation.car-reservation",
