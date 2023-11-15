@@ -276,48 +276,41 @@ module.exports = ({ strapi }) => ({
     );
 
     let rentalExtraIds = [];
-    console.log(
-      "reservationToUpdate.rentalExtras",
-      reservationToUpdate.rentalExtras
-    );
-    console.log("rentalExtras", rentalExtras);
 
-    rentalExtras.forEach(async (rentalExtra) => {
-      const i = reservationToUpdate.rentalExtras.findIndex(
-        (rE) => rE.extra.id == rentalExtra.extra
-      );
-      console.log("index", i);
-      console.log("rentalExtra", rentalExtra);
-      if (i > -1) {
-        console.log("does exist", i);
-        const existingRentalExtraId = reservationToUpdate.rentalExtras[i].id;
-        console.log("existingRentalExtraId", existingRentalExtraId);
-        await strapi.entityService.update(
-          "api::rental-extra.rental-extra",
-          existingRentalExtraId,
-          {
-            data: {
-              quantity: rentalExtra.quantity,
-            },
-          }
+    await Promise.all(
+      rentalExtras.map(async (rentalExtra) => {
+        const i = reservationToUpdate.rentalExtras.findIndex(
+          (rE) => rE.extra.id == rentalExtra.extra
         );
-        rentalExtraIds = [...(rentalExtraIds || []), existingRentalExtraId];
-      } else {
-        console.log("doesnt exist!", i);
-        const rentalExtraFromDb = await strapi.entityService.create(
-          "api::rental-extra.rental-extra",
-          {
-            data: {
-              quantity: rentalExtra.quantity,
-              extra: rentalExtra.extra,
-              userGroup,
-            },
-          }
-        );
-        console.log("rentalExtraFromDb.id", rentalExtraFromDb.id);
-        rentalExtraIds = [...(rentalExtraIds || []), rentalExtraFromDb.id];
-      }
-    });
+
+        if (i > -1) {
+          const existingRentalExtraId = reservationToUpdate.rentalExtras[i].id;
+          await strapi.entityService.update(
+            "api::rental-extra.rental-extra",
+            existingRentalExtraId,
+            {
+              data: {
+                quantity: rentalExtra.quantity,
+              },
+            }
+          );
+          rentalExtraIds.push(existingRentalExtraId);
+        } else {
+          const rentalExtraFromDb = await strapi.entityService.create(
+            "api::rental-extra.rental-extra",
+            {
+              data: {
+                quantity: rentalExtra.quantity,
+                extra: rentalExtra.extra,
+                userGroup,
+              },
+            }
+          );
+          rentalExtraIds.push(rentalExtraFromDb.id);
+        }
+      })
+    );
+
     console.log("rentalExtraIds", rentalExtraIds);
 
     strapi
