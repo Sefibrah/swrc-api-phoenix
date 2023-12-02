@@ -311,11 +311,6 @@ module.exports = ({ strapi }) => ({
 
     console.log("rentalExtraIds", rentalExtraIds);
 
-    strapi
-      .plugin("sentry")
-      .service("sentry")
-      .sendError(`please give me console logs`);
-
     return await strapi.entityService.update(
       "api::car-reservation.car-reservation",
       id,

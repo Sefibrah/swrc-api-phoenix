@@ -187,6 +187,17 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
         subdomain
       );
 
+      const carFromDb = await strapi.query("api::car.car").findOne({
+        where: {
+          userGroup: loggedUserUserGroup.id,
+          id: carId,
+          isAvailable: true,
+        },
+        select: ["id", "make", "model", "registrationPlate", "isAvailable"],
+      });
+      if (carFromDb == null) {
+        return new NotFoundError("CAR_IS_BLOCKED");
+      }
       const epicEventQuery = {
         userGroup: loggedUserUserGroup.id,
         car: {
@@ -306,6 +317,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
       carFilter = {
         ...carFilter,
         cars: {
+          isAvailable: { $eq: true },
           carType: {
             $eq: carType || null,
           },
