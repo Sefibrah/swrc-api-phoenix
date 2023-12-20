@@ -57,9 +57,9 @@ module.exports = {
         files,
       });
 
-      console.log("updatedExtra", Extra);
+      console.log("updatedExtra", extra);
 
-      return getIdAndAttributes(Extra);
+      return getIdAndAttributes(extra);
     } catch (err) {
       if (err.name == "ValidationError") {
         return new ValidationError(err.message, err.details);

@@ -4,7 +4,8 @@
   "info": {
     "singularName": "user-setting",
     "pluralName": "user-settings",
-    "displayName": "User Setting"
+    "displayName": "User Setting",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -29,6 +30,10 @@
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user",
       "mappedBy": "userSetting"
+    },
+    "sidebarMinimised": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

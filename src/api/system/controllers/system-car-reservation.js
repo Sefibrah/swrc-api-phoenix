@@ -1,6 +1,9 @@
 "use strict";
 
 const {
+  parseBody,
+} = require("@strapi/strapi/dist/core-api/controller/transform.js");
+const {
   getSubdomainFromRequest,
 } = require("../../../shared/functions/get-subdomain");
 
@@ -12,7 +15,10 @@ module.exports = {
   createCarReservation: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
+      const { data } = parseBody(ctx);
+      console.log("data", data);
       const body = ctx.request.body;
+      console.log("body", body);
       const query = ctx.request.query;
 
       console.log(body, query, subdomain);
@@ -20,11 +26,11 @@ module.exports = {
       const { id, ...attributes } = await strapi
         .service("api::system.system-car-reservation")
         .createCarReservation(
-          body.reservation,
-          body.rentalAgreementDetail,
-          body.agreementDetail,
-          body.transaction,
-          body.rentalExtras,
+          data.reservation,
+          data.rentalAgreementDetail,
+          data.agreementDetail,
+          data.transaction,
+          data.rentalExtras,
           query,
           subdomain
         );
@@ -36,7 +42,10 @@ module.exports = {
   updateCarReservation: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
+      const { data } = parseBody(ctx);
+      console.log("data", data);
       const body = ctx.request.body;
+      console.log("body", body);
       const query = ctx.request.query;
 
       const reservationId = ctx.request.params.id;
@@ -45,11 +54,11 @@ module.exports = {
         .service("api::system.system-car-reservation")
         .updateCarReservation(
           reservationId,
-          body.reservation,
-          body.rentalAgreementDetail,
-          body.agreementDetail,
-          body.transaction,
-          body.rentalExtras,
+          data.reservation,
+          data.rentalAgreementDetail,
+          data.agreementDetail,
+          data.transaction,
+          data.rentalExtras,
           query,
           subdomain
         );

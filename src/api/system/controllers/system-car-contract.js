@@ -1,6 +1,9 @@
 "use strict";
 
 const {
+  parseBody,
+} = require("@strapi/strapi/dist/core-api/controller/transform.js");
+const {
   getSubdomainFromRequest,
 } = require("../../../shared/functions/get-subdomain");
 
@@ -12,17 +15,20 @@ module.exports = {
   createCarContract: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
+      const { data } = parseBody(ctx);
+      console.log("data", data);
       const body = ctx.request.body;
+      console.log("body", body);
       const query = ctx.request.query;
 
       const { id, ...attributes } = await strapi
         .service("api::system.system-car-contract")
         .createCarContract(
-          body.contract,
-          body.rentalAgreementDetail,
-          body.agreementDetail,
-          body.transaction,
-          body.rentalExtras,
+          data.contract,
+          data.rentalAgreementDetail,
+          data.agreementDetail,
+          data.transaction,
+          data.rentalExtras,
           query,
           subdomain
         );
@@ -39,7 +45,10 @@ module.exports = {
   updateCarContract: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
+      const { data } = parseBody(ctx);
+      console.log("data", data);
       const body = ctx.request.body;
+      console.log("body", body);
       const query = ctx.request.query;
 
       const contractId = ctx.request.params.id;
@@ -48,11 +57,11 @@ module.exports = {
         .service("api::system.system-car-contract")
         .updateCarContract(
           contractId,
-          body.contract,
-          body.rentalAgreementDetail,
-          body.agreementDetail,
-          body.transaction,
-          body.rentalExtras,
+          data.contract,
+          data.rentalAgreementDetail,
+          data.agreementDetail,
+          data.transaction,
+          data.rentalExtras,
           query,
           subdomain
         );

@@ -1,6 +1,9 @@
 "use strict";
 
 const {
+  parseBody,
+} = require("@strapi/strapi/dist/core-api/controller/transform.js");
+const {
   getSubdomainFromRequest,
 } = require("../../../shared/functions/get-subdomain");
 
@@ -12,9 +15,12 @@ module.exports = {
   createCarContractFine: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
-      const contractId = ctx.request.body.carContract;
-      const fineBody = ctx.request.body.fine;
-      console.log("ctx.request.body", ctx.request.body);
+      const { data } = parseBody(ctx);
+      console.log("data", data);
+      const body = ctx.request.body;
+      console.log("body", body);
+      const contractId = data.carContract;
+      const fineBody = data.fine;
       const response = await strapi
         .service("api::system.system-fine")
         .createCarContractFine(contractId, fineBody, subdomain);
@@ -34,9 +40,12 @@ module.exports = {
   updateCarContractFine: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
-      const contractId = ctx.request.body.carContract;
-      const fineBody = ctx.request.body.fine;
-      console.log("ctx.request.body", ctx.request.body);
+      const { data } = parseBody(ctx);
+      console.log("data", data);
+      const body = ctx.request.body;
+      console.log("body", body);
+      const contractId = data.carContract;
+      const fineBody = data.fine;
       const id = ctx.request.params.id;
 
       const response = await strapi

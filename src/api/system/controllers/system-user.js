@@ -1,27 +1,28 @@
 "use strict";
 
 const {
-  parseBody,
-} = require("@strapi/strapi/dist/core-api/controller/transform.js");
-const {
   getSubdomainFromRequest,
 } = require("../../../shared/functions/get-subdomain");
+
+const {
+  parseBody,
+} = require("@strapi/strapi/dist/core-api/controller/transform.js");
 
 /**
  * A set of functions called "actions" for `system`
  */
 
 module.exports = {
-  createCarContractInvoice: async (ctx, next) => {
+  createSystemUser: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
+
       const { data } = parseBody(ctx);
       console.log("data", data);
-      const body = ctx.request.body;
-      console.log("body", body);
+
       const response = await strapi
-        .service("api::system.system-car-contract-invoice")
-        .createCarContractInvoice(data, subdomain);
+        .service("api::system.system-user")
+        .createSystemUser(data, subdomain);
       console.log("response", response);
       if (
         response?.name == "NotFoundError" ||
@@ -35,18 +36,18 @@ module.exports = {
       ctx.body = err;
     }
   },
-  updateCarContractInvoice: async (ctx, next) => {
+  updateSystemUser: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
+
       const { data } = parseBody(ctx);
       console.log("data", data);
-      const body = ctx.request.body;
-      console.log("body", body);
+
       const id = ctx.request.params.id;
 
       const response = await strapi
-        .service("api::system.system-car-contract-invoice")
-        .updateCarContractInvoice(id, data, subdomain);
+        .service("api::system.system-user")
+        .updateSystemUser(id, data, subdomain);
       console.log("response", response);
       if (
         response?.name == "NotFoundError" ||
@@ -54,20 +55,20 @@ module.exports = {
       ) {
         ctx.send(response, 400);
       } else {
-        ctx.send({ data: response }, 201);
+        ctx.send({ data: response }, 200);
       }
     } catch (err) {
       ctx.body = err;
     }
   },
-  deleteCarContractInvoice: async (ctx, next) => {
+  deleteSystemUser: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
       const id = ctx.request.params.id;
 
       const response = await strapi
-        .service("api::system.system-car-contract-invoice")
-        .deleteCarContractInvoice(id, subdomain);
+        .service("api::system.system-user")
+        .deleteSystemUser(id, subdomain);
       console.log("response", response);
       if (
         response?.name == "NotFoundError" ||
@@ -75,21 +76,8 @@ module.exports = {
       ) {
         ctx.send(response, 400);
       } else {
-        ctx.send({ data: response }, 201);
+        ctx.send({ data: response }, 200);
       }
-    } catch (err) {
-      ctx.body = err;
-    }
-  },
-
-  getLatestInvoice: async (ctx, next) => {
-    try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
-      const latest = await strapi
-        .service("api::system.system-car-contract-invoice")
-        .getLatestInvoice(subdomain);
-      ctx.body = latest;
-      return latest;
     } catch (err) {
       ctx.body = err;
     }

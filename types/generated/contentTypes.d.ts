@@ -866,6 +866,11 @@ export interface PluginMultiTenantUserGroup extends Schema.CollectionType {
       'oneToMany',
       'api::fine.fine'
     >;
+    userSettings: Attribute.Relation<
+      'plugin::multi-tenant.user-group',
+      'oneToMany',
+      'api::user-setting.user-setting'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -979,11 +984,6 @@ export interface PluginMultiTenantUserGroup extends Schema.CollectionType {
       'plugin::multi-tenant.user-group',
       'oneToMany',
       'api::address.address'
-    >;
-    userSettings: Attribute.Relation<
-      'plugin::multi-tenant.user-group',
-      'oneToMany',
-      'api::user-setting.user-setting'
     >;
     addressOfStays: Attribute.Relation<
       'plugin::multi-tenant.user-group',
@@ -2935,6 +2935,7 @@ export interface ApiUserSettingUserSetting extends Schema.CollectionType {
     singularName: 'user-setting';
     pluralName: 'user-settings';
     displayName: 'User Setting';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -2952,6 +2953,7 @@ export interface ApiUserSettingUserSetting extends Schema.CollectionType {
       'oneToOne',
       'plugin::users-permissions.user'
     >;
+    sidebarMinimised: Attribute.Boolean & Attribute.DefaultTo<false>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

@@ -1,8 +1,8 @@
 "use strict";
-const bcrypt = require("bcryptjs");
 const {
   USER_GROUP_FIELD_EXTENSIONS,
 } = require("./shared/constants/user-group-extensions");
+const { hashPassword } = require("./shared/functions/hash-password");
 const _ = require("lodash");
 
 // create dashboard strapi user
@@ -95,21 +95,11 @@ const systemTemporaryDiscountsNoLimits = [
   "updateTemporaryDiscount",
   "deleteTemporaryDiscount",
 ];
-
-const hashPassword = (password) => {
-  return new Promise((resolve, reject) => {
-    if (!password) {
-      resolve(null);
-    } else {
-      bcrypt.hash(`${password}`, 10, (err, hash) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve(hash);
-      });
-    }
-  });
-};
+const systemSystemUsersNoLimits = [
+  "createSystemUser",
+  "updateSystemUser",
+  "deleteSystemUser",
+];
 
 const createAdminUser = async (role) => {
   let admin = await strapi
@@ -658,7 +648,12 @@ const getAdminPermissions = () => {
     ["api::system.system-temporary-discount"],
     systemTemporaryDiscountsNoLimits
   );
+  let systemSystemUsersPermissions = combineActionWithService(
+    ["api::system.system-user"],
+    systemSystemUsersNoLimits
+  );
   return [
+    ...systemSystemUsersPermissions,
     ...systemCustomerOrganisationsPermissions,
     ...systemExtrasPermissions,
     ...noRestrictionsAvailableEndpointsPermissions,

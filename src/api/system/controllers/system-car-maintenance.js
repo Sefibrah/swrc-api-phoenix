@@ -1,6 +1,9 @@
 "use strict";
 
 const {
+  parseBody,
+} = require("@strapi/strapi/dist/core-api/controller/transform.js");
+const {
   getSubdomainFromRequest,
 } = require("../../../shared/functions/get-subdomain");
 
@@ -12,10 +15,13 @@ module.exports = {
   createCarMaintenance: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
+      const { data } = parseBody(ctx);
+      console.log("data", data);
       const body = ctx.request.body;
+      console.log("body", body);
       const response = await strapi
         .service("api::system.system-car-maintenance")
-        .createCarMaintenance(body, subdomain);
+        .createCarMaintenance(data, subdomain);
       console.log("response", response);
       if (
         response?.name == "NotFoundError" ||
@@ -32,12 +38,15 @@ module.exports = {
   updateCarMaintenance: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
+      const { data } = parseBody(ctx);
+      console.log("data", data);
       const body = ctx.request.body;
+      console.log("body", body);
       const id = ctx.request.params.id;
 
       const response = await strapi
         .service("api::system.system-car-maintenance")
-        .updateCarMaintenance(id, body, subdomain);
+        .updateCarMaintenance(id, data, subdomain);
       console.log("response", response);
       if (
         response?.name == "NotFoundError" ||

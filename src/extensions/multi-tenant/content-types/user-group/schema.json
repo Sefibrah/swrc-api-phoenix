@@ -169,6 +169,12 @@
       "relation": "oneToMany",
       "target": "api::fine.fine",
       "mappedBy": "userGroup"
+    },
+    "userSettings": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::user-setting.user-setting",
+      "mappedBy": "userGroup"
     }
   }
 }

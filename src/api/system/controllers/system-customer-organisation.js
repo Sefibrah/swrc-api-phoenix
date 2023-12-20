@@ -1,6 +1,9 @@
 "use strict";
 
 const {
+  parseBody,
+} = require("@strapi/strapi/dist/core-api/controller/transform.js");
+const {
   getSubdomainFromRequest,
 } = require("../../../shared/functions/get-subdomain");
 const {
@@ -14,12 +17,14 @@ const {
 module.exports = {
   createGuestOrganisation: async (ctx, next) => {
     try {
-      console.log("im in", ctx.request.body);
       const subdomain = getSubdomainFromRequest(ctx.request);
-      const body = ctx.request.body; // customer, organisation, contact
-      const customer = body.customer;
-      const organisation = body.organisation;
-      const contact = body.contact;
+      const { data } = parseBody(ctx);
+      console.log("data", data);
+      const body = ctx.request.body;
+      console.log("body", body);
+      const customer = data.customer;
+      const organisation = data.organisation;
+      const contact = data.contact;
 
       const loggedUserUserGroup = await getLoggedUserUserGroup(
         strapi,
@@ -47,10 +52,13 @@ module.exports = {
   updateGuestOrganisation: async (ctx, next) => {
     try {
       const subdomain = getSubdomainFromRequest(ctx.request);
-      const body = ctx.request.body; // customer, organisation, contact
-      const customer = body.customer;
-      const organisation = body.organisation;
-      const contact = body.contact;
+      const { data } = parseBody(ctx);
+      console.log("data", data);
+      const body = ctx.request.body;
+      console.log("body", body);
+      const customer = data.customer;
+      const organisation = data.organisation;
+      const contact = data.contact;
       const params = ctx.request.params;
 
       const loggedUserUserGroup = await getLoggedUserUserGroup(
