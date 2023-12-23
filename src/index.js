@@ -37,7 +37,7 @@ const noRestrictionsUser = [
   "me",
   "update",
 ];
-const restrictedUser = ["me"];
+const restrictedUser = ["me", "update"];
 const noLimitsUpload = ["destroy", "find", "findOne", "upload"];
 const noDeleteUpload = ["find", "findOne", "upload"];
 const restrictedUserGroup = ["find", "findOne", "update"];
