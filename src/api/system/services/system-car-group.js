@@ -20,13 +20,28 @@ module.exports = {
         strapi,
         subdomain
       );
+      const userGroup = loggedUserUserGroup.id;
 
-      // const prices = await getPriceIds(strapi, data.prices, carGroup.prices);
+      let prices = [];
+      for (let i = 0; i < data.prices.length; i++) {
+        const price = data.prices[i];
+        const priceFromDb = await strapi.entityService.create(
+          "api::price.price",
+          {
+            data: {
+              minDays: price.minDays,
+              amount: price.amount,
+              userGroup,
+            },
+          }
+        );
+        prices.push(priceFromDb.id);
+      }
 
       const carGroup = await strapi.entityService.create(
         "api::car-group.car-group",
         {
-          data: { ...data, userGroup: loggedUserUserGroup.id },
+          data: { ...data, prices, userGroup },
           files,
         }
       );
@@ -49,6 +64,7 @@ module.exports = {
         strapi,
         subdomain
       );
+      const userGroup = loggedUserUserGroup.id;
 
       let carGroup = await strapi.entityService.findOne(
         "api::car-group.car-group",
@@ -63,7 +79,12 @@ module.exports = {
         }
       );
 
-      const prices = await getPriceIds(strapi, data.prices, carGroup.prices);
+      const prices = await getPriceIds(
+        strapi,
+        userGroup,
+        data.prices,
+        carGroup.prices
+      );
 
       carGroup = await strapi.entityService.update(
         "api::car-group.car-group",
@@ -125,7 +146,12 @@ module.exports = {
   },
 };
 
-async function getPriceIds(strapi, pricesFromRequest, pricesFromCarGroupDb) {
+async function getPriceIds(
+  strapi,
+  userGroup,
+  pricesFromRequest,
+  pricesFromCarGroupDb
+) {
   const original = pricesFromCarGroupDb?.map((price) => price.id) || [];
   const remaining = pricesFromRequest?.filter((price) => price.id != null);
 
@@ -163,6 +189,7 @@ async function getPriceIds(strapi, pricesFromRequest, pricesFromCarGroupDb) {
       "api::price.price",
       {
         data: priceToCreate,
+        userGroup,
       }
     );
     priceIds.push(createdPriceFromDb.id);
