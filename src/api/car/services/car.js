@@ -149,7 +149,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
           endLocation: rentalAgreementDetail.endLocation,
           startDatetime: agreementDetail.startDatetime,
           endDatetime: agreementDetail.endDatetime,
-          name: rentalAgreementDetail.renter.name,
+          name: rentalAgreementDetail.renter?.name,
         };
       }),
       ...carReservations.map((event) => {
@@ -164,7 +164,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
           endLocation: rentalAgreementDetail.endLocation,
           startDatetime: agreementDetail.startDatetime,
           endDatetime: agreementDetail.endDatetime,
-          name: rentalAgreementDetail.renter.name,
+          name: rentalAgreementDetail.renter?.name,
         };
       }),
       ...carMaintenances.map((event) => {
