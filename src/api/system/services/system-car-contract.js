@@ -331,7 +331,7 @@ module.exports = ({ strapi }) => ({
 
     let primaryDriverDocumentVersions =
       contractToUpdate.primaryDriverDocumentVersions;
-    if (contract.primaryDriver != contractToUpdate.primaryDriver.id) {
+    if (contract.primaryDriver != contractToUpdate.primaryDriver?.id) {
       const primaryDriverFromDb = await strapi
         .query("api::customer.customer")
         .findOne({
