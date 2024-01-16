@@ -123,18 +123,26 @@ module.exports = {
   deleteGuestOrganisation: async (userGroup, id) => {
     const organisationlFromDb = await getOrganisationById(strapi, id);
 
-    await strapi.entityService.delete(
-      "api::contact.contact",
-      organisationlFromDb.attributes.customer.attributes.contact.id
-    );
-    await strapi.entityService.delete(
-      "api::organisation.organisation",
-      organisationlFromDb.id
-    );
-    await strapi.entityService.delete(
-      "api::customer.customer",
-      organisationlFromDb.attributes.customer.id
-    );
+    if (
+      organisationlFromDb?.attributes?.customer?.attributes?.contact?.id != null
+    ) {
+      await strapi.entityService.delete(
+        "api::contact.contact",
+        organisationlFromDb.attributes.customer.attributes.contact.id
+      );
+    }
+    if (organisationlFromDb?.id != null) {
+      await strapi.entityService.delete(
+        "api::organisation.organisation",
+        organisationlFromDb.id
+      );
+    }
+    if (organisationlFromDb?.attributes?.customer?.id != null) {
+      await strapi.entityService.delete(
+        "api::customer.customer",
+        organisationlFromDb.attributes.customer.id
+      );
+    }
     return organisationlFromDb;
   },
 };

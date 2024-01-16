@@ -148,15 +148,19 @@ module.exports = {
         }
       );
 
-      await strapi.entityService.delete(
-        "api::transaction.transaction",
-        carMaintenance.transaction.id
-      );
+      if (carMaintenance?.transaction?.id != null) {
+        await strapi.entityService.delete(
+          "api::transaction.transaction",
+          carMaintenance.transaction.id
+        );
+      }
 
-      await strapi.entityService.delete(
-        "api::agreement-detail.agreement-detail",
-        carMaintenance.agreementDetail.id
-      );
+      if (carMaintenance?.agreementDetail?.id != null) {
+        await strapi.entityService.delete(
+          "api::agreement-detail.agreement-detail",
+          carMaintenance.agreementDetail.id
+        );
+      }
 
       await strapi.entityService.delete(
         "api::car-maintenance.car-maintenance",

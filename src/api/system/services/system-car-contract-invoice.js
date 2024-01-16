@@ -111,10 +111,12 @@ module.exports = {
         }
       );
 
-      await strapi.entityService.delete(
-        "api::invoice.invoice",
-        carContractInvoice.invoice.id
-      );
+      if (carContractInvoice?.invoice?.id != null) {
+        await strapi.entityService.delete(
+          "api::invoice.invoice",
+          carContractInvoice.invoice.id
+        );
+      }
 
       await strapi.entityService.delete(
         "api::car-contract-invoice.car-contract-invoice",

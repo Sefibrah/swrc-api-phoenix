@@ -100,7 +100,7 @@ module.exports = {
       }
     }
   },
-  deleteCarContractFine: async (id, fineId, subdomain) => {
+  deleteCarContractFine: async (id, subdomain) => {
     try {
       const loggedUserUserGroup = await getLoggedUserUserGroup(
         strapi,
@@ -113,10 +113,12 @@ module.exports = {
         { populate: { fine: { fields: ["id"] } } }
       );
 
-      await strapi.entityService.delete(
-        "api::fine.fine",
-        carContractFine.fine.id
-      );
+      if (carContractFine?.fine?.id != null) {
+        await strapi.entityService.delete(
+          "api::fine.fine",
+          carContractFine?.fine?.id
+        );
+      }
 
       await strapi.entityService.delete(
         "api::car-contract-fine.car-contract-fine",

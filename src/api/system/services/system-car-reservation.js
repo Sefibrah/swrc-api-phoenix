@@ -358,20 +358,26 @@ module.exports = ({ strapi }) => ({
 
     console.log("reservationToDelete", reservationToDelete);
 
-    await strapi.entityService.delete(
-      "api::agreement-detail.agreement-detail",
-      reservationToDelete.agreementDetail.id
-    );
+    if (reservationToDelete?.agreementDetail?.id != null) {
+      await strapi.entityService.delete(
+        "api::agreement-detail.agreement-detail",
+        reservationToDelete.agreementDetail.id
+      );
+    }
 
-    await strapi.entityService.delete(
-      "api::rental-agreement-detail.rental-agreement-detail",
-      reservationToDelete.rentalAgreementDetail.id
-    );
+    if (reservationToDelete?.rentalAgreementDetail?.id != null) {
+      await strapi.entityService.delete(
+        "api::rental-agreement-detail.rental-agreement-detail",
+        reservationToDelete.rentalAgreementDetail.id
+      );
+    }
 
-    await strapi.entityService.delete(
-      "api::transaction.transaction",
-      reservationToDelete.transaction.id
-    );
+    if (reservationToDelete?.transaction?.id != null) {
+      await strapi.entityService.delete(
+        "api::transaction.transaction",
+        reservationToDelete.transaction.id
+      );
+    }
 
     reservationToDelete.rentalExtras.forEach(async (rentalExtra) => {
       await strapi.entityService.delete(

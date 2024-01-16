@@ -202,18 +202,26 @@ module.exports = {
   deleteGuestIndividual: async (userGroup, id) => {
     const individualFromDb = await getIndividualById(strapi, id);
 
-    await strapi.entityService.delete(
-      "api::contact.contact",
-      individualFromDb.attributes.customer.attributes.contact.id
-    );
-    await strapi.entityService.delete(
-      "api::individual.individual",
-      individualFromDb.id
-    );
-    await strapi.entityService.delete(
-      "api::customer.customer",
-      individualFromDb.attributes.customer.id
-    );
+    if (
+      individualFromDb?.attributes?.customer?.attributes?.contact?.id != null
+    ) {
+      await strapi.entityService.delete(
+        "api::contact.contact",
+        individualFromDb.attributes.customer.attributes.contact.id
+      );
+    }
+    if (individualFromDb?.id != null) {
+      await strapi.entityService.delete(
+        "api::individual.individual",
+        individualFromDb.id
+      );
+    }
+    if (individualFromDb?.attributes?.customer?.id != null) {
+      await strapi.entityService.delete(
+        "api::customer.customer",
+        individualFromDb.attributes.customer.id
+      );
+    }
     for (let i = 0; i < individualFromDb.attributes.documents.length; i++) {
       const document = individualFromDb.attributes.documents[i];
       await strapi.entityService.delete("api::document.document", document.id);
