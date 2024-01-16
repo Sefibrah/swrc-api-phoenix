@@ -42,7 +42,7 @@ module.exports = {
       );
 
       const carMaintenance = await strapi.entityService.create(
-        "api::car-contract-fine.car-contract-fine",
+        "api::car-maintenance.car-maintenance",
         {
           data: {
             ...body,
@@ -54,7 +54,9 @@ module.exports = {
         }
       );
 
-      return getIdAndAttributes(carMaintenance);
+      const response = getIdAndAttributes(carMaintenance);
+      console.log("response", response);
+      return response;
     } catch (err) {
       if (err.name == "ValidationError") {
         return new ValidationError(err.message, err.details);
