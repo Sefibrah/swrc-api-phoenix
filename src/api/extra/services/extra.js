@@ -7,9 +7,6 @@
 const utils = require("@strapi/utils");
 const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
 const { createCoreService } = require("@strapi/strapi").factories;
-const {
-  getLoggedUserUserGroup,
-} = require("../../../shared/functions/get-logged-user-user-group");
 
 module.exports = createCoreService("api::extra.extra", ({ strapi }) => ({
   isAvailable: async (
@@ -17,16 +14,11 @@ module.exports = createCoreService("api::extra.extra", ({ strapi }) => ({
     startDatetime,
     endDatetime,
     quantity,
-    subdomain
+    userGroup
   ) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
       const epicEventQuery = {
-        userGroup: loggedUserUserGroup.id,
+        userGroup,
         rentalExtras: {
           extra: {
             id: {

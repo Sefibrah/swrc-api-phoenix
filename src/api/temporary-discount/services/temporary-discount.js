@@ -1,7 +1,4 @@
 "use strict";
-const {
-  getLoggedUserUserGroup,
-} = require("../../../shared/functions/get-logged-user-user-group");
 const { getDays } = require("../../../shared/functions/get-days");
 const {
   getLatestPriceColumn,
@@ -20,13 +17,8 @@ module.exports = createCoreService(
       carGroupId,
       startDatetime,
       endDatetime,
-      subdomain
+      userGroup
     ) => {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-      const userGroup = loggedUserUserGroup.id;
       const temporaryDiscounts = await strapi
         .query("api::temporary-discount.temporary-discount")
         .findMany({

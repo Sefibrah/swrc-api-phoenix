@@ -1,8 +1,5 @@
 const {
-  getSubdomainFromRequest,
-} = require("../../../shared/functions/get-subdomain");
-const {
-  getLoggedUserUserGroup,
+  getUserGroupId,
 } = require("../../../shared/functions/get-logged-user-user-group");
 
 module.exports = async (policyContext, config, { strapi }) => {
@@ -10,15 +7,9 @@ module.exports = async (policyContext, config, { strapi }) => {
     (symbol) => symbol.toString() === "Symbol(context#_contextSession)"
   );
 
-  const subdomain = await getSubdomainFromRequest(
+  const userGroup = await getUserGroupId(
+    strapi,
     policyContext[targetSymbol].ctx.request
   );
-
-  if (subdomain != null) {
-    const loggedUserUserGroup = await getLoggedUserUserGroup(strapi, subdomain);
-
-    return loggedUserUserGroup.id != null;
-  } else {
-    return false;
-  }
+  return userGroup != null;
 };

@@ -27,17 +27,8 @@ module.exports = ({ strapi }) => ({
     },
     rentalExtras,
     query,
-    subdomain
+    userGroup
   ) => {
-    const loggedUserUserGroup = await strapi
-      .query("plugin::multi-tenant.user-group")
-      .findOne({
-        where: {
-          name: { $eq: subdomain },
-        },
-      });
-    const userGroup = loggedUserUserGroup.id;
-
     const primaryDriverFromDb = await strapi
       .query("api::customer.customer")
       .findOne({
@@ -185,7 +176,6 @@ module.exports = ({ strapi }) => ({
       ...query,
     });
   },
-
   updateCarContract: async (
     id,
     contract,
@@ -194,17 +184,8 @@ module.exports = ({ strapi }) => ({
     transaction,
     rentalExtras,
     query,
-    subdomain
+    userGroup
   ) => {
-    const loggedUserUserGroup = await strapi
-      .query("plugin::multi-tenant.user-group")
-      .findOne({
-        where: {
-          name: { $eq: subdomain },
-        },
-      });
-    const userGroup = loggedUserUserGroup.id;
-
     const contractToUpdate = await strapi
       .query("api::car-contract.car-contract")
       .findOne({
@@ -474,9 +455,6 @@ module.exports = ({ strapi }) => ({
 
     let rentalExtraIds = [];
 
-    console.log("rentalExtras", rentalExtras);
-    console.log("contractToUpdate.rentalExtras", contractToUpdate.rentalExtras);
-
     for (let i = 0; i < rentalExtras.length; i++) {
       const rentalExtra = rentalExtras[i];
       const index = contractToUpdate.rentalExtras.findIndex(
@@ -530,17 +508,7 @@ module.exports = ({ strapi }) => ({
       }
     );
   },
-
-  deleteCarContract: async (id, subdomain) => {
-    const loggedUserUserGroup = await strapi
-      .query("plugin::multi-tenant.user-group")
-      .findOne({
-        where: {
-          name: { $eq: subdomain },
-        },
-      });
-    const userGroup = loggedUserUserGroup.id;
-
+  deleteCarContract: async (id, userGroup) => {
     const contractToDelete = await strapi
       .query("api::car-contract.car-contract")
       .findOne({

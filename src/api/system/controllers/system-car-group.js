@@ -1,8 +1,8 @@
 "use strict";
 
 const {
-  getSubdomainFromRequest,
-} = require("../../../shared/functions/get-subdomain");
+  getUserGroupId,
+} = require("../../../shared/functions/get-logged-user-user-group");
 
 const {
   parseBody,
@@ -15,15 +15,12 @@ const {
 module.exports = {
   createCarGroup: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
-
+      const userGroup = await getUserGroupId(strapi, ctx.request);
       const { data, files } = parseBody(ctx);
-      console.log("data", data, "files", files);
 
       const response = await strapi
         .service("api::system.system-car-group")
-        .createCarGroup(data, files, subdomain);
-      console.log("response", response);
+        .createCarGroup(data, files, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"
@@ -38,17 +35,13 @@ module.exports = {
   },
   updateCarGroup: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
-
       const { data, files } = parseBody(ctx);
-      console.log("data", data, "files", files);
-
+      const userGroup = await getUserGroupId(strapi, ctx.request);
       const id = ctx.request.params.id;
 
       const response = await strapi
         .service("api::system.system-car-group")
-        .updateCarGroup(id, data, files, subdomain);
-      console.log("response", response);
+        .updateCarGroup(id, data, files, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"
@@ -63,13 +56,12 @@ module.exports = {
   },
   deleteCarGroup: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const id = ctx.request.params.id;
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const response = await strapi
         .service("api::system.system-car-group")
-        .deleteCarGroup(id, subdomain);
-      console.log("response", response);
+        .deleteCarGroup(id, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"

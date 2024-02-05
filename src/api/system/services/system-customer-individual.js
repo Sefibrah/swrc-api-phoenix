@@ -18,11 +18,11 @@ const {
 
 module.exports = {
   createGuestIndividual: async (
-    userGroup,
     { email, telephonePrimary, telephoneSecondary, website },
     { civilNumber, dateOfBirth },
     { name, country, comment, isLocal },
-    documents
+    documents,
+    userGroup
   ) => {
     const contact = await strapi.entityService.create("api::contact.contact", {
       data: {
@@ -95,12 +95,12 @@ module.exports = {
     return await getIndividualById(strapi, individual.id);
   },
   updateGuestIndividual: async (
-    userGroup,
     id,
     contact,
     individual,
     customer,
-    documents
+    documents,
+    userGroup
   ) => {
     const individualFromDb = await getIndividualById(strapi, id);
     const documentIds = [];
@@ -199,7 +199,7 @@ module.exports = {
 
     return await getIndividualById(strapi, id);
   },
-  deleteGuestIndividual: async (userGroup, id) => {
+  deleteGuestIndividual: async (id, userGroup) => {
     const individualFromDb = await getIndividualById(strapi, id);
 
     if (

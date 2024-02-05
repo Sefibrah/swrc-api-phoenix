@@ -1,6 +1,6 @@
-const url = require("url");
-const { getSubdomainFromRequest } = require("../shared/functions/get-subdomain")
-const { getLoggedUserUserGroup } = require("../shared/functions/get-logged-user-user-group")
+const {
+  getUserGroupId,
+} = require("../shared/functions/get-logged-user-user-group");
 
 const createContact = async (
   email,
@@ -69,43 +69,34 @@ const updateUser = async (id, userGroup) => {
 module.exports = () => {
   return async (ctx, next) => {
     await next();
-    const subdomain = getSubdomainFromRequest(ctx.request);
     if (
       ctx.request.url.includes("/api/auth/local/register") &&
       ctx.response.status === 200
     ) {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const email = ctx.response.body.user.email;
       const telephone = ctx.response.body.user.telephone;
       const dateOfBirth = ctx.response.body.user.dateOfBirth;
       const name = ctx.response.body.user.username;
 
-      const contact = await createContact(
-        email,
-        "",
-        telephone,
-        loggedUserUserGroup.id
-      );
+      const contact = await createContact(email, "", telephone, userGroup);
 
       const individual = await createIndividual(
         contact.id,
         dateOfBirth,
         name,
-        loggedUserUserGroup.id
+        userGroup
       );
       const customer = await createCustomer(
         individual.id,
         contact.id,
         // name,
         "USER",
-        loggedUserUserGroup.id
+        userGroup
       );
       await updateIndividual(individual.id, customer.id);
-      await updateUser(ctx.response.body.user.id, loggedUserUserGroup.id);
+      await updateUser(ctx.response.body.user.id, userGroup);
     }
   };
 };

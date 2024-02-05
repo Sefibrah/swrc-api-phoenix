@@ -3,7 +3,7 @@
 const utils = require("@strapi/utils");
 const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
 const {
-  getLoggedUserUserGroup,
+  getUserGroupId,
 } = require("../../../shared/functions/get-logged-user-user-group");
 const {
   getIdAndAttributes,
@@ -14,12 +14,7 @@ const {
  */
 
 module.exports = {
-  createCarContractInvoice: async (body, subdomain) => {
-    console.log("body", body);
-    const loggedUserUserGroup = await getLoggedUserUserGroup(strapi, subdomain);
-
-    const userGroup = loggedUserUserGroup.id;
-
+  createCarContractInvoice: async (body, userGroup) => {
     const newInvoice = await strapi.entityService.create(
       "api::invoice.invoice",
       {
@@ -43,14 +38,8 @@ module.exports = {
 
     return getIdAndAttributes(carContractInvoice);
   },
-
-  updateCarContractInvoice: async (id, body, subdomain) => {
+  updateCarContractInvoice: async (id, body, userGroup) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
       let carContractInvoice = await strapi.entityService.findOne(
         "api::car-contract-invoice.car-contract-invoice",
         id,
@@ -94,13 +83,8 @@ module.exports = {
       }
     }
   },
-  deleteCarContractInvoice: async (id, subdomain) => {
+  deleteCarContractInvoice: async (id, userGroup) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
       const carContractInvoice = await strapi.entityService.findOne(
         "api::car-contract-invoice.car-contract-invoice",
         id,
@@ -134,15 +118,12 @@ module.exports = {
       }
     }
   },
-
-  getLatestInvoice: async (subdomain) => {
-    const loggedUserUserGroup = await getLoggedUserUserGroup(strapi, subdomain);
-
+  getLatestInvoice: async (userGroup) => {
     const latest = await strapi
       .query("api::car-contract-invoice.car-contract-invoice")
       .findMany({
         where: {
-          userGroup: loggedUserUserGroup.id,
+          userGroup,
         },
         orderBy: { invoice: { fiscalNumber: "desc" } },
         limit: 1,

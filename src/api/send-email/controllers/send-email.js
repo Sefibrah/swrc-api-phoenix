@@ -1,6 +1,10 @@
 "use strict";
-const { getSubdomainFromRequest } = require("../../../shared/functions/get-subdomain");
-const { getRandomString } = require("../../../shared/functions/get-random-string");
+const {
+  getUserGroupId,
+} = require("../../../shared/functions/get-logged-user-user-group");
+const {
+  getRandomString,
+} = require("../../../shared/functions/get-random-string");
 const fs = require("fs");
 const util = require("util");
 
@@ -11,7 +15,7 @@ const util = require("util");
 module.exports = {
   sendEmail: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
+      const userGroup = await getUserGroupId(strapi, ctx.request);
       const recipient = "ibrahim@seferware.com";
       const code = getRandomString();
       const html = fs.readFileSync(
@@ -23,7 +27,7 @@ module.exports = {
 
       const sendEmail = await strapi
         .service("api::send-email.send-email")
-        .sendEmail(recipient, formattedHTML, subject, subdomain);
+        .sendEmail(recipient, formattedHTML, subject, userGroup);
 
       ctx.body = sendEmail;
     } catch (err) {

@@ -18,7 +18,7 @@ function getLatestPriceColumn(carGroup, days) {
         (price) => closestPriceColumn.minDays === price.minDays
       ).amount * days;
   }
-  return price;
+  return parseFloat(price.toFixed(1));
 }
 
 module.exports = {

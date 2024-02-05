@@ -789,11 +789,20 @@ const getPublicPermissions = () => {
 };
 
 const getCustomEndpointPermissions = () => {
-  let createReservationPermissions = combineActionWithService(
+  let createReservationFromGroupedCarPermissions = combineActionWithService(
     ["api::consumer.consumer"],
-    ["createReservation"]
+    [
+      "createReservationFromCar",
+      "getCarReservationByCode",
+      "getCarOffers",
+      "getCarOffer",
+      "createReservationFromGroupedCar",
+      "getCarGroupReservationByCode",
+      "getCarGroupedOffers",
+      "getCarGroupedOffer",
+    ]
   );
-  return [...createReservationPermissions];
+  return [...createReservationFromGroupedCarPermissions];
 };
 
 const generatePermission = async (role, action) => {

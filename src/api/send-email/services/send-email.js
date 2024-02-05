@@ -2,7 +2,7 @@
 
 const nodemailer = require("nodemailer");
 const {
-  getLoggedUserUserGroup,
+  getUserGroupId,
 } = require("../../../shared/functions/get-logged-user-user-group");
 
 /**
@@ -10,14 +10,12 @@ const {
  */
 
 module.exports = ({ strapi }) => ({
-  sendEmail: async (recipient, html, subject, subdomain) => {
-    const loggedUserUserGroup = await getLoggedUserUserGroup(strapi, subdomain);
-
+  sendEmail: async (recipient, html, subject, userGroup) => {
     const organizationEmailConfig = await strapi
       .query("api::organization-email-config.organization-email-config")
       .findOne({
         where: {
-          userGroup: loggedUserUserGroup.id,
+          userGroup,
         },
         select: ["host", "email", "password"],
       });

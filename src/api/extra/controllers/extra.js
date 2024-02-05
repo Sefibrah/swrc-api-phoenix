@@ -6,9 +6,8 @@
 
 const { createCoreController } = require("@strapi/strapi").factories;
 
-const { getSubdomainFromRequest } = require("../../../shared/functions/get-subdomain");
 const {
-  getLoggedUserUserGroup,
+  getUserGroupId,
 } = require("../../../shared/functions/get-logged-user-user-group");
 
 const {
@@ -23,11 +22,11 @@ module.exports = createCoreController("api::extra.extra", ({ strapi }) => ({
         ctx.request.query
       );
       const quantity = ctx.request.query.quantity;
-      const subdomain = getSubdomainFromRequest(ctx.request);
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const isAvailable = await strapi
         .service("api::extra.extra")
-        .isAvailable(extraId, startDateTime, endDateTime, quantity, subdomain);
+        .isAvailable(extraId, startDateTime, endDateTime, quantity, userGroup);
 
       return isAvailable;
     } catch (err) {
@@ -40,14 +39,10 @@ module.exports = createCoreController("api::extra.extra", ({ strapi }) => ({
       const { startDateTime, endDateTime } = getStartAndEndDateTimeFromPayload(
         ctx.request.query
       );
-      const subdomain = getSubdomainFromRequest(ctx.request);
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const epicEventQuery = {
-        userGroup: loggedUserUserGroup.id,
+        userGroup,
         $or: [
           {
             $and: [
@@ -162,7 +157,7 @@ module.exports = createCoreController("api::extra.extra", ({ strapi }) => ({
 
       const extras = await strapi.query("api::extra.extra").findMany({
         where: {
-          userGroup: loggedUserUserGroup.id,
+          userGroup,
         },
         populate: {
           thumbnail: {

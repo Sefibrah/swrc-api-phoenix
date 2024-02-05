@@ -1,5 +1,4 @@
 "use strict";
-const { getDays } = require("../../../shared/functions/get-days");
 
 /**
  * car service.
@@ -14,16 +13,16 @@ const {
 const {
   getLatestPriceColumn,
 } = require("../../../shared/functions/get-latest-price-column");
+const { getDays } = require("../../../shared/functions/get-days");
 
 module.exports = createCoreService("api::car.car", ({ strapi }) => ({
-  relevantEventsList: async (carId, subdomain) => {
-    const loggedUserUserGroup = await getLoggedUserUserGroup(strapi, subdomain);
+  relevantEventsList: async (carId, userGroup) => {
     const $gte = new Date();
     $gte.setHours(0, 0, 0, 0);
     const $lte = new Date();
     $lte.setHours(23, 59, 59, 0);
     const epicEventQuery = {
-      userGroup: loggedUserUserGroup.id,
+      userGroup,
       car: {
         id: { $eq: carId },
       },
@@ -180,16 +179,11 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
       }),
     ];
   },
-  isAvailable: async (carId, startDatetime, endDatetime, subdomain) => {
+  isAvailable: async (carId, startDatetime, endDatetime, userGroup) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
       const carFromDb = await strapi.query("api::car.car").findOne({
         where: {
-          userGroup: loggedUserUserGroup.id,
+          userGroup,
           id: carId,
           isAvailable: true,
         },
@@ -199,7 +193,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
         return new NotFoundError("CAR_IS_BLOCKED");
       }
       const epicEventQuery = {
-        userGroup: loggedUserUserGroup.id,
+        userGroup,
         car: {
           id: { $eq: carId },
         },
@@ -305,13 +299,11 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
       return err;
     }
   },
-  available: async (startDatetime, endDatetime, carType, subdomain) => {
+  available: async (startDatetime, endDatetime, carType, userGroup) => {
     const days = getDays(startDatetime, endDatetime);
 
-    const loggedUserUserGroup = await getLoggedUserUserGroup(strapi, subdomain);
-
     let carFilter = {
-      userGroup: loggedUserUserGroup.id,
+      userGroup,
     };
     if (carType != null && carType != "") {
       carFilter = {
@@ -487,7 +479,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
           carGroup.id,
           startDatetime,
           endDatetime,
-          subdomain
+          userGroup
         );
       const temporaryDiscount = await strapi
         .service("api::temporary-discount.temporary-discount")
@@ -495,7 +487,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
           carGroup.id,
           startDatetime,
           endDatetime,
-          subdomain
+          userGroup
         );
       const discount =
         recurringDiscount.fixedDiscount > temporaryDiscount.fixedDiscount

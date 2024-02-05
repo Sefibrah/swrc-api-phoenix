@@ -14,19 +14,14 @@ const {
  */
 
 module.exports = {
-  createRecurringDiscount: async (data, subdomain) => {
+  createRecurringDiscount: async (data, userGroup) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
       const discount = await strapi.entityService.create(
         "api::discount.discount",
         {
           data: {
             ...data.discount,
-            userGroup: loggedUserUserGroup.id,
+            userGroup,
           },
         }
       );
@@ -37,7 +32,7 @@ module.exports = {
           data: {
             ...data.recurringDiscount,
             discount: discount.id,
-            userGroup: loggedUserUserGroup.id,
+            userGroup,
           },
         }
       );
@@ -53,13 +48,8 @@ module.exports = {
       }
     }
   },
-  updateRecurringDiscount: async (id, data, subdomain) => {
+  updateRecurringDiscount: async (id, data, userGroup) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
       let recurringDiscount = await getRecurringDiscount(strapi, id);
 
       await strapi.entityService.update(
@@ -93,13 +83,8 @@ module.exports = {
       }
     }
   },
-  deleteRecurringDiscount: async (id, subdomain) => {
+  deleteRecurringDiscount: async (id, userGroup) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
       const recurringDiscount = await getRecurringDiscount(strapi, id);
 
       console.log("id", id);

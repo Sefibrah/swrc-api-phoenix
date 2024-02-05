@@ -14,14 +14,8 @@ const {
  */
 
 module.exports = {
-  createCarGroup: async (data, files, subdomain) => {
+  createCarGroup: async (data, files, userGroup) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-      const userGroup = loggedUserUserGroup.id;
-
       let prices = [];
       for (let i = 0; i < data.prices.length; i++) {
         const price = data.prices[i];
@@ -57,15 +51,8 @@ module.exports = {
       }
     }
   },
-  updateCarGroup: async (id, data, files, subdomain) => {
+  updateCarGroup: async (id, data, files, userGroup) => {
     try {
-      console.log("id", id);
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-      const userGroup = loggedUserUserGroup.id;
-
       let carGroup = await strapi.entityService.findOne(
         "api::car-group.car-group",
         id,
@@ -111,13 +98,8 @@ module.exports = {
       }
     }
   },
-  deleteCarGroup: async (id, subdomain) => {
+  deleteCarGroup: async (id, userGroup) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
       const carGroup = await strapi.entityService.findOne(
         "api::car-group.car-group",
         id,

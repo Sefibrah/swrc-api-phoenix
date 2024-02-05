@@ -16,15 +16,8 @@ const { hashPassword } = require("../../../shared/functions/hash-password");
  */
 
 module.exports = {
-  createSystemUser: async (data, subdomain) => {
+  createSystemUser: async (data, userGroup) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
-      const userGroup = loggedUserUserGroup.id;
-
       let user = await strapi
         .query("plugin::users-permissions.user")
         .findOne({ where: { email: { $eq: data.email } } });
@@ -100,7 +93,7 @@ module.exports = {
       }
     }
   },
-  updateSystemUser: async (id, data, subdomain) => {
+  updateSystemUser: async (id, data, userGroup) => {
     try {
       let user = await getSystemUser(strapi, id);
       if (user == null) {
@@ -148,7 +141,7 @@ module.exports = {
       }
     }
   },
-  deleteSystemUser: async (id, subdomain) => {
+  deleteSystemUser: async (id, userGroup) => {
     try {
       const user = await getSystemUser(strapi, id);
       if (user == null) {

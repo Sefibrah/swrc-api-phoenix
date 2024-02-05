@@ -23,17 +23,8 @@ module.exports = ({ strapi }) => ({
     },
     rentalExtras,
     query,
-    subdomain
+    userGroup
   ) => {
-    const loggedUserUserGroup = await strapi
-      .query("plugin::multi-tenant.user-group")
-      .findOne({
-        where: {
-          name: { $eq: subdomain },
-        },
-      });
-    const userGroup = loggedUserUserGroup.id;
-
     const agreementDetail = await strapi.entityService.create(
       "api::agreement-detail.agreement-detail",
       {
@@ -126,17 +117,8 @@ module.exports = ({ strapi }) => ({
     transaction,
     rentalExtras,
     query,
-    subdomain
+    userGroup
   ) => {
-    const loggedUserUserGroup = await strapi
-      .query("plugin::multi-tenant.user-group")
-      .findOne({
-        where: {
-          name: { $eq: subdomain },
-        },
-      });
-    const userGroup = loggedUserUserGroup.id;
-
     const reservationToUpdate = await strapi
       .query("api::car-reservation.car-reservation")
       .findOne({
@@ -331,16 +313,7 @@ module.exports = ({ strapi }) => ({
     );
   },
 
-  deleteCarReservation: async (id, subdomain) => {
-    const loggedUserUserGroup = await strapi
-      .query("plugin::multi-tenant.user-group")
-      .findOne({
-        where: {
-          name: { $eq: subdomain },
-        },
-      });
-    const userGroup = loggedUserUserGroup.id;
-
+  deleteCarReservation: async (id, userGroup) => {
     const reservationToDelete = await strapi
       .query("api::car-reservation.car-reservation")
       .findOne({
@@ -355,8 +328,6 @@ module.exports = ({ strapi }) => ({
           "rentalExtras",
         ],
       });
-
-    console.log("reservationToDelete", reservationToDelete);
 
     if (reservationToDelete?.agreementDetail?.id != null) {
       await strapi.entityService.delete(

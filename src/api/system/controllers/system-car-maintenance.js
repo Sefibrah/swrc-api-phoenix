@@ -4,8 +4,8 @@ const {
   parseBody,
 } = require("@strapi/strapi/dist/core-api/controller/transform.js");
 const {
-  getSubdomainFromRequest,
-} = require("../../../shared/functions/get-subdomain");
+  getUserGroupId,
+} = require("../../../shared/functions/get-logged-user-user-group");
 
 /**
  * A set of functions called "actions" for `system`
@@ -14,14 +14,11 @@ const {
 module.exports = {
   createCarMaintenance: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const { data } = parseBody(ctx);
-      console.log("data", data);
-      const body = ctx.request.body;
-      console.log("body", body);
+      const userGroup = await getUserGroupId(strapi, ctx.request);
       const response = await strapi
         .service("api::system.system-car-maintenance")
-        .createCarMaintenance(data, subdomain);
+        .createCarMaintenance(data, userGroup);
       console.log("response", response);
       if (
         response?.name == "NotFoundError" ||
@@ -37,17 +34,13 @@ module.exports = {
   },
   updateCarMaintenance: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const { data } = parseBody(ctx);
-      console.log("data", data);
-      const body = ctx.request.body;
-      console.log("body", body);
       const id = ctx.request.params.id;
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const response = await strapi
         .service("api::system.system-car-maintenance")
-        .updateCarMaintenance(id, data, subdomain);
-      console.log("response", response);
+        .updateCarMaintenance(id, data, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"
@@ -62,13 +55,12 @@ module.exports = {
   },
   deleteCarMaintenance: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const id = ctx.request.params.id;
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const response = await strapi
         .service("api::system.system-car-maintenance")
-        .deleteCarMaintenance(id, subdomain);
-      console.log("response", response);
+        .deleteCarMaintenance(id, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"

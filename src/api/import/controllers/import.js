@@ -6,7 +6,7 @@ const {
 const { getDays } = require("../../../shared/functions/get-days");
 const { getSubdomainFromRequest } = require("../../../shared/functions/get-subdomain");
 const {
-  getLoggedUserUserGroup,
+  getUserGroupId,
 } = require("../../../shared/functions/get-logged-user-user-group");
 
 /**
@@ -77,13 +77,7 @@ module.exports = {
         },
       };
 
-      const subdomain = getSubdomainFromRequest(ctx.request);
-
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-      const userGroup = loggedUserUserGroup.id;
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const startDateTime = getDateTimeFromObject(
         getDateTimeComponents(contractData.startDate, contractData.startTime)
@@ -328,13 +322,7 @@ module.exports = {
         totalWithTax: body.totalWithTax,
       };
 
-      const subdomain = getSubdomainFromRequest(ctx.request);
-
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-      const userGroup = loggedUserUserGroup.id;
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const startDateTime = getDateTimeFromObject(
         getDateTimeComponents(

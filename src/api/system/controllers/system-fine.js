@@ -4,8 +4,8 @@ const {
   parseBody,
 } = require("@strapi/strapi/dist/core-api/controller/transform.js");
 const {
-  getSubdomainFromRequest,
-} = require("../../../shared/functions/get-subdomain");
+  getUserGroupId,
+} = require("../../../shared/functions/get-logged-user-user-group");
 
 /**
  * A set of functions called "actions" for `system`
@@ -14,17 +14,13 @@ const {
 module.exports = {
   createCarContractFine: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const { data } = parseBody(ctx);
-      console.log("data", data);
-      const body = ctx.request.body;
-      console.log("body", body);
       const contractId = data.carContract;
       const fineBody = data.fine;
+      const userGroup = await getUserGroupId(strapi, ctx.request);
       const response = await strapi
         .service("api::system.system-fine")
-        .createCarContractFine(contractId, fineBody, subdomain);
-      console.log("response", response);
+        .createCarContractFine(contractId, fineBody, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"
@@ -39,19 +35,15 @@ module.exports = {
   },
   updateCarContractFine: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const { data } = parseBody(ctx);
-      console.log("data", data);
-      const body = ctx.request.body;
-      console.log("body", body);
       const contractId = data.carContract;
       const fineBody = data.fine;
       const id = ctx.request.params.id;
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const response = await strapi
         .service("api::system.system-fine")
-        .updateCarContractFine(id, contractId, fineBody, subdomain);
-      console.log("response", response);
+        .updateCarContractFine(id, contractId, fineBody, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"
@@ -66,13 +58,12 @@ module.exports = {
   },
   deleteCarContractFine: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const id = ctx.request.params.id;
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const response = await strapi
         .service("api::system.system-fine")
-        .deleteCarContractFine(id, subdomain);
-      console.log("response", response);
+        .deleteCarContractFine(id, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"

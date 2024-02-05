@@ -7,7 +7,7 @@ const {
   getSubdomainFromRequest,
 } = require("../../../shared/functions/get-subdomain");
 const {
-  getLoggedUserUserGroup,
+  getUserGroupId,
 } = require("../../../shared/functions/get-logged-user-user-group");
 
 /**
@@ -17,29 +17,22 @@ const {
 module.exports = {
   createGuestIndividual: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const { data } = parseBody(ctx);
-      console.log("data", data);
-      const body = ctx.request.body;
-      console.log("body", body);
       const customer = data.customer;
       const individual = data.individual;
       const contact = data.contact;
       const documents = data.documents;
 
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const { id, ...attributes } = await strapi
         .service("api::system.system-customer-individual")
         .createGuestIndividual(
-          loggedUserUserGroup.id,
           contact,
           individual,
           customer,
-          documents
+          documents,
+          userGroup
         );
       if (attributes?.name === "NotFoundError") {
         ctx.send({ ...attributes }, 404);
@@ -53,31 +46,23 @@ module.exports = {
   },
   updateGuestIndividual: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const { data } = parseBody(ctx);
-      console.log("data", data);
-      const body = ctx.request.body;
-      console.log("body", body);
       const customer = data.customer;
       const individual = data.individual;
       const contact = data.contact;
       const documents = data.documents;
       const params = ctx.request.params;
-
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const { id, ...attributes } = await strapi
         .service("api::system.system-customer-individual")
         .updateGuestIndividual(
-          loggedUserUserGroup.id,
           params.id,
           contact,
           individual,
           customer,
-          documents
+          documents,
+          userGroup
         );
       if (attributes?.name === "NotFoundError") {
         ctx.send({ ...attributes }, 404);
@@ -91,17 +76,12 @@ module.exports = {
   },
   deleteGuestIndividual: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const individualId = ctx.request.params.id;
-
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const { id, ...attributes } = await strapi
         .service("api::system.system-customer-individual")
-        .deleteGuestIndividual(loggedUserUserGroup.id, individualId);
+        .deleteGuestIndividual(individualId, userGroup);
       if (attributes?.name === "NotFoundError") {
         ctx.send({ ...attributes }, 404);
       } else {

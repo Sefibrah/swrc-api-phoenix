@@ -1,8 +1,8 @@
 "use strict";
 
 const {
-  getSubdomainFromRequest,
-} = require("../../../shared/functions/get-subdomain");
+  getUserGroupId,
+} = require("../../../shared/functions/get-logged-user-user-group");
 
 const {
   parseBody,
@@ -15,15 +15,13 @@ const {
 module.exports = {
   createTemporaryDiscount: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const { data } = parseBody(ctx);
-      console.log("data", data);
 
       const response = await strapi
         .service("api::system.system-temporary-discount")
-        .createTemporaryDiscount(data, subdomain);
-      console.log("response", response);
+        .createTemporaryDiscount(data, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"
@@ -38,17 +36,14 @@ module.exports = {
   },
   updateTemporaryDiscount: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
-
       const { data } = parseBody(ctx);
-      console.log("data", data);
 
       const id = ctx.request.params.id;
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const response = await strapi
         .service("api::system.system-temporary-discount")
-        .updateTemporaryDiscount(id, data, subdomain);
-      console.log("response", response);
+        .updateTemporaryDiscount(id, data, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"
@@ -63,13 +58,12 @@ module.exports = {
   },
   deleteTemporaryDiscount: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const id = ctx.request.params.id;
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const response = await strapi
         .service("api::system.system-temporary-discount")
-        .deleteTemporaryDiscount(id, subdomain);
-      console.log("response", response);
+        .deleteTemporaryDiscount(id, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"

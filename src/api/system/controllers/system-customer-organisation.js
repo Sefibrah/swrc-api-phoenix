@@ -7,7 +7,7 @@ const {
   getSubdomainFromRequest,
 } = require("../../../shared/functions/get-subdomain");
 const {
-  getLoggedUserUserGroup,
+  getUserGroupId,
 } = require("../../../shared/functions/get-logged-user-user-group");
 
 /**
@@ -17,27 +17,19 @@ const {
 module.exports = {
   createGuestOrganisation: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const { data } = parseBody(ctx);
-      console.log("data", data);
-      const body = ctx.request.body;
-      console.log("body", body);
       const customer = data.customer;
       const organisation = data.organisation;
       const contact = data.contact;
-
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const { id, ...attributes } = await strapi
         .service("api::system.system-customer-organisation")
         .createGuestOrganisation(
-          loggedUserUserGroup.id,
           contact,
           organisation,
-          customer
+          customer,
+          userGroup
         );
       if (attributes?.name === "NotFoundError") {
         ctx.send({ ...attributes }, 404);
@@ -51,29 +43,21 @@ module.exports = {
   },
   updateGuestOrganisation: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const { data } = parseBody(ctx);
-      console.log("data", data);
-      const body = ctx.request.body;
-      console.log("body", body);
       const customer = data.customer;
       const organisation = data.organisation;
       const contact = data.contact;
       const params = ctx.request.params;
-
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const { id, ...attributes } = await strapi
         .service("api::system.system-customer-organisation")
         .updateGuestOrganisation(
-          loggedUserUserGroup.id,
           params.id,
           contact,
           organisation,
-          customer
+          customer,
+          userGroup
         );
       if (attributes?.name === "NotFoundError") {
         ctx.send({ ...attributes }, 404);
@@ -87,17 +71,12 @@ module.exports = {
   },
   deleteGuestOrganisation: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const organisationId = ctx.request.params.id;
-
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const { id, ...attributes } = await strapi
         .service("api::system.system-customer-organisation")
-        .deleteGuestOrganisation(loggedUserUserGroup.id, organisationId);
+        .deleteGuestOrganisation(organisationId, userGroup);
       if (attributes?.name === "NotFoundError") {
         ctx.send({ ...attributes }, 404);
       } else {

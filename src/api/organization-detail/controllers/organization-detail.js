@@ -1,10 +1,7 @@
 "use strict";
-const url = require("url");
-
-const { getSubdomainFromRequest } = require("../../../shared/functions/get-subdomain");
 const { getIdAndAttributesSimple } = require("../../../shared/functions/get-id-and-attributes");
 const {
-  getLoggedUserUserGroup,
+  getUserGroupId,
 } = require("../../../shared/functions/get-logged-user-user-group");
 
 /**
@@ -18,11 +15,7 @@ module.exports = createCoreController(
   ({ strapi }) => ({
     myDetail: async (ctx, next) => {
       try {
-        const subdomain = getSubdomainFromRequest(ctx.request);
-        const loggedUserUserGroup = await getLoggedUserUserGroup(
-          strapi,
-          subdomain
-        );
+        const userGroup = await getUserGroupId(strapi, ctx.request);
 
         const myDetailRaw = await strapi
           .query("api::organization-detail.organization-detail")
@@ -62,7 +55,7 @@ module.exports = createCoreController(
               },
             },
             where: {
-              userGroup: loggedUserUserGroup.id,
+              userGroup,
             },
           });
         const myDetail = getIdAndAttributesSimple(myDetailRaw);

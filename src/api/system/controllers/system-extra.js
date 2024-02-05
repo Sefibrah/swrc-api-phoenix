@@ -1,8 +1,8 @@
 "use strict";
 
 const {
-  getSubdomainFromRequest,
-} = require("../../../shared/functions/get-subdomain");
+  getUserGroupId,
+} = require("../../../shared/functions/get-logged-user-user-group");
 
 const {
   parseBody,
@@ -15,15 +15,12 @@ const {
 module.exports = {
   createExtra: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
-
       const { data, files } = parseBody(ctx);
-      console.log("data", data, "files", files);
 
+      const userGroup = await getUserGroupId(strapi, ctx.request);
       const response = await strapi
         .service("api::system.system-extra")
-        .createExtra(data, files, subdomain);
-      console.log("response", response);
+        .createExtra(data, files, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"
@@ -38,17 +35,14 @@ module.exports = {
   },
   updateExtra: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
-
       const { data, files } = parseBody(ctx);
-      console.log("data", data, "files", files);
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const id = ctx.request.params.id;
 
       const response = await strapi
         .service("api::system.system-extra")
-        .updateExtra(id, data, files, subdomain);
-      console.log("response", response);
+        .updateExtra(id, data, files, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"
@@ -63,13 +57,11 @@ module.exports = {
   },
   deleteExtra: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const id = ctx.request.params.id;
-
+      const userGroup = await getUserGroupId(strapi, ctx.request);
       const response = await strapi
         .service("api::system.system-extra")
-        .deleteExtra(id, subdomain);
-      console.log("response", response);
+        .deleteExtra(id, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"

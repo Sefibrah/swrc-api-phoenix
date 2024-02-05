@@ -14,11 +14,8 @@ const {
 module.exports = {
   createCarContract: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
+      const userGroup = await getUserGroupId(strapi, ctx.request);
       const { data } = parseBody(ctx);
-      console.log("data", data);
-      const body = ctx.request.body;
-      console.log("body", body);
       const query = ctx.request.query;
 
       const { id, ...attributes } = await strapi
@@ -30,7 +27,7 @@ module.exports = {
           data.transaction,
           data.rentalExtras,
           query,
-          subdomain
+          userGroup
         );
       if (attributes?.name === "NotFoundError") {
         ctx.send({ ...attributes }, 404);
@@ -44,12 +41,9 @@ module.exports = {
   },
   updateCarContract: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const { data } = parseBody(ctx);
-      console.log("data", data);
-      const body = ctx.request.body;
-      console.log("body", body);
       const query = ctx.request.query;
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const contractId = ctx.request.params.id;
 
@@ -63,7 +57,7 @@ module.exports = {
           data.transaction,
           data.rentalExtras,
           query,
-          subdomain
+          userGroup
         );
       if (attributes.name === "NotFoundError") {
         ctx.body = { ...attributes };
@@ -76,12 +70,12 @@ module.exports = {
   },
   deleteCarContract: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const contractId = ctx.request.params.id;
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       await strapi
         .service("api::system.system-car-contract")
-        .deleteCarContract(contractId, subdomain);
+        .deleteCarContract(contractId, userGroup);
       ctx.body = { data: {}, isSuccess: true };
     } catch (err) {
       ctx.body = err;

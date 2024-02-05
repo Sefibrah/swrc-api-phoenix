@@ -18,10 +18,10 @@ const {
 
 module.exports = {
   createGuestOrganisation: async (
-    userGroup,
     { email, telephonePrimary, telephoneSecondary, website },
     { organisationId },
-    { name, country, comment, isLocal }
+    { name, country, comment, isLocal },
+    userGroup
   ) => {
     const contact = await strapi.entityService.create("api::contact.contact", {
       data: {
@@ -75,11 +75,11 @@ module.exports = {
     return await getOrganisationById(strapi, organisation.id);
   },
   updateGuestOrganisation: async (
-    userGroup,
     id,
     contact,
     organisation,
-    customer
+    customer,
+    userGroup
   ) => {
     const organisationFromDb = await getOrganisationById(strapi, id);
     await strapi.entityService.update(
@@ -120,7 +120,7 @@ module.exports = {
 
     return await getOrganisationById(strapi, id);
   },
-  deleteGuestOrganisation: async (userGroup, id) => {
+  deleteGuestOrganisation: async (id, userGroup) => {
     const organisationlFromDb = await getOrganisationById(strapi, id);
 
     if (

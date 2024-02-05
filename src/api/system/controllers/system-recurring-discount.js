@@ -1,8 +1,8 @@
 "use strict";
 
 const {
-  getSubdomainFromRequest,
-} = require("../../../shared/functions/get-subdomain");
+  getUserGroupId,
+} = require("../../../shared/functions/get-logged-user-user-group");
 
 const {
   parseBody,
@@ -15,15 +15,12 @@ const {
 module.exports = {
   createRecurringDiscount: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
-
       const { data } = parseBody(ctx);
-      console.log("data", data);
 
+      const userGroup = await getUserGroupId(strapi, ctx.request);
       const response = await strapi
         .service("api::system.system-recurring-discount")
-        .createRecurringDiscount(data, subdomain);
-      console.log("response", response);
+        .createRecurringDiscount(data, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"
@@ -38,18 +35,14 @@ module.exports = {
   },
   updateRecurringDiscount: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
-
-      console.log(ctx.body);
       const { data } = parseBody(ctx);
-      console.log("data", data);
 
       const id = ctx.request.params.id;
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const response = await strapi
         .service("api::system.system-recurring-discount")
-        .updateRecurringDiscount(id, data, subdomain);
-      console.log("response", response);
+        .updateRecurringDiscount(id, data, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"
@@ -64,15 +57,12 @@ module.exports = {
   },
   deleteRecurringDiscount: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const id = ctx.request.params.id;
-
-      console.log("ctx.request.params", ctx.request.params);
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const response = await strapi
         .service("api::system.system-recurring-discount")
-        .deleteRecurringDiscount(id, subdomain);
-      console.log("response", response);
+        .deleteRecurringDiscount(id, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"

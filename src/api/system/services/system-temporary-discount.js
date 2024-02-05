@@ -14,21 +14,14 @@ const {
  */
 
 module.exports = {
-  createTemporaryDiscount: async (data, subdomain) => {
+  createTemporaryDiscount: async (data, userGroup) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
-      console.log("loggedUserUserGroup", loggedUserUserGroup);
-
       const discount = await strapi.entityService.create(
         "api::discount.discount",
         {
           data: {
             ...data.discount,
-            userGroup: loggedUserUserGroup.id,
+            userGroup
           },
         }
       );
@@ -39,7 +32,7 @@ module.exports = {
           data: {
             ...data.temporaryDiscount,
             discount: discount.id,
-            userGroup: loggedUserUserGroup.id,
+            userGroup,
           },
         }
       );
@@ -55,13 +48,8 @@ module.exports = {
       }
     }
   },
-  updateTemporaryDiscount: async (id, data, subdomain) => {
+  updateTemporaryDiscount: async (id, data, userGroup) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
       let temporaryDiscount = await getTemporaryDiscount(strapi, id);
 
       await strapi.entityService.update(
@@ -95,13 +83,8 @@ module.exports = {
       }
     }
   },
-  deleteTemporaryDiscount: async (id, subdomain) => {
+  deleteTemporaryDiscount: async (id, userGroup) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
       const temporaryDiscount = await getTemporaryDiscount(strapi, id);
 
       if (temporaryDiscount?.discount?.id != null) {

@@ -14,14 +14,8 @@ const {
  */
 
 module.exports = {
-  createCarContractFine: async (contractId, fine, subdomain) => {
+  createCarContractFine: async (contractId, fine, userGroup) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
-      const userGroup = loggedUserUserGroup.id;
       const newFine = await strapi.entityService.create("api::fine.fine", {
         data: {
           ...fine,
@@ -51,13 +45,8 @@ module.exports = {
       }
     }
   },
-  updateCarContractFine: async (id, contractId, fineBody, subdomain) => {
+  updateCarContractFine: async (id, contractId, fineBody, userGroup) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
       let carContractFine = await strapi.entityService.findOne(
         "api::car-contract-fine.car-contract-fine",
         id,
@@ -100,13 +89,8 @@ module.exports = {
       }
     }
   },
-  deleteCarContractFine: async (id, subdomain) => {
+  deleteCarContractFine: async (id, userGroup) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
       const carContractFine = await strapi.entityService.findOne(
         "api::car-contract-fine.car-contract-fine",
         id,

@@ -14,15 +14,10 @@ const {
  */
 
 module.exports = {
-  createExtra: async (data, files, subdomain) => {
-    try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
-      const extra = await strapi.entityService.create("api::extra.extra", {
-        data: { ...data, userGroup: loggedUserUserGroup.id },
+  createExtra: async (data, files, userGroup) => {
+    try { 
+        const extra = await strapi.entityService.create("api::extra.extra", {
+        data: { ...data, userGroup },
         files,
       });
 
@@ -37,13 +32,8 @@ module.exports = {
       }
     }
   },
-  updateExtra: async (id, data, files, subdomain) => {
+  updateExtra: async (id, data, files, userGroup) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
       let extra = await strapi.entityService.findOne("api::extra.extra", id, {
         populate: {
           thumbnail: { fields: ["id", "url"] },
@@ -70,13 +60,8 @@ module.exports = {
       }
     }
   },
-  deleteExtra: async (id, subdomain) => {
+  deleteExtra: async (id, userGroup) => {
     try {
-      const loggedUserUserGroup = await getLoggedUserUserGroup(
-        strapi,
-        subdomain
-      );
-
       // fixme: maybe add the deletion of images from the server and cloud too?
 
       await strapi.entityService.delete("api::extra.extra", id);

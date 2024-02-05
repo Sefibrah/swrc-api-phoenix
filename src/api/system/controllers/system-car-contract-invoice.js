@@ -4,8 +4,8 @@ const {
   parseBody,
 } = require("@strapi/strapi/dist/core-api/controller/transform.js");
 const {
-  getSubdomainFromRequest,
-} = require("../../../shared/functions/get-subdomain");
+  getUserGroupId,
+} = require("../../../shared/functions/get-logged-user-user-group");
 
 /**
  * A set of functions called "actions" for `system`
@@ -14,15 +14,11 @@ const {
 module.exports = {
   createCarContractInvoice: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const { data } = parseBody(ctx);
-      console.log("data", data);
-      const body = ctx.request.body;
-      console.log("body", body);
+      const userGroup = await getUserGroupId(strapi, ctx.request);
       const response = await strapi
         .service("api::system.system-car-contract-invoice")
-        .createCarContractInvoice(data, subdomain);
-      console.log("response", response);
+        .createCarContractInvoice(data, userGroup);
       if (
         response?.name == "NotFoundError" ||
         response?.name == "ValidationError"
@@ -37,16 +33,13 @@ module.exports = {
   },
   updateCarContractInvoice: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const { data } = parseBody(ctx);
-      console.log("data", data);
-      const body = ctx.request.body;
-      console.log("body", body);
       const id = ctx.request.params.id;
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const response = await strapi
         .service("api::system.system-car-contract-invoice")
-        .updateCarContractInvoice(id, data, subdomain);
+        .updateCarContractInvoice(id, data, userGroup);
       console.log("response", response);
       if (
         response?.name == "NotFoundError" ||
@@ -62,12 +55,12 @@ module.exports = {
   },
   deleteCarContractInvoice: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
       const id = ctx.request.params.id;
+      const userGroup = await getUserGroupId(strapi, ctx.request);
 
       const response = await strapi
         .service("api::system.system-car-contract-invoice")
-        .deleteCarContractInvoice(id, subdomain);
+        .deleteCarContractInvoice(id, userGroup);
       console.log("response", response);
       if (
         response?.name == "NotFoundError" ||
@@ -84,10 +77,10 @@ module.exports = {
 
   getLatestInvoice: async (ctx, next) => {
     try {
-      const subdomain = getSubdomainFromRequest(ctx.request);
+      const userGroup = await getUserGroupId(strapi, ctx.request);
       const latest = await strapi
         .service("api::system.system-car-contract-invoice")
-        .getLatestInvoice(subdomain);
+        .getLatestInvoice(userGroup);
       ctx.body = latest;
       return latest;
     } catch (err) {

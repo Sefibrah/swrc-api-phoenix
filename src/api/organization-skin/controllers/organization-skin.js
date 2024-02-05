@@ -5,8 +5,7 @@ const url = require("url");
  */
 
 const { createCoreController } = require("@strapi/strapi").factories;
-const { getSubdomainFromRequest } = require("../../../shared/functions/get-subdomain");
-const { getLoggedUserUserGroup } = require("../../../shared/functions/get-logged-user-user-group")
+const { getUserGroupId } = require("../../../shared/functions/get-logged-user-user-group")
 const { getIdAndAttributesSimple } = require("../../../shared/functions/get-id-and-attributes")
 
 module.exports = createCoreController(
@@ -14,11 +13,7 @@ module.exports = createCoreController(
   ({ strapi }) => ({
     mySkin: async (ctx, next) => {
       try {
-        const subdomain = getSubdomainFromRequest(ctx.request);
-        const loggedUserUserGroup = await getLoggedUserUserGroup(
-          strapi,
-          subdomain
-        );
+        const userGroup = await getUserGroupId(strapi, ctx.request);
 
         const mySkinRaw = await strapi
           .query("api::organization-skin.organization-skin")
@@ -38,7 +33,7 @@ module.exports = createCoreController(
               },
             },
             where: {
-              userGroup: loggedUserUserGroup.id,
+              userGroup,
             },
           });
         const mySkin = getIdAndAttributesSimple(mySkinRaw);
