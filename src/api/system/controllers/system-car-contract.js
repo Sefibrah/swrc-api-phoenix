@@ -4,8 +4,8 @@ const {
   parseBody,
 } = require("@strapi/strapi/dist/core-api/controller/transform.js");
 const {
-  getSubdomainFromRequest,
-} = require("../../../shared/functions/get-subdomain");
+  getUserGroupId,
+} = require("../../../shared/functions/get-logged-user-user-group");
 
 /**
  * A set of functions called "actions" for `system`
