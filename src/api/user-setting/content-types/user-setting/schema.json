@@ -34,6 +34,14 @@
     "sidebarMinimised": {
       "type": "boolean",
       "default": false
+    },
+    "brightness": {
+      "type": "enumeration",
+      "enum": [
+        "DARK",
+        "LIGHT",
+        "SYSTEM"
+      ]
     }
   }
 }

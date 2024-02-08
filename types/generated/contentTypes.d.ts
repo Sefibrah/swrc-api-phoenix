@@ -2954,6 +2954,7 @@ export interface ApiUserSettingUserSetting extends Schema.CollectionType {
       'plugin::users-permissions.user'
     >;
     sidebarMinimised: Attribute.Boolean & Attribute.DefaultTo<false>;
+    brightness: Attribute.Enumeration<['DARK', 'LIGHT', 'SYSTEM']>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
