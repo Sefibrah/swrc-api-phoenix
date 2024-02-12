@@ -430,7 +430,7 @@ module.exports = ({ strapi }) => ({
     const taxRate = 0.145299; // fixme: probably when going international this will need to be uplifted to the cloud
     const tax = transaction.totalWithTax * taxRate;
     const totalWithoutTax = transaction.totalWithTax - tax;
-    const updatedTransaction = await strapi.entityService.update(
+    await strapi.entityService.update(
       "api::transaction.transaction",
       contractToUpdate.transaction.id,
       {

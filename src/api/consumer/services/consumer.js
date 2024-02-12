@@ -880,7 +880,7 @@ async function prepareAndCreateReservationRequestFromConsumer(
   }
 
   const pricePerDay = latestPriceColumn.amount;
-  let totalWithTax = Math.ceil(pricePerDay * days);
+  let totalWithTax = pricePerDay * days;
   const deposit = 400; // fixme: hardcoded, most, if not all, companies don't want 400 as their deposit
 
   // procedure: calculating system discounts, for now, not implemented, so always zero
