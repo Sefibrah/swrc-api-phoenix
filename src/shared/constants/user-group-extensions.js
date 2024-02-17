@@ -179,12 +179,6 @@ const USER_GROUP_FIELD_EXTENSIONS = {
     target: "api::extra.extra",
     mappedBy: "userGroup",
   },
-  paymentMethods: {
-    type: "relation",
-    relation: "oneToMany",
-    target: "api::payment-method.payment-method",
-    mappedBy: "userGroup",
-  },
   transactions: {
     type: "relation",
     relation: "oneToMany",
@@ -248,7 +242,7 @@ const USER_GROUP_FIELD_EXTENSIONS = {
   addressOfStays: {
     type: "relation",
     relation: "oneToMany",
-    target: "api::payment-method.payment-method",
+    target: "api::address-of-stay.address-of-stay",
     mappedBy: "userGroup",
   },
   carContractFines: {

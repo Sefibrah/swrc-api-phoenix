@@ -965,11 +965,6 @@ export interface PluginMultiTenantUserGroup extends Schema.CollectionType {
       'oneToMany',
       'api::extra.extra'
     >;
-    paymentMethods: Attribute.Relation<
-      'plugin::multi-tenant.user-group',
-      'oneToMany',
-      'api::payment-method.payment-method'
-    >;
     rentalExtras: Attribute.Relation<
       'plugin::multi-tenant.user-group',
       'oneToMany',
@@ -988,7 +983,7 @@ export interface PluginMultiTenantUserGroup extends Schema.CollectionType {
     addressOfStays: Attribute.Relation<
       'plugin::multi-tenant.user-group',
       'oneToMany',
-      'api::payment-method.payment-method'
+      'api::address-of-stay.address-of-stay'
     >;
     radarNumbers: Attribute.Relation<
       'plugin::multi-tenant.user-group',
@@ -2337,40 +2332,6 @@ export interface ApiPaymentDetailPaymentDetail extends Schema.CollectionType {
   };
 }
 
-export interface ApiPaymentMethodPaymentMethod extends Schema.CollectionType {
-  collectionName: 'payment_methods';
-  info: {
-    singularName: 'payment-method';
-    pluralName: 'payment-methods';
-    displayName: 'Payment Method';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    name: Attribute.String;
-    userGroup: Attribute.Relation<
-      'api::payment-method.payment-method',
-      'manyToOne',
-      'plugin::multi-tenant.user-group'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::payment-method.payment-method',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::payment-method.payment-method',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface ApiPlaceOfIssuePlaceOfIssue extends Schema.CollectionType {
   collectionName: 'place_of_issues';
   info: {
@@ -2459,6 +2420,7 @@ export interface ApiPricePrice extends Schema.CollectionType {
       'oneToOne',
       'plugin::multi-tenant.user-group'
     >;
+    isFixed: Attribute.Boolean & Attribute.DefaultTo<false>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -2808,7 +2770,6 @@ export interface ApiTransactionTransaction extends Schema.CollectionType {
         min: 0;
       }> &
       Attribute.DefaultTo<0>;
-    paymentMethod: Attribute.String;
     totalWithTax: Attribute.Decimal &
       Attribute.SetMinMax<{
         min: 0;
@@ -2843,6 +2804,7 @@ export interface ApiTransactionTransaction extends Schema.CollectionType {
         min: 0;
       }>;
     includeTimeAsExtraDay: Attribute.Boolean & Attribute.DefaultTo<true>;
+    paymentMethod: Attribute.Enumeration<['CASH', 'CARD', 'GIRO']>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -3054,7 +3016,6 @@ declare module '@strapi/types' {
       'api::organization-email-config.organization-email-config': ApiOrganizationEmailConfigOrganizationEmailConfig;
       'api::organization-skin.organization-skin': ApiOrganizationSkinOrganizationSkin;
       'api::payment-detail.payment-detail': ApiPaymentDetailPaymentDetail;
-      'api::payment-method.payment-method': ApiPaymentMethodPaymentMethod;
       'api::place-of-issue.place-of-issue': ApiPlaceOfIssuePlaceOfIssue;
       'api::police-station.police-station': ApiPoliceStationPoliceStation;
       'api::price.price': ApiPricePrice;

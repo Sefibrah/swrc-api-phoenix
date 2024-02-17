@@ -40,9 +40,6 @@
       "min": 0,
       "default": 0
     },
-    "paymentMethod": {
-      "type": "string"
-    },
     "totalWithTax": {
       "type": "decimal",
       "min": 0,
@@ -80,6 +77,14 @@
     "includeTimeAsExtraDay": {
       "type": "boolean",
       "default": true
+    },
+    "paymentMethod": {
+      "type": "enumeration",
+      "enum": [
+        "CASH",
+        "CARD",
+        "GIRO"
+      ]
     }
   }
 }

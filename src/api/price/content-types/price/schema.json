@@ -22,6 +22,10 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::multi-tenant.user-group"
+    },
+    "isFixed": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
