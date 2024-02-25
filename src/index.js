@@ -225,6 +225,10 @@ const getReceptionistPermissions = () => {
       "api::type-of-service.type-of-service",
       "api::flight-number.flight-number",
       "api::place-of-issue.place-of-issue",
+      "api::police-station.police-station",
+      "api::radar-number.radar-number",
+      "api::car-contract-fine.car-contract-fine",
+      "api::fine.fine",
     ],
     noRestrictions
   );
