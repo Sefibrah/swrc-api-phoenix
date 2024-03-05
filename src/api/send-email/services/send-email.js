@@ -11,13 +11,25 @@ const {
 
 module.exports = ({ strapi }) => ({
   sendEmail: async (userGroup, subject, htmlContent, recipient = null) => {
+    // if the recipient is null, i assume that the email is for the user itself
+    // so i will send the email to the user's email and the other email
+    // else, i will send the email to the recipient
+    
     const organizationEmailConfig = await strapi
       .query("api::organization-email-config.organization-email-config")
       .findOne({
         where: {
           userGroup,
         },
-        select: ["host", "email", "password", "secure", "port"],
+        select: [
+          "host",
+          "email",
+          "password",
+          "secure",
+          "port",
+          "sendToSelfConfirmation",
+          "sendToOtherConfirmation",
+        ],
       });
     // console.log("organizationEmailConfig", organizationEmailConfig);
 
@@ -36,7 +48,13 @@ module.exports = ({ strapi }) => ({
     // Email options
     const mailOptions = {
       from: self,
-      to: recipient == null ? self : recipient,
+      to:
+        recipient == null
+          ? [
+              self,
+              ...(organizationEmailConfig.sendToOtherConfirmation || "").split(","),
+            ]
+          : recipient.split(","),
       subject,
       html: htmlContent,
     };

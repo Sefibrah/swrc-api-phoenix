@@ -60,6 +60,9 @@
       },
       "regex": "^\\d{3}$",
       "customField": "plugin::encryptable-field.encryptable-field"
+    },
+    "sendToOtherConfirmation": {
+      "type": "string"
     }
   }
 }

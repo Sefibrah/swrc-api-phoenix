@@ -1298,7 +1298,7 @@ async function sendToSelfConfirmation(strapi, data, userGroup) {
     .sendEmail(
       userGroup,
       "Stigla nova rezervacija!",
-      html
+      html,
     );
 }
 
