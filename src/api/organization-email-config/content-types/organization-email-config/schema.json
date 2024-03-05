@@ -12,12 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "host": {
-      "type": "string"
-    },
-    "email": {
-      "type": "string"
-    },
     "userGroup": {
       "type": "relation",
       "relation": "manyToOne",
@@ -25,7 +19,47 @@
       "inversedBy": "organizationEmailConfigs"
     },
     "password": {
-      "type": "string"
+      "type": "customField",
+      "options": {
+        "hint": null
+      },
+      "required": false,
+      "customField": "plugin::encryptable-field.encryptable-field"
+    },
+    "sendToSelfConfirmation": {
+      "type": "boolean",
+      "default": true
+    },
+    "email": {
+      "type": "customField",
+      "options": {
+        "hint": "Should be an email"
+      },
+      "regex": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+      "customField": "plugin::encryptable-field.encryptable-field"
+    },
+    "host": {
+      "type": "customField",
+      "options": {
+        "hint": null
+      },
+      "customField": "plugin::encryptable-field.encryptable-field"
+    },
+    "secure": {
+      "type": "customField",
+      "options": {
+        "hint": "Should be a true or false value"
+      },
+      "regex": "^(true|false)$",
+      "customField": "plugin::encryptable-field.encryptable-field"
+    },
+    "port": {
+      "type": "customField",
+      "options": {
+        "hint": "Should be a 3-digit port number"
+      },
+      "regex": "^\\d{3}$",
+      "customField": "plugin::encryptable-field.encryptable-field"
     }
   }
 }

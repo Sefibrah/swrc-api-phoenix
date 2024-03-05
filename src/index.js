@@ -816,11 +816,11 @@ const generatePermission = async (role, action) => {
 
 const generateMultiplePermissionsForRole = async (role, actions) => {
   actions.forEach(async (action, index) => {
-    console.log(
-      `${index + 1}. from ${
-        actions.length
-      }. Creating permission for action ${action} for role ID ${role}`
-    );
+    // console.log(
+    //   `${index + 1}. from ${
+    //     actions.length
+    //   }. Creating permission for action ${action} for role ID ${role}`
+    // );
     await generatePermission(role, action);
   });
 };
@@ -831,11 +831,11 @@ const clearAllPermissions = async () => {
     .findMany();
   const permissions = permissionsRaw.map((permission) => permission.id);
   permissions.forEach(async (permission, index) => {
-    console.log(
-      `${index + 1}. out of ${
-        permissions.length
-      }. Deleting active permission of id ${permission}`
-    );
+    // console.log(
+    //   `${index + 1}. out of ${
+    //     permissions.length
+    //   }. Deleting active permission of id ${permission}`
+    // );
     await strapi.query("plugin::users-permissions.permission").delete({
       where: {
         id: { $eq: permission },

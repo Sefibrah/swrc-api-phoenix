@@ -10,37 +10,38 @@ const {
  */
 
 module.exports = ({ strapi }) => ({
-  sendEmail: async (recipient, html, subject, userGroup) => {
+  sendEmail: async (userGroup, subject, htmlContent, recipient = null) => {
     const organizationEmailConfig = await strapi
       .query("api::organization-email-config.organization-email-config")
       .findOne({
         where: {
           userGroup,
         },
-        select: ["host", "email", "password"],
+        select: ["host", "email", "password", "secure", "port"],
       });
+    // console.log("organizationEmailConfig", organizationEmailConfig);
 
-    console.log("organizationEmailConfig", organizationEmailConfig);
+    const self = organizationEmailConfig.email;
     // Create a Nodemailer transporter using SMTP settings
     const transporter = nodemailer.createTransport({
       host: organizationEmailConfig.host,
-      port: 465,
-      secure: true,
+      port: parseInt(organizationEmailConfig.port),
+      secure: JSON.parse(organizationEmailConfig.secure),
       auth: {
-        user: organizationEmailConfig.email,
+        user: self,
         pass: organizationEmailConfig.password,
       },
     });
-    console.log("transporter", transporter);
 
     // Email options
     const mailOptions = {
-      from: organizationEmailConfig.email,
-      to: recipient,
+      from: self,
+      to: recipient == null ? self : recipient,
       subject,
-      html,
+      html: htmlContent,
     };
-    console.log("mailOptions", mailOptions);
+
+    // console.log("mailOptions", mailOptions);
 
     try {
       // Send the email

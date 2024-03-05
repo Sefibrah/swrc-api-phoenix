@@ -59,18 +59,77 @@ module.exports = ({ strapi }) => ({
 
     // feat: will be used for price calculations for the reservation
 
-    const carReservation = await prepareAndCreateReservationRequestFromConsumer(
+    const createdCarReservation =
+      await prepareAndCreateReservationRequestFromConsumer(
+        strapi,
+        id,
+        carGroupFromDb.id,
+        carGroupFromDb.prices,
+        startDateTime,
+        endDateTime,
+        startLocation,
+        endLocation,
+        flightNumber,
+        rentalExtras,
+        user,
+        userGroup
+      );
+
+    const carReservation = await strapi.entityService.findOne(
+      "api::car-reservation.car-reservation",
+      createdCarReservation.id,
+      {
+        fields: ["code", "createdAt", "flightNumber", "status"],
+        populate: {
+          transaction: {
+            fields: ["totalWithTax", "extrasPrice"],
+          },
+          rentalAgreementDetail: {
+            populate: {
+              renter: {
+                fields: ["name"],
+                populate: {
+                  contact: {
+                    fields: ["email", "telephonePrimary"],
+                  },
+                },
+              },
+            },
+          },
+          agreementDetail: {
+            fields: ["startDatetime", "endDatetime"],
+          },
+          car: {
+            fields: ["make", "model", "registrationPlate"],
+          },
+        },
+      }
+    );
+
+    await sendEmailToRecipient(
       strapi,
-      id,
-      carGroupFromDb.id,
-      carGroupFromDb.prices,
-      startDateTime,
-      endDateTime,
-      startLocation,
-      endLocation,
-      flightNumber,
-      rentalExtras,
-      user,
+      carReservation.rentalAgreementDetail.renter.contact.email,
+      carReservation.code,
+      userGroup
+    );
+    await sendToSelfConfirmation(
+      strapi,
+      {
+        code: carReservation.code,
+        createdAt: carReservation.createdAt,
+        renterName: carReservation.rentalAgreementDetail.renter.name,
+        renterEmail: carReservation.rentalAgreementDetail.renter.contact.email,
+        renterTelephone:
+          carReservation.rentalAgreementDetail.renter.contact.telephonePrimary,
+        carName: `${carReservation.car.make} ${
+          carReservation.car.model
+        } (${carReservation.car.registrationPlate.slice(-3)})`,
+        startDateTime: carReservation.agreementDetail.startDatetime,
+        endDateTime: carReservation.agreementDetail.endDatetime,
+        flightNumber: carReservation.flightNumber,
+        extrasPrice: carReservation.transaction.extrasPrice,
+        total: carReservation.transaction.totalWithTax,
+      },
       userGroup
     );
 
@@ -95,6 +154,7 @@ module.exports = ({ strapi }) => ({
           id,
         },
         select: ["id"],
+        fields: ["name"],
         populate: {
           prices: {
             select: ["minDays", "amount"],
@@ -125,18 +185,79 @@ module.exports = ({ strapi }) => ({
 
     // feat: will be used for price calculations for the reservation
 
-    const carReservation = await prepareAndCreateReservationRequestFromConsumer(
+    const createdCarReservation =
+      await prepareAndCreateReservationRequestFromConsumer(
+        strapi,
+        carFromDbId,
+        id,
+        carGroupFromDb.prices,
+        startDateTime,
+        endDateTime,
+        startLocation,
+        endLocation,
+        flightNumber,
+        rentalExtras,
+        user,
+        userGroup
+      );
+
+    const carReservation = await strapi.entityService.findOne(
+      "api::car-reservation.car-reservation",
+      createdCarReservation.id,
+      {
+        fields: ["code", "createdAt", "flightNumber", "status"],
+        populate: {
+          transaction: {
+            fields: ["totalWithTax", "extrasPrice"],
+          },
+          rentalAgreementDetail: {
+            populate: {
+              renter: {
+                fields: ["name"],
+                populate: {
+                  contact: {
+                    fields: ["email", "telephonePrimary"],
+                  },
+                },
+              },
+            },
+          },
+          agreementDetail: {
+            fields: ["startDatetime", "endDatetime"],
+          },
+          car: {
+            populate: {
+              carGroup: {
+                fields: ["name"],
+              },
+            },
+          },
+        },
+      }
+    );
+
+    await sendEmailToRecipient(
       strapi,
-      carFromDbId,
-      id,
-      carGroupFromDb.prices,
-      startDateTime,
-      endDateTime,
-      startLocation,
-      endLocation,
-      flightNumber,
-      rentalExtras,
-      user,
+      carReservation.rentalAgreementDetail.renter.contact.email,
+      carReservation.code,
+      userGroup
+    );
+    await sendToSelfConfirmation(
+      strapi,
+      {
+        code: carReservation.code,
+        createdAt: carReservation.createdAt,
+        renterName: carReservation.rentalAgreementDetail.renter.name,
+        renterEmail: carReservation.rentalAgreementDetail.renter.contact.email,
+        renterTelephone:
+          carReservation.rentalAgreementDetail.renter.contact.telephonePrimary,
+        carName: carReservation.car.carGroup.name,
+        startDateTime: carReservation.agreementDetail.startDatetime,
+        endDateTime: carReservation.agreementDetail.endDatetime,
+        flightNumber: carReservation.flightNumber,
+        extrasPrice: carReservation.transaction.extrasPrice,
+        total: carReservation.transaction.totalWithTax,
+      },
       userGroup
     );
 
@@ -966,7 +1087,6 @@ async function prepareAndCreateReservationRequestFromConsumer(
   // procedure: making the reservation + sending the email
 
   let carReservation = null;
-  let recipient = "";
   if (user.jwt != null) {
     const decoded = jwt_decode(user.jwt);
     const userId = decoded?.id;
@@ -977,7 +1097,6 @@ async function prepareAndCreateReservationRequestFromConsumer(
         populate: { customer: { populate: true } },
       });
     // fixme: ovo testirati
-    recipient = userFromDb.email;
     if (userFromDb != null) {
       carReservation = await submitReservationRequestToSystem(
         strapi,
@@ -1005,7 +1124,6 @@ async function prepareAndCreateReservationRequestFromConsumer(
   } else {
     // fixme: idea: mozda je dobro da odradimo provjeru da li guest vec postoji?
     const name = user.info.name;
-    recipient = user.info.email;
 
     const customer = await strapi
       .service("api::customer.customer")
@@ -1045,7 +1163,6 @@ async function prepareAndCreateReservationRequestFromConsumer(
     );
   }
 
-  await sendEmail(strapi, recipient, carReservation.code, userGroup);
   return carReservation;
 }
 
@@ -1142,26 +1259,62 @@ function formatString(template, data) {
   return formattedString;
 }
 
-async function sendEmail(strapi, recipient, code, userGroup) {
-  let html = "";
+async function sendEmailToRecipient(strapi, recipient, code, userGroup) {
   const rawHtml = fs.readFileSync(
     "src/shared/email/reservation-request-successful.html",
     "utf8"
   );
-  html = formatString(rawHtml, {
+  const html = formatString(rawHtml, {
     code,
+    logoUrl:
+      "https://res.cloudinary.com/dbwmyma6c/image/upload/v1683199011/gt_logo_8b9af8e585.png",
     link: `https://gulftravelbosnia.com/booking-confirmation/${code}`,
   });
 
-  console.log("html", html);
-
-  // ovo prebaciti u web stranicu od gulftravelbosnia.com ... ovome nije mjesto ovdje ...
   await strapi
     .service("api::send-email.send-email")
     .sendEmail(
-      recipient,
-      html,
+      userGroup,
       "Your booking request has been received successfully!",
-      userGroup
+      html,
+      recipient
     );
+}
+
+async function sendToSelfConfirmation(strapi, data, userGroup) {
+  const rawHtml = fs.readFileSync(
+    "src/shared/email/reservation-confirmation-to-self-bosnian.html",
+    "utf8"
+  );
+  const html = formatString(rawHtml, {
+    ...data,
+    createdAt: formatDateToBosnianFormat(data.createdAt, true),
+    startDateTime: formatDateToBosnianFormat(data.startDateTime),
+    endDateTime: formatDateToBosnianFormat(data.endDateTime),
+  });
+
+  await strapi
+    .service("api::send-email.send-email")
+    .sendEmail(
+      userGroup,
+      "Stigla nova rezervacija!",
+      html
+    );
+}
+
+function formatDateToBosnianFormat(date, addSeconds = false) {
+  date = new Date(date);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // January is 0!
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  let formattedDate = `${day}.${month}.${year}. ${hours}:${minutes}`;
+
+  if (addSeconds) {
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+    formattedDate += `:${seconds}`;
+  }
+
+  return formattedDate;
 }

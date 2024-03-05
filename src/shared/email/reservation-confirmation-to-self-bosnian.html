@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      * {
+        text-align: left;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      table {
+        border-collapse: collapse;
+        border: 1px solid black;
+        width: 600px;
+      }
+
+      table td,
+      table th {
+        border: 1px solid black;
+        padding: 5px 10px;
+      }
+
+      table.customer-information {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Upravo je stigla nova rezervacija!</h1>
+    <p>Rezervacijski kod: <strong>{code}</strong></p>
+    <p>Kada je napravio rezervaciju: <strong>{createdAt}</strong></p>
+    <table class="reservation-information">
+      <tr>
+        <th colspan="3">Podaci o rezervaciji</th>
+      </tr>
+      <tr>
+        <th>Vozilo</th>
+        <td colspan="2">{carName}</td>
+      </tr>
+      <tr>
+        <th>Datum početka</th>
+        <td colspan="2">{startDateTime}</td>
+      </tr>
+      <tr>
+        <th>Datum završetka</th>
+        <td colspan="2">{endDateTime}</td>
+      </tr>
+      <tr>
+        <th>Broj leta</th>
+        <td colspan="2">{flightNumber}</td>
+      </tr>
+      <tr>
+        <th>Cijena dodataka</th>
+        <td colspan="2">{extrasPrice}</td>
+      </tr>
+      <tr>
+        <th>Ukupan iznos</th>
+        <td colspan="2">{total}</td>
+      </tr>
+    </table>
+    <table class="customer-information">
+      <tr>
+        <th colspan="3">Podaci o mušteriji</th>
+      </tr>
+      <tr>
+        <th>Ime</th>
+        <td colspan="2">{renterName}</td>
+      </tr>
+      <tr>
+        <th>Broj telefona</th>
+        <td colspan="2">{renterTelephone}</td>
+      </tr>
+      <tr>
+        <th>Email</th>
+        <td colspan="2">{renterEmail}</td>
+      </tr>
+    </table>
+
+    <p>Ovo je sistemski generisana poruka.</p>
+  </body>
+</html>

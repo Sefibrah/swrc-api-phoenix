@@ -27,7 +27,7 @@ module.exports = {
 
       const sendEmail = await strapi
         .service("api::send-email.send-email")
-        .sendEmail(recipient, formattedHTML, subject, userGroup);
+        .sendEmail(userGroup, subject, formattedHTML, recipient);
 
       ctx.body = sendEmail;
     } catch (err) {
