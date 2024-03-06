@@ -127,8 +127,8 @@ module.exports = ({ strapi }) => ({
         startDateTime: carReservation.agreementDetail.startDatetime,
         endDateTime: carReservation.agreementDetail.endDatetime,
         flightNumber: carReservation.flightNumber,
-        extrasPrice: carReservation.transaction.extrasPrice,
-        total: carReservation.transaction.totalWithTax,
+        extrasPrice: (carReservation.transaction.extrasPrice || 0).toFixed(2),
+        total: carReservation.transaction.totalWithTax.toFixed(2),
       },
       userGroup
     );
@@ -255,8 +255,8 @@ module.exports = ({ strapi }) => ({
         startDateTime: carReservation.agreementDetail.startDatetime,
         endDateTime: carReservation.agreementDetail.endDatetime,
         flightNumber: carReservation.flightNumber,
-        extrasPrice: carReservation.transaction.extrasPrice,
-        total: carReservation.transaction.totalWithTax,
+        extrasPrice: (carReservation.transaction.extrasPrice || 0).toFixed(2),
+        total: carReservation.transaction.totalWithTax.toFixed(2),
       },
       userGroup
     );
@@ -1253,7 +1253,9 @@ function formatString(template, data) {
 
   // Replace each matched placeholder with the corresponding value from the data object
   const formattedString = template.replace(regex, (match, key) => {
-    return data[key] || match; // Use the value from data or keep the placeholder if not found
+    const value = data[key];
+    if (value == null) return match;
+    return value; // Use the value from data or keep the placeholder if not found
   });
 
   return formattedString;
@@ -1295,11 +1297,7 @@ async function sendToSelfConfirmation(strapi, data, userGroup) {
 
   await strapi
     .service("api::send-email.send-email")
-    .sendEmail(
-      userGroup,
-      "Stigla nova rezervacija!",
-      html,
-    );
+    .sendEmail(userGroup, "Stigla nova rezervacija!", html);
 }
 
 function formatDateToBosnianFormat(date, addSeconds = false) {
