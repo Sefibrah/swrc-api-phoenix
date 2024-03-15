@@ -90,6 +90,10 @@
       "relation": "manyToOne",
       "target": "plugin::multi-tenant.user-group",
       "inversedBy": "cars"
+    },
+    "horsePower": {
+      "type": "integer",
+      "min": 0
     }
   }
 }
