@@ -29,12 +29,6 @@ const USER_GROUP_FIELD_EXTENSIONS = {
     target: "api::car-reservation.car-reservation",
     mappedBy: "userGroup",
   },
-  colors: {
-    type: "relation",
-    relation: "oneToMany",
-    target: "api::color.color",
-    mappedBy: "userGroup",
-  },
   contacts: {
     type: "relation",
     relation: "oneToMany",
@@ -63,12 +57,6 @@ const USER_GROUP_FIELD_EXTENSIONS = {
     type: "relation",
     relation: "oneToMany",
     target: "api::flight-number.flight-number",
-    mappedBy: "userGroup",
-  },
-  fuelTypes: {
-    type: "relation",
-    relation: "oneToMany",
-    target: "api::fuel-type.fuel-type",
     mappedBy: "userGroup",
   },
   guests: {
@@ -117,18 +105,6 @@ const USER_GROUP_FIELD_EXTENSIONS = {
     type: "relation",
     relation: "oneToMany",
     target: "api::service-location.service-location",
-    mappedBy: "userGroup",
-  },
-  statuses: {
-    type: "relation",
-    relation: "oneToMany",
-    target: "api::status.status",
-    mappedBy: "userGroup",
-  },
-  transmissionTypes: {
-    type: "relation",
-    relation: "oneToMany",
-    target: "api::transmission-type.transmission-type",
     mappedBy: "userGroup",
   },
   typeOfServices: {

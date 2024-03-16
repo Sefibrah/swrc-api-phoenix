@@ -156,12 +156,8 @@ const getReceptionistPermissions = () => {
   );
   let restrictedPermissions = combineActionWithService(
     [
-      "api::color.color",
-      "api::fuel-type.fuel-type",
       "api::car-group.car-group",
       "api::location.location",
-      "api::status.status",
-      "api::transmission-type.transmission-type",
       "api::invoice-place-of-issue.invoice-place-of-issue",
       "api::address-of-stay.address-of-stay",
       "api::vehicle-type.vehicle-type",
@@ -300,14 +296,10 @@ const getMechanicPermissions = () => {
   );
   let restrictedPermissions = combineActionWithService(
     [
-      "api::color.color",
       "api::contact.contact",
       "api::flight-number.flight-number",
-      "api::fuel-type.fuel-type",
       "api::car-group.car-group",
       "api::location.location",
-      "api::status.status",
-      "api::transmission-type.transmission-type",
       "api::invoice-place-of-issue.invoice-place-of-issue",
       "api::vehicle-type.vehicle-type",
       "api::car-reservation.car-reservation",
@@ -395,15 +387,11 @@ const getManagerPermissions = () => {
   );
   let noRestrictionPermissions = combineActionWithService(
     [
-      "api::color.color",
       "api::contact.contact",
       "api::car-group.car-group",
       "api::flight-number.flight-number",
-      "api::fuel-type.fuel-type",
       "api::location.location",
       "api::service-location.service-location",
-      "api::status.status",
-      "api::transmission-type.transmission-type",
       "api::type-of-service.type-of-service",
       "api::vehicle-type.vehicle-type",
       "api::car-contract.car-contract",
@@ -536,14 +524,10 @@ const getAdminPermissions = () => {
   );
   let noRestrictionPermissions = combineActionWithService(
     [
-      "api::color.color",
       "api::flight-number.flight-number",
-      "api::fuel-type.fuel-type",
       "api::location.location",
       "api::contact.contact",
       "api::service-location.service-location",
-      "api::status.status",
-      "api::transmission-type.transmission-type",
       "api::type-of-service.type-of-service",
       "api::vehicle-type.vehicle-type",
       "api::car-group.car-group",
