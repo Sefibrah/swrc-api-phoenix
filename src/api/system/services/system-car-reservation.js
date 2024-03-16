@@ -6,7 +6,7 @@
 
 module.exports = ({ strapi }) => ({
   createCarReservation: async (
-    { car, flightNumber, status, code },
+    { car, flightNumber, status, code, source },
     { startLocation, endLocation, renter },
     { startDatetime, endDatetime, comment, author },
     {
@@ -99,6 +99,7 @@ module.exports = ({ strapi }) => ({
           car,
           flightNumber,
           status,
+          source,
           code,
           rentalAgreementDetail: rentalAgreementDetail.id,
           agreementDetail: agreementDetail.id,
@@ -304,6 +305,7 @@ module.exports = ({ strapi }) => ({
           car: reservation.car,
           flightNumber: reservation.flightNumber,
           status: reservation.status,
+          source: reservation.source,
           code: reservation.code,
           rentalAgreementDetail: rentalAgreementDetail.id,
           agreementDetail: agreementDetail.id,

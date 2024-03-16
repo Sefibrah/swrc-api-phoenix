@@ -1192,7 +1192,6 @@ async function submitReservationRequestToSystem(
     "api::agreement-detail.agreement-detail",
     {
       data: {
-        comment: "web",
         author,
         startDatetime,
         endDatetime,
@@ -1237,6 +1236,8 @@ async function submitReservationRequestToSystem(
         flightNumber,
         code: getRandomString(),
         car,
+        source: "WEBSITE",
+        status: "PENDING",
         rentalExtras,
         rentalAgreementDetail: rentalAgreementDetail.id,
         transaction: transaction.id,

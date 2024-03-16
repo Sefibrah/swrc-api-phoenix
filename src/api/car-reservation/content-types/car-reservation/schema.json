@@ -15,9 +15,6 @@
     "flightNumber": {
       "type": "string"
     },
-    "status": {
-      "type": "string"
-    },
     "userGroup": {
       "type": "relation",
       "relation": "manyToOne",
@@ -51,6 +48,24 @@
     },
     "code": {
       "type": "string"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "PENDING",
+        "CONFIRMED",
+        "CANCELLED",
+        "NO_SHOW"
+      ]
+    },
+    "source": {
+      "type": "enumeration",
+      "enum": [
+        "WEBSITE",
+        "PHONE",
+        "EMAIL",
+        "IN_PERSON"
+      ]
     }
   }
 }
