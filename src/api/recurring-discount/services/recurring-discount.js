@@ -154,7 +154,7 @@ module.exports = createCoreService(
             },
             populate: {
               prices: {
-                select: ["minDays", "amount"],
+                select: ["minDays", "amount", "isFixed"],
               },
             },
           });

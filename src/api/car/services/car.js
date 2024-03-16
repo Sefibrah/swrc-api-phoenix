@@ -323,7 +323,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
         select: ["id", "name"],
         populate: {
           prices: {
-            select: ["minDays", "amount"],
+            select: ["minDays", "amount", "isFixed"],
           },
           cars: {
             select: [

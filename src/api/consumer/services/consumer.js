@@ -39,7 +39,7 @@ module.exports = ({ strapi }) => ({
         select: ["id"],
         populate: {
           prices: {
-            select: ["minDays", "amount"],
+            select: ["minDays", "amount", "isFixed"],
           },
           cars: {
             select: ["id"],
@@ -157,7 +157,7 @@ module.exports = ({ strapi }) => ({
         fields: ["name"],
         populate: {
           prices: {
-            select: ["minDays", "amount"],
+            select: ["minDays", "amount", "isFixed"],
           },
           cars: {
             select: ["id"],
@@ -412,7 +412,7 @@ module.exports = ({ strapi }) => ({
           select: ["id", "name"],
           populate: {
             prices: {
-              select: ["minDays", "amount"],
+              select: ["minDays", "amount", "isFixed"],
             },
             thumbnail: {
               select: ["url"],
@@ -486,7 +486,7 @@ module.exports = ({ strapi }) => ({
         select: ["id", "name"],
         populate: {
           prices: {
-            select: ["minDays", "amount"],
+            select: ["minDays", "amount", "isFixed"],
           },
           cars: {
             select: [
@@ -610,7 +610,7 @@ module.exports = ({ strapi }) => ({
       select: ["id", "name"],
       populate: {
         prices: {
-          select: ["minDays", "amount"],
+          select: ["minDays", "amount", "isFixed"],
         },
         thumbnail: {
           select: ["url"],
@@ -662,7 +662,7 @@ module.exports = ({ strapi }) => ({
       select: ["id", "name"],
       populate: {
         prices: {
-          select: ["minDays", "amount"],
+          select: ["minDays", "amount", "isFixed"],
         },
         cars: {
           select: [
@@ -1002,6 +1002,9 @@ async function prepareAndCreateReservationRequestFromConsumer(
 
   const pricePerDay = latestPriceColumn.amount;
   let totalWithTax = pricePerDay * days;
+  if(latestPriceColumn.isFixed){
+    totalWithTax = latestPriceColumn.amount;
+  }
   const deposit = 400; // fixme: hardcoded, most, if not all, companies don't want 400 as their deposit
 
   // procedure: calculating system discounts, for now, not implemented, so always zero

@@ -33,7 +33,7 @@ module.exports = createCoreService(
           populate: {
             discount: {
               populate: {
-                fields: ["amount", "type"],
+                fields: ["amount", "type", ""],
                 carGroups: {
                   populate: {
                     fields: ["id"],
@@ -87,7 +87,7 @@ module.exports = createCoreService(
             },
             populate: {
               prices: {
-                select: ["minDays", "amount"],
+                select: ["minDays", "amount", "isFixed"],
               },
             },
           });

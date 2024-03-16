@@ -264,7 +264,7 @@ module.exports = ({ strapi }) => ({
                 fields: ["id"],
                 populate: {
                   prices: {
-                    fields: ["minDays", "amount"],
+                    fields: ["minDays", "amount", "isFixed"],
                   },
                   inspectionImages: {
                     fields: ["url"],

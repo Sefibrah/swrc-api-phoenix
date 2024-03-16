@@ -13,12 +13,16 @@ function getLatestPriceColumn(carGroup, days) {
       closestPriceColumn = priceColumn;
       break;
     }
-    price =
-      carGroup.prices.find(
-        (price) => closestPriceColumn.minDays === price.minDays
-      ).amount * days;
+    priceColumn = carGroup.prices.find(
+      (price) => closestPriceColumn.minDays === price.minDays
+    );
+    if (!priceColumn.isFixed) {
+      price = priceColumn.amount * days;
+    } else {
+      price = priceColumn.amount;
+    }
   }
-  return parseFloat(price.toFixed(1));
+  return parseFloat(price);
 }
 
 module.exports = {

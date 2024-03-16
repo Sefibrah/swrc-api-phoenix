@@ -59,7 +59,7 @@ module.exports = {
         {
           populate: {
             cars: { fields: ["id", "registrationPlate"] },
-            prices: { fields: ["id", "minDays", "amount"] },
+            prices: { fields: ["id", "minDays", "amount", "isFixed"] },
             thumbnail: { fields: ["id", "url"] },
             inspectionImages: { fields: ["id", "url"] },
           },
