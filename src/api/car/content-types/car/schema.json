@@ -18,7 +18,29 @@
       "unique": true
     },
     "color": {
-      "type": "string",
+      "type": "enumeration",
+      "enum": [
+        "GREEN",
+        "GRAY",
+        "BLACK",
+        "WHITE",
+        "RED",
+        "BLUE",
+        "BROWN",
+        "YELLOW",
+        "ORANGE",
+        "PURPLE",
+        "PINK",
+        "BEIGE",
+        "CYAN",
+        "MAGENTA",
+        "LIME",
+        "TEAL",
+        "OLIVE",
+        "MAROON",
+        "NAVY",
+        "SILVER"
+      ],
       "required": false
     },
     "chassis": {
@@ -74,10 +96,12 @@
       "type": "string"
     },
     "fuelType": {
-      "type": "string"
+      "type": "enumeration",
+      "enum": ["DIESEL", "PETROL", "HYBRID", "ELECTRIC"]
     },
     "transmissionType": {
-      "type": "string"
+      "type": "enumeration",
+      "enum": ["AUTOMATIC", "MANUAL"]
     },
     "carGroup": {
       "type": "relation",
