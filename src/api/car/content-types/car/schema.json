@@ -97,11 +97,19 @@
     },
     "fuelType": {
       "type": "enumeration",
-      "enum": ["DIESEL", "PETROL", "HYBRID", "ELECTRIC"]
+      "enum": [
+        "DIESEL",
+        "PETROL",
+        "HYBRID",
+        "ELECTRIC"
+      ]
     },
     "transmissionType": {
       "type": "enumeration",
-      "enum": ["AUTOMATIC", "MANUAL"]
+      "enum": [
+        "AUTOMATIC",
+        "MANUAL"
+      ]
     },
     "carGroup": {
       "type": "relation",
@@ -118,6 +126,11 @@
     "horsePower": {
       "type": "integer",
       "min": 0
+    },
+    "mileages": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::mileage.mileage"
     }
   }
 }

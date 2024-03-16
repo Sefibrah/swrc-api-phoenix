@@ -79,6 +79,12 @@ const systemCarGroupsNoLimits = [
   "updateCarGroup",
   "deleteCarGroup",
 ];
+const systemCarsNoLimits = [
+  "createCar",
+  "updateCar",
+  "deleteCar",
+  "setMileageByCarId",
+];
 const systemExtrasNoLimits = ["createExtra", "updateExtra", "deleteExtra"];
 const systemCarContractFinesNoLimits = [
   "createCarContractFine",
@@ -165,6 +171,7 @@ const getReceptionistPermissions = () => {
       "api::recurring-discount.recurring-discount",
       "api::temporary-discount.temporary-discount",
       "api::price.price",
+      "api::mileage.mileage",
     ],
     restricted
   );
@@ -221,6 +228,7 @@ const getReceptionistPermissions = () => {
       "api::type-of-service.type-of-service",
       "api::flight-number.flight-number",
       "api::place-of-issue.place-of-issue",
+      "api::mileage.mileage",
       "api::police-station.police-station",
       "api::radar-number.radar-number",
       "api::car-contract-fine.car-contract-fine",
@@ -248,6 +256,11 @@ const getReceptionistPermissions = () => {
     ["api::system.system-car-group"],
     systemCarGroupsNoLimits
   );
+  let systemCarsPermissions = combineActionWithService(
+    ["api::system.system-car"],
+    systemCarsNoLimits
+  );
+  systemCarsNoLimits
   let systemExtrasPermissions = combineActionWithService(
     ["api::system.system-extra"],
     systemExtrasNoLimits
@@ -265,6 +278,7 @@ const getReceptionistPermissions = () => {
     systemTemporaryDiscountsNoLimits
   );
   return [
+    ...systemCarsPermissions,
     ...systemCustomerOrganisationsPermissions,
     ...systemExtrasPermissions,
     ...restrictedUserSettingPermissions,
@@ -333,6 +347,7 @@ const getMechanicPermissions = () => {
     [
       "api::service-location.service-location",
       "api::type-of-service.type-of-service",
+      "api::mileage.mileage",
     ],
     noRestrictions
   );
@@ -411,6 +426,7 @@ const getManagerPermissions = () => {
       "api::recurring-discount.recurring-discount",
       "api::temporary-discount.temporary-discount",
       "api::price.price",
+      "api::mileage.mileage",
       "api::transaction.transaction",
       "api::rental-agreement-detail.rental-agreement-detail",
       "api::agreement-detail.agreement-detail",
@@ -477,6 +493,10 @@ const getManagerPermissions = () => {
     ["api::system.system-car-group"],
     systemCarGroupsNoLimits
   );
+  let systemCarsPermissions = combineActionWithService(
+    ["api::system.system-car"],
+    systemCarsNoLimits
+  );
   let systemExtrasPermissions = combineActionWithService(
     ["api::system.system-extra"],
     systemExtrasNoLimits
@@ -494,6 +514,7 @@ const getManagerPermissions = () => {
     systemTemporaryDiscountsNoLimits
   );
   return [
+    ...systemCarsPermissions,
     ...systemCustomerOrganisationsPermissions,
     ...systemExtrasPermissions,
     ...restrictedUserSettingPermissions,
@@ -554,6 +575,7 @@ const getAdminPermissions = () => {
       "api::car-contract-invoice.car-contract-invoice",
       "api::car-contract-fine.car-contract-fine",
       "api::fine.fine",
+      "api::mileage.mileage",
       "api::police-station.police-station",
       "api::radar-number.radar-number",
       "api::rental-extra.rental-extra",
@@ -615,6 +637,10 @@ const getAdminPermissions = () => {
     ["api::system.system-car-group"],
     systemCarGroupsNoLimits
   );
+  let systemCarsPermissions = combineActionWithService(
+    ["api::system.system-car"],
+    systemCarsNoLimits
+  );
   let systemExtrasPermissions = combineActionWithService(
     ["api::system.system-extra"],
     systemExtrasNoLimits
@@ -636,6 +662,7 @@ const getAdminPermissions = () => {
     systemSystemUsersNoLimits
   );
   return [
+    ...systemCarsPermissions,
     ...systemSystemUsersPermissions,
     ...systemCustomerOrganisationsPermissions,
     ...systemExtrasPermissions,

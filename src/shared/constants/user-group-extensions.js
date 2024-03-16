@@ -113,6 +113,12 @@ const USER_GROUP_FIELD_EXTENSIONS = {
     target: "api::type-of-service.type-of-service",
     mappedBy: "userGroup",
   },
+  mileages: {
+    type: "relation",
+    relation: "oneToMany",
+    target: "api::mileage.mileage",
+    mappedBy: "userGroup",
+  },
   vehicleTypes: {
     type: "relation",
     relation: "oneToMany",

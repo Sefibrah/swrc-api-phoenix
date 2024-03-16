@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "mileages",
+  "info": {
+    "singularName": "mileage",
+    "pluralName": "mileages",
+    "displayName": "Mileage"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "amount": {
+      "type": "decimal"
+    },
+    "timestamp": {
+      "type": "datetime"
+    },
+    "userGroup": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::multi-tenant.user-group",
+      "inversedBy": "mileages"
+    }
+  }
+}
