@@ -19,12 +19,24 @@ const {
 module.exports = createCoreController("api::car.car", ({ strapi }) => ({
   relevantEventsList: async (ctx, next) => {
     try {
-      const carId = ctx.params.id;
+      const dateTime = ctx.request.query.dateTime;
       const userGroup = await getUserGroupId(strapi, ctx.request);
       const relevantEventsList = await strapi
         .service("api::car.car")
-        .relevantEventsList(carId, userGroup);
+        .relevantEventsList(dateTime, userGroup);
       ctx.body = relevantEventsList;
+    } catch (err) {
+      ctx.body = err;
+    }
+  },
+  relevantEventsListById: async (ctx, next) => {
+    try {
+      const carId = ctx.params.id;
+      const userGroup = await getUserGroupId(strapi, ctx.request);
+      const relevantEventsListById = await strapi
+        .service("api::car.car")
+        .relevantEventsListById(carId, userGroup);
+      ctx.body = relevantEventsListById;
     } catch (err) {
       ctx.body = err;
     }

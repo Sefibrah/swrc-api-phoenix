@@ -63,3 +63,6 @@ mysqldump -u root -p swrcapic_db > latest.sql --skip-comments --no-data
 
 https://www.descope.com/success-redirect
 ovo vjv ne bi bilo lose da koristim u buducnosti
+
+izgleda da is-same-user-group interfere sa svim custom GET elementima koji nisu ukljuceni u ovaj plugin
+tako da necemo da spajamo sve, nego fino cemo razdvajati!

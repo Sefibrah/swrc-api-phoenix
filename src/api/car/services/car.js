@@ -16,7 +16,174 @@ const {
 const { getDays } = require("../../../shared/functions/get-days");
 
 module.exports = createCoreService("api::car.car", ({ strapi }) => ({
-  relevantEventsList: async (carId, userGroup) => {
+  relevantEventsList: async (dateTime, userGroup) => {
+    console.log('dateTime', dateTime);
+    if (dateTime == null || dateTime == "") {
+      return ValidationError("DATE_TIME_IS_REQUIRED");
+    }
+    const $gte = new Date(dateTime);
+    $gte.setHours(0, 0, 0, 0);
+    const $lte = new Date(dateTime);
+    $lte.setHours(23, 59, 59, 0);
+    const epicEventQuery = {
+      userGroup,
+      $or: [
+        {
+          $and: [
+            {
+              agreementDetail: {
+                startDatetime: {
+                  $gte,
+                  $lte,
+                },
+                endDatetime: {
+                  $gte,
+                },
+              },
+            },
+          ],
+        },
+        {
+          $and: [
+            {
+              agreementDetail: {
+                endDatetime: {
+                  $gte,
+                  $lte,
+                },
+                startDatetime: {
+                  $lte,
+                },
+              },
+            },
+          ],
+        },
+        {
+          $and: [
+            {
+              agreementDetail: {
+                startDatetime: {
+                  $lte,
+                  $lte,
+                },
+                endDatetime: {
+                  $gte,
+                  $gte,
+                },
+              },
+            },
+          ],
+        },
+      ],
+    };
+    const carContracts = await strapi.db
+      .query("api::car-contract.car-contract")
+      .findMany({
+        select: ["id"],
+        populate: {
+          car: {
+            select: ["id", "registrationPlate"],
+          },
+          agreementDetail: {
+            select: ["startDatetime", "endDatetime"],
+          },
+          rentalAgreementDetail: {
+            select: ["startLocation", "endLocation"],
+            populate: {
+              renter: {
+                select: ["name"],
+              },
+            },
+          },
+        },
+        where: epicEventQuery,
+      });
+    const carReservations = await strapi.db
+      .query("api::car-reservation.car-reservation")
+      .findMany({
+        select: ["id"],
+        populate: {
+          car: {
+            select: ["id", "registrationPlate"],
+          },
+          agreementDetail: {
+            select: ["startDatetime", "endDatetime"],
+          },
+          rentalAgreementDetail: {
+            select: ["startLocation", "endLocation"],
+            populate: {
+              renter: {
+                select: ["name"],
+              },
+            },
+          },
+        },
+        where: epicEventQuery,
+      });
+    const carMaintenances = await strapi.db
+      .query("api::car-maintenance.car-maintenance")
+      .findMany({
+        select: ["id"],
+        populate: {
+          car: {
+            select: ["id", "registrationPlate"],
+          },
+          agreementDetail: {
+            select: ["startDatetime", "endDatetime"],
+          },
+        },
+        where: epicEventQuery,
+      });
+
+    return [
+      ...carContracts.map((event) => {
+        console.log(event);
+        const rentalAgreementDetail = event.rentalAgreementDetail;
+        const agreementDetail = event.agreementDetail;
+        const car = event.car;
+        return {
+          id: event.id,
+          type: "CONTRACT",
+          carId: car.id,
+          registrationPlate: car.registrationPlate,
+          startLocation: rentalAgreementDetail.startLocation,
+          endLocation: rentalAgreementDetail.endLocation,
+          startDatetime: agreementDetail.startDatetime,
+          endDatetime: agreementDetail.endDatetime,
+          name: rentalAgreementDetail.renter?.name,
+        };
+      }),
+      ...carReservations.map((event) => {
+        const rentalAgreementDetail = event.rentalAgreementDetail;
+        const agreementDetail = event.agreementDetail;
+        const car = event.car;
+        return {
+          type: "RESERVATION",
+          id: event.id,
+          carId: car.id,
+          registrationPlate: car.registrationPlate,
+          startLocation: rentalAgreementDetail.startLocation,
+          endLocation: rentalAgreementDetail.endLocation,
+          startDatetime: agreementDetail.startDatetime,
+          endDatetime: agreementDetail.endDatetime,
+          name: rentalAgreementDetail.renter?.name,
+        };
+      }),
+      ...carMaintenances.map((event) => {
+        const agreementDetail = event.agreementDetail;
+        const car = event.car;
+        return {
+          id: event.id,
+          carId: car.id,
+          type: "MAINTENANCE",
+          registrationPlate: car.registrationPlate,
+          startDatetime: agreementDetail.startDatetime,
+          endDatetime: agreementDetail.endDatetime,
+        };
+      }),
+    ];
+  },
+  relevantEventsListById: async (carId, userGroup) => {
     const $gte = new Date();
     $gte.setHours(0, 0, 0, 0);
     const $lte = new Date();
