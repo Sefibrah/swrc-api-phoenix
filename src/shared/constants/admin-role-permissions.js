@@ -64,6 +64,7 @@ const getAdminPermissions = () => {
     ...systemSystemUsersPermissions,
     ...noRestrictionRolePermissions,
     ...noRestrictionUserPermissions,
+    ...COMMON_PERMISSION_GROUPS.pdfPermissions,
     ...COMMON_PERMISSION_GROUPS.noRestrictionsAuthPermissions,
     ...COMMON_PERMISSION_GROUPS.extrasRestrictedPermissions,
     ...COMMON_PERMISSION_GROUPS.carsRestrictedPermissions,

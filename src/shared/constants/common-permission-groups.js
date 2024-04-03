@@ -107,7 +107,13 @@ const createReservationFromGroupedCarPermissions = combineActionWithService(
   ]
 );
 
+const pdfPermissions = combineActionWithService(
+  ["api::pdf.pdf"],
+  ["getBookingConfirmationPdf"]
+);
+
 const COMMON_PERMISSION_GROUPS = {
+  pdfPermissions,
   extrasRestrictedPermissions,
   carsRestrictedPermissions,
   systemTemporaryDiscountsPermissions,

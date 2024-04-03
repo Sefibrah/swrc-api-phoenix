@@ -21,6 +21,7 @@ const getAuthenticatedPermissions = () => {
   return [
     ...availableEndpointsPermissions,
     ...restrictedPermissions,
+    ...COMMON_PERMISSION_GROUPS.pdfPermissions,
     ...COMMON_PERMISSION_GROUPS.restrictedUserSettingPermissions,
     ...COMMON_PERMISSION_GROUPS.myOrganizationSkinRestrictedPermissions,
     ...COMMON_PERMISSION_GROUPS.myOrganizationDetailRestrictedPermissions,

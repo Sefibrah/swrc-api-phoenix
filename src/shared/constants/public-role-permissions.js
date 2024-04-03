@@ -30,6 +30,7 @@ const getPublicPermissions = () => {
     ...sendEmailPermissions,
     ...restrictedPermissions,
     ...availableEndpointsPermissions,
+    ...COMMON_PERMISSION_GROUPS.pdfPermissions,
     ...COMMON_PERMISSION_GROUPS.noLimitUploadPermissions,
     ...COMMON_PERMISSION_GROUPS.myOrganizationSkinRestrictedPermissions,
     ...COMMON_PERMISSION_GROUPS.myOrganizationDetailPermissions,

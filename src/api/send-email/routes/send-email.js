@@ -3,7 +3,7 @@ module.exports = {
     {
      method: 'POST',
      path: '/send-email',
-     handler: 'send-email.sendEmail',
+     handler: 'send-email.sendEmailToSelf',
      config: {
        policies: [],
        middlewares: [],

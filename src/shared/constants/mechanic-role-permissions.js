@@ -52,6 +52,7 @@ const getMechanicPermissions = () => {
     ...restrictedPermissions,
     ...noDeletePermissions,
     ...noRestrictionPermissions,
+    ...COMMON_PERMISSION_GROUPS.pdfPermissions,
     ...COMMON_PERMISSION_GROUPS.extrasRestrictedPermissions,
     ...COMMON_PERMISSION_GROUPS.carsRestrictedPermissions,
     ...COMMON_PERMISSION_GROUPS.restrictedUserSettingPermissions,

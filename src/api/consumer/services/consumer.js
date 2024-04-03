@@ -106,12 +106,6 @@ module.exports = ({ strapi }) => ({
       }
     );
 
-    await sendEmailToRecipient(
-      strapi,
-      carReservation.rentalAgreementDetail.renter.contact.email,
-      carReservation.code,
-      userGroup
-    );
     await sendToSelfConfirmation(
       strapi,
       {
@@ -236,12 +230,6 @@ module.exports = ({ strapi }) => ({
       }
     );
 
-    await sendEmailToRecipient(
-      strapi,
-      carReservation.rentalAgreementDetail.renter.contact.email,
-      carReservation.code,
-      userGroup
-    );
     await sendToSelfConfirmation(
       strapi,
       {
@@ -254,7 +242,7 @@ module.exports = ({ strapi }) => ({
         carName: carReservation.car.carGroup.name,
         startDateTime: carReservation.agreementDetail.startDatetime,
         endDateTime: carReservation.agreementDetail.endDatetime,
-        flightNumber: carReservation.flightNumber,
+        flightNumber: carReservation.flightNumber || "N/A",
         extrasPrice: (carReservation.transaction.extrasPrice || 0).toFixed(2),
         total: carReservation.transaction.totalWithTax.toFixed(2),
       },
@@ -1002,7 +990,7 @@ async function prepareAndCreateReservationRequestFromConsumer(
 
   const pricePerDay = latestPriceColumn.amount;
   let totalWithTax = pricePerDay * days;
-  if(latestPriceColumn.isFixed){
+  if (latestPriceColumn.isFixed) {
     totalWithTax = latestPriceColumn.amount;
   }
   const deposit = 400; // fixme: hardcoded, most, if not all, companies don't want 400 as their deposit
@@ -1265,28 +1253,6 @@ function formatString(template, data) {
   return formattedString;
 }
 
-async function sendEmailToRecipient(strapi, recipient, code, userGroup) {
-  const rawHtml = fs.readFileSync(
-    "src/shared/email/reservation-request-successful.html",
-    "utf8"
-  );
-  const html = formatString(rawHtml, {
-    code,
-    logoUrl:
-      "https://res.cloudinary.com/dbwmyma6c/image/upload/v1683199011/gt_logo_8b9af8e585.png",
-    link: `https://gulftravelbosnia.com/booking-confirmation/${code}`,
-  });
-
-  await strapi
-    .service("api::send-email.send-email")
-    .sendEmail(
-      userGroup,
-      "Your booking request has been received successfully!",
-      html,
-      recipient
-    );
-}
-
 async function sendToSelfConfirmation(strapi, data, userGroup) {
   const rawHtml = fs.readFileSync(
     "src/shared/email/reservation-confirmation-to-self-bosnian.html",
@@ -1301,7 +1267,7 @@ async function sendToSelfConfirmation(strapi, data, userGroup) {
 
   await strapi
     .service("api::send-email.send-email")
-    .sendEmail(userGroup, "Stigla nova rezervacija!", html);
+    .sendEmailToSelf(userGroup, "Stigla nova rezervacija!", html);
 }
 
 function formatDateToBosnianFormat(date, addSeconds = false) {

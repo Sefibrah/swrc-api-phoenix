@@ -10,59 +10,41 @@ const {
  */
 
 module.exports = ({ strapi }) => ({
-  sendEmail: async (userGroup, subject, htmlContent, recipient = null) => {
-    // if the recipient is null, i assume that the email is for the user itself
-    // so i will send the email to the user's email and the other email
-    // else, i will send the email to the recipient
-    
-    const organizationEmailConfig = await strapi
-      .query("api::organization-email-config.organization-email-config")
+  sendEmailToSelf: async (userGroup, subject, htmlContent) => {
+    const organizationDetail = await strapi
+      .query("api::organization-detail.organization-detail")
       .findOne({
         where: {
           userGroup,
         },
-        select: [
-          "host",
-          "email",
-          "password",
-          "secure",
-          "port",
-          "sendToSelfConfirmation",
-          "sendToOtherConfirmation",
-        ],
+        populate: {
+          contact: {
+            fields: ["email"],
+          },
+        },
       });
-    // console.log("organizationEmailConfig", organizationEmailConfig);
+    console.log("organizationDetail", organizationDetail);
 
-    const self = organizationEmailConfig.email;
     // Create a Nodemailer transporter using SMTP settings
     const transporter = nodemailer.createTransport({
-      host: organizationEmailConfig.host,
-      port: parseInt(organizationEmailConfig.port),
-      secure: JSON.parse(organizationEmailConfig.secure),
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      secure: process.env.EMAIL_SECURE,
       auth: {
-        user: self,
-        pass: organizationEmailConfig.password,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
     // Email options
     const mailOptions = {
-      from: self,
-      to:
-        recipient == null
-          ? [
-              self,
-              ...(organizationEmailConfig.sendToOtherConfirmation || "").split(","),
-            ]
-          : recipient.split(","),
+      from: process.env.EMAIL_USER,
+      to: organizationDetail.contact.email,
       subject,
       html: htmlContent,
     };
 
-    // console.log("mailOptions", mailOptions);
-
     try {
-      // Send the email
       const info = await transporter.sendMail(mailOptions);
       console.log("Email sent successfully:", info.response);
       return "Email sent successfully";

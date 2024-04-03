@@ -2,26 +2,13 @@
 
 const utils = require("@strapi/utils");
 const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
-const {
-  getSubdomainFromRequest,
-} = require("../../../shared/functions/get-subdomain");
-const {
-  getRandomString,
-} = require("../../../shared/functions/get-random-string");
 const { getJwt } = require("../../../shared/functions/get-jwt");
 const {
   getStartAndEndDateTimeFromPayload,
 } = require("../../../shared/functions/get-start-and-end-date-time-from-payload");
-const { getDays } = require("../../../shared/functions/get-days");
 const {
-  getLoggedUserUserGroup,
   getUserGroupId,
 } = require("../../../shared/functions/get-logged-user-user-group");
-const fs = require("fs");
-const util = require("util");
-const {
-  getLatestPriceColumn,
-} = require("../../../shared/functions/get-latest-price-column");
 
 /**
  * A set of functions called "actions" for `consumer`
@@ -29,17 +16,15 @@ const {
 
 module.exports = {
   createReservationFromCar: async (ctx, next) => {
+    if (isStartAndEndDateTimeValid(ctx.request.body)) {
+      throw new ValidationError("Invalid start and end date time");
+    }
+    const { startDateTime, endDateTime } = getStartAndEndDateTimeFromPayload(
+      ctx.request.body
+    );
     const { userGroup } = await getConsumerProps(strapi, ctx);
-    const {
-      id,
-      startDateTime,
-      endDateTime,
-      startLocation,
-      endLocation,
-      flightNumber,
-      user,
-      rentalExtras,
-    } = getConsumerPostProps(ctx.request);
+    const { id, startLocation, endLocation, flightNumber, user, rentalExtras } =
+      getConsumerPostProps(ctx.request);
 
     const reservation = await strapi
       .service("api::consumer.consumer")
@@ -58,17 +43,15 @@ module.exports = {
     return reservation;
   },
   createReservationFromGroupedCar: async (ctx, next) => {
+    if (isStartAndEndDateTimeValid(ctx.request.body)) {
+      throw new ValidationError("Invalid start and end date time");
+    }
+    const { startDateTime, endDateTime } = getStartAndEndDateTimeFromPayload(
+      ctx.request.body
+    );
     const { userGroup } = await getConsumerProps(strapi, ctx);
-    const {
-      id,
-      startDateTime,
-      endDateTime,
-      startLocation,
-      endLocation,
-      flightNumber,
-      user,
-      rentalExtras,
-    } = getConsumerPostProps(ctx.request);
+    const { id, startLocation, endLocation, flightNumber, user, rentalExtras } =
+      getConsumerPostProps(ctx.request);
 
     const reservation = await strapi
       .service("api::consumer.consumer")
@@ -107,8 +90,13 @@ module.exports = {
     return reservation;
   },
   getCarOffers: async (ctx, next) => {
-    const { startDateTime, endDateTime, vehicleType, userGroup } =
-      await getConsumerProps(strapi, ctx);
+    if (isStartAndEndDateTimeValid(ctx.request.query)) {
+      throw new ValidationError("Invalid start and end date time");
+    }
+    const { startDateTime, endDateTime } = getStartAndEndDateTimeFromPayload(
+      ctx.request.query
+    );
+    const { vehicleType, userGroup } = await getConsumerProps(strapi, ctx);
 
     const offers = await strapi
       .service("api::consumer.consumer")
@@ -117,8 +105,13 @@ module.exports = {
     return offers;
   },
   getCarGroupedOffers: async (ctx, next) => {
-    const { startDateTime, endDateTime, vehicleType, userGroup } =
-      await getConsumerProps(strapi, ctx);
+    if (isStartAndEndDateTimeValid(ctx.request.query)) {
+      throw new ValidationError("Invalid start and end date time");
+    }
+    const { startDateTime, endDateTime } = getStartAndEndDateTimeFromPayload(
+      ctx.request.query
+    );
+    const { vehicleType, userGroup } = await getConsumerProps(strapi, ctx);
 
     const offers = await strapi
       .service("api::consumer.consumer")
@@ -127,14 +120,23 @@ module.exports = {
     return offers;
   },
   getCarOffer: async (ctx, next) => {
-    const { id, startDateTime, endDateTime, userGroup } =
-      await getConsumerProps(strapi, ctx);
+    if (isStartAndEndDateTimeValid(ctx.request.query)) {
+      throw new ValidationError("Invalid start and end date time");
+    }
+    const { startDateTime, endDateTime } = getStartAndEndDateTimeFromPayload(
+      ctx.request.query
+    );
+    const { id, userGroup } = await getConsumerProps(strapi, ctx);
 
     const offer = await strapi
       .service("api::consumer.consumer")
       .getCarOffer(id, startDateTime, endDateTime, userGroup);
 
-    return offer;
+    if (offer.name === "NotFoundError") {
+      ctx.send(offer, 404);
+    } else {
+      ctx.send(offer, 200);
+    }
   },
   getCarGroupedOffer: async (ctx, next) => {
     const { id, startDateTime, endDateTime, userGroup } =
@@ -144,26 +146,24 @@ module.exports = {
       .service("api::consumer.consumer")
       .getCarGroupedOffer(id, startDateTime, endDateTime, userGroup);
 
-    return offer;
+    if (offer.name === "NotFoundError") {
+      ctx.send(offer, 404);
+    } else {
+      ctx.send(offer, 200);
+    }
   },
 };
 
 async function getConsumerProps(strapi, ctx) {
   const id = +ctx.params?.id;
   const code = ctx.params?.code;
-  const { startDateTime, endDateTime } = getStartAndEndDateTimeFromPayload(
-    ctx.request.query
-  );
   const vehicleType = ctx.request.query.vehicleType;
   const userGroup = await getUserGroupId(strapi, ctx.request);
-  return { id, code, startDateTime, endDateTime, vehicleType, userGroup };
+  return { id, code, vehicleType, userGroup };
 }
 
 function getConsumerPostProps(ctxRequest) {
   const id = +ctxRequest.params.id;
-  const { startDateTime, endDateTime } = getStartAndEndDateTimeFromPayload(
-    ctxRequest.body
-  );
   const startLocation = ctxRequest.body.startLocation;
   const endLocation = ctxRequest.body.endLocation;
   const flightNumber = ctxRequest.body.flightNumber;
@@ -173,12 +173,36 @@ function getConsumerPostProps(ctxRequest) {
   const user = { info: userInfo, jwt };
   return {
     id,
-    startDateTime,
-    endDateTime,
     startLocation,
     endLocation,
     flightNumber,
     user,
     rentalExtras,
   };
+}
+
+function isStartAndEndDateTimeValid({
+  puDay,
+  puMonth,
+  puYear,
+  puMinute,
+  puHour,
+  doDay,
+  doMonth,
+  doYear,
+  doMinute,
+  doHour,
+}) {
+  return (
+    !puDay ||
+    !puMonth ||
+    !puYear ||
+    !puMinute ||
+    !puHour ||
+    !doDay ||
+    !doMonth ||
+    !doYear ||
+    !doMinute ||
+    !doHour
+  );
 }
