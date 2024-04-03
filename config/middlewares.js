@@ -19,16 +19,9 @@ module.exports = [
     config: {
       enabled: true,
       headers: "*",
-      origin: [
-        "http://localhost:1337",
-        "http://localhost:4200",
-        "https://ssr.gulftravelbosnia.com",
-        "https://gulftravelbosnia.com",
-        "https://gulftravelbosnia.swrcpanel.com",
-      ],
+      origin: "*",
     },
   },
-  // "strapi::cors",
   "strapi::poweredBy",
   "strapi::logger",
   "strapi::query",
