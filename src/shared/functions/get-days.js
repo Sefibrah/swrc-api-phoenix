@@ -11,7 +11,8 @@ function getDays(startDateTime, endDateTime) {
     return 1; // even if it's 1 millisecond, we will count it as a full day :)
   }
 
-  if (differenceInMilliseconds % oneDayInMilliseconds >= 43200000) {
+  const twoHours = 7200000 // 2 hours * 60 minutes * 60 seconds * 1000 milliseconds
+  if (differenceInMilliseconds % oneDayInMilliseconds > twoHours) {
     differenceInDays++;
   }
   return differenceInDays;

@@ -5,6 +5,8 @@ const {
 const moment = require("moment");
 const PDFDocument = require("pdfkit");
 const axios = require("axios");
+const fs = require("fs");
+const path = require("path");
 
 /**
  * A set of functions called "actions" for `pdf`
@@ -104,13 +106,30 @@ module.exports = {
       )} €`;
       const formattedTotalRentPrice = `${carReservation.transaction.totalWithTax.toFixed(
         2
-      )} BAM / ${(carReservation.transaction.totalWithTax / 1.93).toFixed(2)} €`;
+      )} BAM / ${(carReservation.transaction.totalWithTax / 1.93).toFixed(
+        2
+      )} €`;
       const formattedDeposit = `${carReservation.transaction.deposit.toFixed(
         2
       )} BAM / ${(carReservation.transaction.deposit / 2).toFixed(2)} €`;
 
       // Create a new PDF document
       const doc = new PDFDocument({ size: "A4", margin: 20 });
+
+      const rubikRegularPath = path.resolve(__dirname, "./Rubik-Regular.ttf");
+      const rubikBoldPath = path.resolve(__dirname, "./Rubik-Bold.ttf");
+      const rubikMediumPath = path.resolve(__dirname, "./Rubik-Medium.ttf");
+      const rubikItalicPath = path.resolve(__dirname, "./Rubik-Italic.ttf");
+
+      const rubikRegularBuffer = fs.readFileSync(rubikRegularPath);
+      const rubikBoldBuffer = fs.readFileSync(rubikBoldPath);
+      const rubikMediumBuffer = fs.readFileSync(rubikMediumPath);
+      const rubikItalicBuffer = fs.readFileSync(rubikItalicPath);
+
+      doc.registerFont("regular", rubikRegularBuffer);
+      doc.registerFont("bold", rubikBoldBuffer);
+      doc.registerFont("medium", rubikMediumBuffer);
+      doc.registerFont("italic", rubikItalicBuffer);
 
       // Add a header
       const response = await axios.get(
@@ -122,6 +141,7 @@ module.exports = {
 
       doc.image(imageBuffer, 20, doc.y, { height: 70 });
       doc
+        .font("regular")
         .fontSize(10)
         .text(
           `Booking date: ${formattedCreatedAt}`,
@@ -141,10 +161,11 @@ module.exports = {
         .strokeColor("#808080");
 
       doc
+        .font("italic")
         .fontSize(28)
-        .text(`Booking confirmation`, 20, doc.y + 75, {
+        .text(`Booking confirmation`, 20, doc.y + 50, {
           lineGap: 12,
-          oblique: true,
+          // oblique: true,
         })
         .moveDown(1);
 
@@ -153,6 +174,9 @@ module.exports = {
         {
           label: "Renter's full name",
           value: carReservation.rentalAgreementDetail.renter.name,
+          isRtl: hasRTLCharacters(
+            carReservation.rentalAgreementDetail.renter.name
+          ),
         },
         // fixme: what about grouped cars??
         {
@@ -196,15 +220,16 @@ module.exports = {
         if (row.hide) {
           return;
         }
-        doc.font("Helvetica-Bold").fontSize(14).text(row.label, 20, doc.y, {
+        doc.fontSize(14).font("medium").text(row.label, 20, doc.y, {
           lineGap: 12,
         });
-        doc.font("Helvetica").text(row.value, 200, doc.y - 28, {
+        doc.font("regular").text(row.value, 200, doc.y - 28, {
           lineGap: 12,
+          features: [row.isRtl && "rtla"],
         });
         doc
-          .moveTo(20, doc.y - 8)
-          .lineTo(575, doc.y - 8)
+          .moveTo(20, doc.y - 6)
+          .lineTo(575, doc.y - 6)
           .stroke()
           .strokeColor("#808080");
       });
@@ -212,13 +237,13 @@ module.exports = {
 
       // Add extra information section
       doc
-        .font("Helvetica-Bold")
+        .font("medium")
         .fontSize(14)
         .text("Free", 20, doc.y, {
           continued: true,
           lineGap: 15,
         })
-        .font("Helvetica")
+        .font("regular")
         .text(" cancellation up to 48 hours before vehicle pickup.", {
           lineGap: 15,
         });
@@ -228,12 +253,12 @@ module.exports = {
           lineGap: 15,
           continued: true,
         })
-        .font("Helvetica-Bold")
+        .font("medium")
         .text(`${organisationDetail.organizationBrandName}!`, {
           lineGap: 15,
         });
       doc
-        .font("Helvetica")
+        .font("regular")
         .fontSize(14)
         .text(`We expect your arrival!`, 20, doc.y, { lineGap: 15 });
 
@@ -262,12 +287,17 @@ module.exports = {
             align: "right",
           }
         );
-
       return new Promise((resolve, reject) => {
         const chunks = [];
         doc.on("data", (chunk) => chunks.push(chunk));
         doc.on("end", () => {
           const pdfData = Buffer.concat(chunks);
+          ctx.set("Content-Type", "application/pdf");
+          ctx.set(
+            "Content-Disposition",
+            `attachment; filename=booking-confirmation-${code}.pdf`
+          );
+          ctx.send(pdfData, 200);
           resolve(pdfData);
         });
         doc.on("error", (err) => {
@@ -277,6 +307,13 @@ module.exports = {
       });
     } catch (err) {
       ctx.body = err;
+      return err;
     }
   },
 };
+
+function hasRTLCharacters(str) {
+  const rtlChars =
+    /[\u0590-\u05FF\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+  return rtlChars.test(str);
+}
