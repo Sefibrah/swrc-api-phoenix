@@ -43,7 +43,11 @@ module.exports = ({ strapi }) => ({
         },
       });
 
-    const arePrimaryDocsValid = checkDriverDocuments(primaryDriverFromDb, true);
+    const arePrimaryDocsValid = checkDriverDocuments(
+      primaryDriverFromDb,
+      true,
+      endDatetime
+    );
 
     if (typeof arePrimaryDocsValid == "string") {
       return new NotFoundError(arePrimaryDocsValid);
@@ -76,7 +80,8 @@ module.exports = ({ strapi }) => ({
 
       const areSecondaryDocsValid = checkDriverDocuments(
         secondaryDriverFromDb,
-        false
+        false,
+        endDatetime
       );
 
       if (typeof areSecondaryDocsValid == "string") {
@@ -329,7 +334,8 @@ module.exports = ({ strapi }) => ({
 
       const arePrimaryDocsValid = checkDriverDocuments(
         primaryDriverFromDb,
-        true
+        true,
+        agreementDetail.endDatetime
       );
 
       if (typeof arePrimaryDocsValid == "string") {
@@ -375,7 +381,8 @@ module.exports = ({ strapi }) => ({
 
       const areSecondaryDocsValid = checkDriverDocuments(
         secondaryDriverFromDb,
-        false
+        false,
+        agreementDetail.endDatetime
       );
 
       if (typeof areSecondaryDocsValid == "string") {
@@ -567,26 +574,33 @@ module.exports = ({ strapi }) => ({
   },
 });
 
-function checkDriverDocuments(driver, isPrimary) {
+function checkDriverDocuments(driver, isPrimary, endDatetime) {
   const messagePrefix = isPrimary ? "PRIMARY" : "SECONDARY";
   const DDocuments = driver?.individual?.documents;
   if (DDocuments == null || DDocuments?.length === 0) {
     return `${messagePrefix}_DRIVER_HAS_NO_DOCUMENTS`;
   }
-  const DHasDriverLicense = DDocuments?.find(
-    (doc) =>
-      doc.type === "DRIVING" &&
-      new Date(doc.expiry).getTime() > new Date().getTime()
-  );
+  const DHasDriverLicense =
+    DDocuments?.sort(
+      (a, b) => new Date(b.expiry).getTime() - new Date(a.expiry).getTime()
+    )
+      .filter((doc) => doc.type === "DRIVING")
+      .find(
+        (doc) =>
+          new Date(doc.expiry).getTime() > new Date(endDatetime).getTime()
+      ) || null;
   if (DHasDriverLicense == null) {
     return `${messagePrefix}_DRIVER_HAS_NO_DRIVER_LICENSE`;
   }
-  const DHasValidID = DDocuments?.find(
-    (doc) =>
-      doc.type === "IDENTITY" ||
-      (doc.type === "PASSPORT" &&
-        new Date(doc.expiry).getTime() > new Date().getTime())
-  );
+  const DHasValidID =
+    DDocuments?.sort(
+      (a, b) => new Date(b.expiry).getTime() - new Date(a.expiry).getTime()
+    )
+      .filter((doc) => doc.type === "IDENTITY" || doc.type === "PASSPORT")
+      .find(
+        (doc) =>
+          new Date(doc.expiry).getTime() > new Date(endDatetime).getTime()
+      ) || null;
   if (DHasValidID == null) {
     return `${messagePrefix}_DRIVER_HAS_NO_ID`;
   }
