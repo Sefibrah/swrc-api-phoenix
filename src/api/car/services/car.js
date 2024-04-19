@@ -17,7 +17,7 @@ const { getDays } = require("../../../shared/functions/get-days");
 
 module.exports = createCoreService("api::car.car", ({ strapi }) => ({
   relevantEventsList: async (dateTime, userGroup) => {
-    console.log('dateTime', dateTime);
+    console.log("dateTime", dateTime);
     if (dateTime == null || dateTime == "") {
       return ValidationError("DATE_TIME_IS_REQUIRED");
     }
@@ -199,7 +199,6 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
             {
               agreementDetail: {
                 startDatetime: {
-                  $gte,
                   $lte,
                 },
                 endDatetime: {
@@ -215,25 +214,8 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
               agreementDetail: {
                 endDatetime: {
                   $gte,
-                  $lte,
                 },
                 startDatetime: {
-                  $lte,
-                },
-              },
-            },
-          ],
-        },
-        {
-          $and: [
-            {
-              agreementDetail: {
-                startDatetime: {
-                  $lte,
-                  $lte,
-                },
-                endDatetime: {
-                  $gte,
                   $gte,
                 },
               },
@@ -344,7 +326,9 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
           endDatetime: agreementDetail.endDatetime,
         };
       }),
-    ];
+    ].sort((a, b) => {
+      return new Date(a.startDatetime) - new Date(b.startDatetime);
+    });
   },
   isAvailable: async (carId, startDatetime, endDatetime, userGroup) => {
     try {

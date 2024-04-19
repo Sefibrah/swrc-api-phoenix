@@ -55,7 +55,8 @@
         "PENDING",
         "CONFIRMED",
         "CANCELLED",
-        "NO_SHOW"
+        "NO_SHOW",
+        "COMPLETED"
       ]
     },
     "source": {

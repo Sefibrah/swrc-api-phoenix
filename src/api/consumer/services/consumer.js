@@ -796,7 +796,14 @@ async function getUniqueBusyCarIds(strapi, startDatetime, endDatetime) {
           select: ["startDatetime", "endDatetime"],
         },
       },
-      where: epicEventQuery,
+      where: {
+        ...epicEventQuery,
+        $and: [
+          { status: { $ne: "CANCELLED" } },
+          { status: { $ne: "COMPLETED" } },
+          { status: { $ne: "NO_SHOW" } },
+        ],
+      },
     });
   const carMaintenances = await strapi.db
     .query("api::car-maintenance.car-maintenance")

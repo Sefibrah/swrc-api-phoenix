@@ -61,6 +61,7 @@ module.exports = {
                 "totalWithTax",
                 "deposit",
                 "discount",
+                "discountType",
                 "additionalCost",
                 "extrasPrice",
                 "pricePerDay",
@@ -96,9 +97,6 @@ module.exports = {
           carReservation.transaction.days) /
         1.93
       ).toFixed(2)} €`;
-      const formattedDiscount = `${carReservation.transaction.discount.toFixed(
-        2
-      )} BAM / ${(carReservation.transaction.discount / 1.93).toFixed(2)} €`;
       const formattedAdditionalCost = `${carReservation.transaction.additionalCost.toFixed(
         2
       )} BAM / ${(carReservation.transaction.additionalCost / 1.93).toFixed(
@@ -112,6 +110,28 @@ module.exports = {
       const formattedDeposit = `${carReservation.transaction.deposit.toFixed(
         2
       )} BAM / ${(carReservation.transaction.deposit / 2).toFixed(2)} €`;
+
+      let fixedDiscount = 0;
+      switch (carReservation.transaction.discountType) {
+        case "FIXED":
+          fixedDiscount = carReservation.transaction.discount;
+          break;
+        case "PER_DAY":
+          fixedDiscount =
+            carReservation.transaction.discount *
+            carReservation.transaction.days;
+          break;
+        case "PERCENTAGE":
+          fixedDiscount =
+            (carReservation.transaction.pricePerDay *
+              carReservation.transaction.days *
+              carReservation.transaction.discount) /
+            100;
+          break;
+      }
+      const formattedDiscount = `${fixedDiscount.toFixed(2)} BAM / ${(
+        fixedDiscount / 1.93
+      ).toFixed(2)} €`;
 
       // Create a new PDF document
       const doc = new PDFDocument({ size: "A4", margin: 20 });
