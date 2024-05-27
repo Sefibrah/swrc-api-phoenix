@@ -39,7 +39,7 @@ module.exports = ({ strapi }) => ({
     // Email options
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: organizationDetail.contact.email,
+      to: [organizationDetail.contact.email, process.env.EMAIL_USER],
       subject,
       html: htmlContent,
     };

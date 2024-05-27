@@ -925,6 +925,8 @@ async function getReservationByCode(code, userGroup) {
       where: carReservationFilter,
     });
 
+  console.log('i\'m expecting something wrong with carReservation', carReservation);
+  
   const carGroupFilter = {
     userGroup,
     cars: {
