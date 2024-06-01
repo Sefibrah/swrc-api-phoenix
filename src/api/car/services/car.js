@@ -332,6 +332,10 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
   },
   isAvailable: async (carId, startDatetime, endDatetime, userGroup) => {
     try {
+      console.log("carId", carId);
+      console.log("startDatetime", startDatetime);
+      console.log("endDatetime", endDatetime);
+      console.log("userGroup", userGroup);
       const carFromDb = await strapi.query("api::car.car").findOne({
         where: {
           userGroup,
@@ -340,6 +344,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
         },
         select: ["id", "make", "model", "registrationPlate", "isAvailable"],
       });
+      console.log("carFromDb", carFromDb);
       if (carFromDb == null) {
         return new NotFoundError("CAR_IS_BLOCKED");
       }
@@ -411,6 +416,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
           },
           where: epicEventQuery,
         });
+      console.log("carContracts", carContracts);
       const carReservations = await strapi.db
         .query("api::car-reservation.car-reservation")
         .findMany({
@@ -425,6 +431,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
           },
           where: epicEventQuery,
         });
+      console.log("carReservations", carReservations);
       const carMaintenances = await strapi.db
         .query("api::car-maintenance.car-maintenance")
         .findMany({
@@ -439,8 +446,16 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
           },
           where: epicEventQuery,
         });
+      console.log("carMaintenances", carMaintenances);
       const isAvailable =
-        [...carContracts, ...carReservations, ...carMaintenances].length === 0;
+        [
+          ...(carContracts || []),
+          ...(carReservations || []),
+          ...(carMaintenances || []),
+        ]?.length === 0;
+
+      console.log("isAvailable", isAvailable);
+
       if (isAvailable) {
         return { message: "CAR_IS_AVAILABLE" };
       } else {
