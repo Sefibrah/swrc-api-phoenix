@@ -52,6 +52,8 @@ module.exports = ({ strapi }) => ({
     const isAvailable = await strapi
       .service("api::car.car")
       .isAvailable(id, startDateTime, endDateTime, userGroup);
+    
+    console.log('isAvailable from consumer', isAvailable);
 
     if (isAvailable.message != "CAR_IS_AVAILABLE") {
       throw new NotFoundError("CAR_IS_NOT_AVAILABLE");
