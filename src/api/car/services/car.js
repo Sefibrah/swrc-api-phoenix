@@ -17,7 +17,6 @@ const { getDays } = require("../../../shared/functions/get-days");
 
 module.exports = createCoreService("api::car.car", ({ strapi }) => ({
   relevantEventsList: async (dateTime, userGroup) => {
-    console.log("dateTime", dateTime);
     if (dateTime == null || dateTime == "") {
       return ValidationError("DATE_TIME_IS_REQUIRED");
     }
@@ -76,6 +75,20 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
         },
       ],
     };
+    const specialisedEventQueryForReservation = {
+      userGroup,
+      $and: [
+        {
+          $or: epicEventQuery.$or,
+        },
+        {
+          $or: [
+            { status: { $eq: "PENDING" } },
+            { status: { $eq: "CONFIRMED" } },
+          ],
+        },
+      ],
+    };
     const carContracts = await strapi.db
       .query("api::car-contract.car-contract")
       .findMany({
@@ -118,7 +131,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
             },
           },
         },
-        where: epicEventQuery,
+        where: specialisedEventQueryForReservation,
       });
     const carMaintenances = await strapi.db
       .query("api::car-maintenance.car-maintenance")
@@ -137,7 +150,6 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
 
     return [
       ...carContracts.map((event) => {
-        console.log(event);
         const rentalAgreementDetail = event.rentalAgreementDetail;
         const agreementDetail = event.agreementDetail;
         const car = event.car;
@@ -224,6 +236,23 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
         },
       ],
     };
+    const specialisedEventQueryForReservation = {
+      userGroup,
+      car: {
+        id: { $eq: carId },
+      },
+      $and: [
+        {
+          $or: epicEventQuery.$or,
+        },
+        {
+          $or: [
+            { status: { $eq: "PENDING" } },
+            { status: { $eq: "CONFIRMED" } },
+          ],
+        },
+      ],
+    };
     const carContracts = await strapi.db
       .query("api::car-contract.car-contract")
       .findMany({
@@ -266,7 +295,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
             },
           },
         },
-        where: epicEventQuery,
+        where: specialisedEventQueryForReservation,
       });
     const carMaintenances = await strapi.db
       .query("api::car-maintenance.car-maintenance")
@@ -285,7 +314,6 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
 
     return [
       ...carContracts.map((event) => {
-        console.log(event);
         const rentalAgreementDetail = event.rentalAgreementDetail;
         const agreementDetail = event.agreementDetail;
         const car = event.car;
@@ -332,10 +360,6 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
   },
   isAvailable: async (carId, startDatetime, endDatetime, userGroup) => {
     try {
-      console.log("carId", carId);
-      console.log("startDatetime", startDatetime);
-      console.log("endDatetime", endDatetime);
-      console.log("userGroup", userGroup);
       const carFromDb = await strapi.query("api::car.car").findOne({
         where: {
           userGroup,
@@ -344,7 +368,6 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
         },
         select: ["id", "make", "model", "registrationPlate", "isAvailable"],
       });
-      console.log("carFromDb", carFromDb);
       if (carFromDb == null) {
         return new NotFoundError("CAR_IS_BLOCKED");
       }
@@ -402,6 +425,23 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
           },
         ],
       };
+      const specialisedEventQueryForReservation = {
+        userGroup,
+        car: {
+          id: { $eq: carId },
+        },
+        $and: [
+          {
+            $or: epicEventQuery.$or,
+          },
+          {
+            $or: [
+              { status: { $eq: "PENDING" } },
+              { status: { $eq: "CONFIRMED" } },
+            ],
+          },
+        ],
+      };
       const carContracts = await strapi.db
         .query("api::car-contract.car-contract")
         .findMany({
@@ -416,7 +456,6 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
           },
           where: epicEventQuery,
         });
-      console.log("carContracts", carContracts);
       const carReservations = await strapi.db
         .query("api::car-reservation.car-reservation")
         .findMany({
@@ -429,9 +468,8 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
               select: ["startDatetime", "endDatetime"],
             },
           },
-          where: epicEventQuery,
+          where: specialisedEventQueryForReservation,
         });
-      console.log("carReservations", carReservations);
       const carMaintenances = await strapi.db
         .query("api::car-maintenance.car-maintenance")
         .findMany({
@@ -446,15 +484,12 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
           },
           where: epicEventQuery,
         });
-      console.log("carMaintenances", carMaintenances);
       const isAvailable =
         [
-          ...(carContracts || []),
-          ...(carReservations || []),
-          ...(carMaintenances || []),
+          ...carContracts,
+          ...carReservations,
+          ...carMaintenances,
         ]?.length === 0;
-
-      console.log("isAvailable", isAvailable);
 
       if (isAvailable) {
         return { message: "CAR_IS_AVAILABLE" };
@@ -559,6 +594,20 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
         },
       ],
     };
+    const specialisedEventQueryForReservation = {
+      userGroup,
+      $and: [
+        {
+          $or: epicEventQuery.$or,
+        },
+        {
+          $or: [
+            { status: { $eq: "PENDING" } },
+            { status: { $eq: "CONFIRMED" } },
+          ],
+        },
+      ],
+    };
     const carContracts = await strapi.db
       .query("api::car-contract.car-contract")
       .findMany({
@@ -585,7 +634,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
             select: ["startDatetime", "endDatetime"],
           },
         },
-        where: epicEventQuery,
+        where: specialisedEventQueryForReservation,
       });
     const carMaintenances = await strapi.db
       .query("api::car-maintenance.car-maintenance")
@@ -620,7 +669,6 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
     let availableCarGroups = carGroups.filter(
       (carGroup) => carGroup.cars.length > 0
     );
-    console.log("days", days);
     // calculate the vehicle prices!!
     availableCarGroups = availableCarGroups.map((carGroup) => {
       let price = getLatestPriceColumn(carGroup, days);
