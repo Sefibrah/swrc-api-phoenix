@@ -12,7 +12,6 @@ const getPublicPermissions = () => {
   let restrictedPermissions = combineActionWithService(
     [
       "api::flight-number.flight-number",
-      "api::vehicle-type.vehicle-type",
       "api::location.location",
     ],
     COMMON_ENDPOINT_GROUPS.restricted

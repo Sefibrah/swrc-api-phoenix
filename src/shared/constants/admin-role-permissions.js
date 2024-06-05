@@ -12,7 +12,6 @@ const getAdminPermissions = () => {
       "api::contact.contact",
       "api::service-location.service-location",
       "api::type-of-service.type-of-service",
-      "api::vehicle-type.vehicle-type",
       "api::car-group.car-group",
       "api::car-contract.car-contract",
       "api::car-maintenance.car-maintenance",

@@ -13,7 +13,6 @@ const getManagerPermissions = () => {
       "api::location.location",
       "api::service-location.service-location",
       "api::type-of-service.type-of-service",
-      "api::vehicle-type.vehicle-type",
       "api::car-contract.car-contract",
       "api::car-maintenance.car-maintenance",
       "api::car-reservation.car-reservation",

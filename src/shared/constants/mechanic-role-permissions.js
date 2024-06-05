@@ -12,7 +12,6 @@ const getMechanicPermissions = () => {
       "api::car-group.car-group",
       "api::location.location",
       "api::invoice-place-of-issue.invoice-place-of-issue",
-      "api::vehicle-type.vehicle-type",
       "api::car-reservation.car-reservation",
       "api::car-contract.car-contract",
       "api::document-connection.document-connection",

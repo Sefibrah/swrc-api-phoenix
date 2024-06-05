@@ -11,7 +11,6 @@ const getReceptionistPermissions = () => {
       "api::location.location",
       "api::invoice-place-of-issue.invoice-place-of-issue",
       "api::address-of-stay.address-of-stay",
-      "api::vehicle-type.vehicle-type",
       "api::discount.discount",
       "api::recurring-discount.recurring-discount",
       "api::temporary-discount.temporary-discount",
