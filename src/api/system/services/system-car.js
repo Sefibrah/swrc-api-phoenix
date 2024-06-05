@@ -115,10 +115,11 @@ module.exports = {
       // if there is a mileage with the same timestamp, update it
       for (let i = 0; i < car.mileages?.length; i++) {
         const mileage = car.mileages[i];
-        if (
-          new Date(mileage.timestamp).setHours(0, 0, 0) ===
-          new Date(data.timestamp).setHours(0, 0, 0)
-        ) {
+        const mileageTimestamp = new Date(mileage.timestamp);
+        const dataTimestamp = new Date(data.timestamp);
+        mileageTimestamp.setHours(0, 0, 0);
+        dataTimestamp.setHours(0, 0, 0);
+        if (mileageTimestamp.getTime() === dataTimestamp.getTime()) {
           const updatedMileage = await strapi.entityService.update(
             "api::mileage.mileage",
             mileage.id,
