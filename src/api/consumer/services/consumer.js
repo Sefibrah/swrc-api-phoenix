@@ -1236,7 +1236,7 @@ async function submitReservationRequestToSystem(
         flightNumber,
         code: getRandomString(),
         car,
-        source: "WEBSITE",
+        source: "COMPANY_WEBSITE",
         status: "PENDING",
         rentalExtras,
         rentalAgreementDetail: rentalAgreementDetail.id,

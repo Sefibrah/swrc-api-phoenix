@@ -51,21 +51,20 @@
     },
     "status": {
       "type": "enumeration",
-      "enum": [
-        "PENDING",
-        "CONFIRMED",
-        "CANCELLED",
-        "NO_SHOW",
-        "COMPLETED"
-      ]
+      "enum": ["PENDING", "CONFIRMED", "CANCELLED", "COMPLETED"]
     },
     "source": {
       "type": "enumeration",
       "enum": [
-        "WEBSITE",
-        "PHONE",
-        "EMAIL",
-        "IN_PERSON"
+        "WHATSAPP",
+        "INSTAGRAM",
+        "FACEBOOK",
+        "VIBER",
+        "TELEGRAM",
+        "TELEPHONE_CALL",
+        "IN_OFFICE",
+        "COMPANY_EMAIL",
+        "COMPANY_WEBSITE"
       ]
     }
   }
