@@ -93,23 +93,26 @@
       "type": "string"
     },
     "carType": {
-      "type": "string"
+      "type": "enumeration",
+      "enum": [
+        "MINI_VAN",
+        "SUV",
+        "LUXURY",
+        "SMALL",
+        "COMPACT",
+        "MEDIUM",
+        "LARGE",
+        "ESTATE",
+        "VAN"
+      ]
     },
     "fuelType": {
       "type": "enumeration",
-      "enum": [
-        "DIESEL",
-        "PETROL",
-        "HYBRID",
-        "ELECTRIC"
-      ]
+      "enum": ["DIESEL", "PETROL", "HYBRID", "ELECTRIC"]
     },
     "transmissionType": {
       "type": "enumeration",
-      "enum": [
-        "AUTOMATIC",
-        "MANUAL"
-      ]
+      "enum": ["AUTOMATIC", "MANUAL"]
     },
     "carGroup": {
       "type": "relation",
