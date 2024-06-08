@@ -10,12 +10,20 @@ module.exports = {
     },
     {
       method: "GET",
-      path: "/consumer/cars/reservations/:code",
-      handler: "consumer.getCarReservationByCode",
+      path: "/consumer/cars/reservations/:id",
+      handler: "consumer.getCarReservationById",
       config: {
         auth: false,
       },
     },
+    // {
+    //   method: "GET",
+    //   path: "/consumer/cars/reservations/:code",
+    //   handler: "consumer.getCarReservationByCode",
+    //   config: {
+    //     auth: false,
+    //   },
+    // },
     {
       method: "GET",
       path: "/consumer/cars/offers",

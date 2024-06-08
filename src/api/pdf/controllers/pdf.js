@@ -16,7 +16,7 @@ module.exports = {
   getBookingConfirmationPdf: async (ctx, next) => {
     try {
       const userGroup = await getUserGroupId(strapi, ctx.request);
-      const code = ctx.request.params.code;
+      const id = ctx.request.params.id;
 
       const organisationDetail = await strapi.db
         .query("api::organization-detail.organization-detail")
@@ -40,7 +40,7 @@ module.exports = {
       const carReservation = await strapi.db
         .query("api::car-reservation.car-reservation")
         .findOne({
-          select: ["id", "createdAt"],
+          select: ["id", "createdAt", "code"],
           populate: {
             car: {
               select: ["id", "registrationPlate", "make", "model"],
@@ -70,7 +70,7 @@ module.exports = {
             },
           },
           where: {
-            code,
+            id,
             userGroup,
           },
         });
@@ -315,7 +315,7 @@ module.exports = {
           ctx.set("Content-Type", "application/pdf");
           ctx.set(
             "Content-Disposition",
-            `attachment; filename=booking-confirmation-${code}.pdf`
+            `attachment; filename=booking-confirmation-${carReservation.code}.pdf`
           );
           ctx.send(pdfData, 200);
           resolve(pdfData);

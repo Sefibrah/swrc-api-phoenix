@@ -251,7 +251,50 @@ module.exports = ({ strapi }) => ({
 
     return carReservation;
   },
-  getCarReservationById: async (ctx, next) => {},
+  getCarReservationById: async (id, userGroup) => {
+    const {
+      code,
+      carGroup,
+      car,
+      rentalAgreementDetail,
+      agreementDetail,
+      rentalExtras,
+      transaction,
+      flightNumber,
+      status,
+    } = await getReservationById(id, userGroup);
+
+    const response = {
+      code,
+      id,
+      flightNumber,
+      status,
+      rentalAgreementDetail,
+      agreementDetail,
+      rentalExtras: rentalExtras.map((rE) => ({
+        id: rE.extra.id,
+        quantity: rE.quantity,
+      })),
+      car: {
+        id: car.id,
+        // fixme: this is shit code! fix the substring
+        name: `${carGroup.name} (${car.registrationPlate.substring(
+          car.registrationPlate.length - 3,
+          car.registrationPlate.length
+        )})`,
+        thumbnail: carGroup.thumbnail.url,
+        seats: car.seats,
+        doors: car.doors,
+        carType: car.carType,
+        fuelType: car.fuelType,
+        transmissionType: car.transmissionType,
+        // largeBags: carReservation.car.largeBags,
+        // smallBags: carReservation.car.smallBags,
+      },
+      transaction,
+    };
+    return response;
+  },
   getCarGroupedReservationById: async (id, userGroup) => {},
   getCarReservationByCode: async (code, userGroup) => {
     const {
@@ -801,7 +844,6 @@ async function getUniqueBusyCarIds(strapi, startDatetime, endDatetime) {
         $and: [
           { status: { $ne: "CANCELLED" } },
           { status: { $ne: "COMPLETED" } },
-          { status: { $ne: "NO_SHOW" } },
         ],
       },
     });
@@ -954,6 +996,109 @@ async function getReservationByCode(code, userGroup) {
 
   return {
     id: carReservation.id,
+    carGroup,
+    car,
+    rentalAgreementDetail,
+    agreementDetail,
+    rentalExtras,
+    transaction,
+    flightNumber,
+    status,
+  };
+}
+
+async function getReservationById(id, userGroup) {
+  const carReservationFilter = {
+    userGroup,
+    id,
+  };
+
+  const carReservation = await strapi.db
+    .query("api::car-reservation.car-reservation")
+    .findOne({
+      select: ["flightNumber", "code"],
+      populate: {
+        rentalAgreementDetail: {
+          select: ["startLocation", "endLocation"],
+          populate: {
+            renter: {
+              select: ["name"],
+              populate: {
+                contact: {
+                  select: ["email", "telephonePrimary", "telephoneSecondary"],
+                },
+              },
+            },
+          },
+        },
+        rentalExtras: {
+          select: ["quantity"],
+          populate: {
+            extra: {
+              select: ["id"],
+            },
+          },
+        },
+        agreementDetail: {
+          select: ["startDatetime", "endDatetime"],
+        },
+        transaction: {
+          select: [
+            "totalWithTax",
+            "deposit",
+            "extrasPrice",
+            "pricePerDay",
+            "extrasPrice",
+            "totalPricePerDay",
+            "discount",
+            "discountType",
+          ],
+        },
+        car: {
+          select: [
+            "id",
+            "transmissionType",
+            "registrationPlate",
+            "fuelType",
+            "carType",
+            "doors",
+            "seats",
+          ],
+        },
+      },
+      where: carReservationFilter,
+    });
+
+  console.log('i\'m expecting something wrong with carReservation', carReservation);
+  
+  const carGroupFilter = {
+    userGroup,
+    cars: {
+      id: carReservation.car.id,
+    },
+  };
+
+  const carGroup = await strapi.db.query("api::car-group.car-group").findOne({
+    select: ["id", "name"],
+    populate: {
+      thumbnail: {
+        select: ["url"],
+      },
+    },
+    where: carGroupFilter,
+  });
+
+  const car = carReservation.car;
+  const rentalAgreementDetail = carReservation.rentalAgreementDetail;
+  const agreementDetail = carReservation.agreementDetail;
+  const rentalExtras = carReservation.rentalExtras;
+  const transaction = carReservation.transaction;
+  const flightNumber = carReservation.flightNumber;
+  const status = carReservation?.status;
+
+  return {
+    id,
+    code: carReservation.code,
     carGroup,
     car,
     rentalAgreementDetail,

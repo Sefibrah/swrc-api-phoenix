@@ -6,7 +6,7 @@ const { combineActionWithService } = require("../functions/combine-action-with-s
 
 const getPublicPermissions = () => {
   let availableEndpointsPermissions = combineActionWithService(
-    ["api::car-helpers.car-helpers", "api::extra.extra"],
+    ["api::extra.extra"],
     COMMON_ENDPOINT_GROUPS.availabilityLimited
   );
   let restrictedPermissions = combineActionWithService(
