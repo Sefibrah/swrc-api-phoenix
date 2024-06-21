@@ -1,4 +1,4 @@
-const strapi = require('../../../node_modules@strapi/strapi');
+const strapi = require('../../../node_modules/@strapi/strapi');
 
 if (process.env.NODE_ENV == "development")
     strapi({"autoReload": { "enabled": true }}).start();
