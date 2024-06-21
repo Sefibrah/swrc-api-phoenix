@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkstrapi=self.webpackChunkstrapi||[]).push([[1149],{91149:(e,t,a)=>{a.r(t),a.d(t,{default:()=>n});const n={"plugin.description.long":"Strapi hata olaylar\u0131n\u0131 Sentry'e ilet.","plugin.description.short":"Strapi hata olaylar\u0131n\u0131 Sentry'e ilet.","plugin.name":"Sentry"}}}]);

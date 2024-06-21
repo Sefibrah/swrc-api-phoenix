@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkstrapi=self.webpackChunkstrapi||[]).push([[4699],{34699:(i,e,n)=>{n.r(e),n.d(e,{default:()=>t});const t={"plugin.description.long":"Send Strapi fejlevents til Sentry.","plugin.description.short":"Send Strapi fejlevents til Sentry.","plugin.name":"Sentry"}}}]);

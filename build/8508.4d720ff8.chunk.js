@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkstrapi=self.webpackChunkstrapi||[]).push([[8508],{98508:(t,p,n)=>{n.r(p),n.d(p,{default:()=>e});const e={"plugin.description.long":"Cr\xE9e un endpoint GraphQL supportant les m\xE9thodes par d\xE9faut de l'API.","plugin.description.short":"Cr\xE9e un endpoint GraphQL supportant les m\xE9thodes par d\xE9faut de l'API.","plugin.name":"GraphQL"}}}]);

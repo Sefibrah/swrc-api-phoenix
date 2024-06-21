@@ -3,10 +3,10 @@ const _ = require("lodash");
 const {
   validateCreateUserBody,
   validateUpdateUserBody,
-} = require("@strapi/plugin-users-permissions/server/controllers/validation/user");
+} = require("../../../node_modules/@strapi/plugin-users-permissions/server/controllers/validation/user");
 
-const utils = require("@strapi/utils");
-const { getService } = require("@strapi/plugin-users-permissions/server/utils");
+const utils = require("../../../node_modules/@strapi/utils");
+const { getService } = require("../../../node_modules/@strapi/plugin-users-permissions/server/utils");
 const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
 const {
   getLoggedUserUserGroupWithId,

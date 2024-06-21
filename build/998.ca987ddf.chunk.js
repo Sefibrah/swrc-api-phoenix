@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkstrapi=self.webpackChunkstrapi||[]).push([[998],{10998:(t,e,n)=>{n.r(e),n.d(e,{default:()=>s});const s={"plugin.description.long":"Skicka felkoder fr\xE5n strapi som Sentry-events.","plugin.description.short":"Skicka felkoder fr\xE5n strapi som Sentry-events.","plugin.name":"Sentry"}}}]);

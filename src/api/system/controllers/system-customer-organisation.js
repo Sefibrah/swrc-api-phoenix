@@ -2,7 +2,7 @@
 
 const {
   parseBody,
-} = require("@strapi/strapi/dist/core-api/controller/transform.js");
+} = require("../../../../node_modules/@strapi/strapi/dist/core-api/controller/transform.js");
 const {
   getSubdomainFromRequest,
 } = require("../../../shared/functions/get-subdomain");

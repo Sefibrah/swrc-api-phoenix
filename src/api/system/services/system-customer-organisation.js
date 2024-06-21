@@ -3,7 +3,7 @@
 const utils = require("@strapi/utils");
 const {
   transformResponse,
-} = require("@strapi/strapi/dist/core-api/controller/transform.js");
+} = require("../../../../node_modules/@strapi/strapi/dist/core-api/controller/transform.js");
 const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
 const {
   getLoggedUserUserGroup,

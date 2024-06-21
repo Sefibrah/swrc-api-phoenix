@@ -10,7 +10,7 @@ const {
 } = require("../../../shared/functions/get-id-and-attributes");
 const {
   transformResponse,
-} = require("@strapi/strapi/dist/core-api/controller/transform.js");
+} = require("../../../../node_modules/@strapi/strapi/dist/core-api/controller/transform.js");
 
 /**
  * system service

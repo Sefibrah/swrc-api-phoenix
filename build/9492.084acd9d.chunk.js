@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkstrapi=self.webpackChunkstrapi||[]).push([[9492],{89492:(r,e,n)=>{n.r(e),n.d(e,{default:()=>s});const s={"plugin.description.long":"Env\xEDe los eventos de error de Strapi a Sentry.","plugin.description.short":"Env\xEDe los eventos de error de Strapi a Sentry.","plugin.name":"Sentry"}}}]);

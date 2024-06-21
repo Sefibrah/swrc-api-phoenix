@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkstrapi=self.webpackChunkstrapi||[]).push([[7853],{77853:(e,i,n)=>{n.r(i),n.d(i,{default:()=>u});const u={"plugin.description.long":"Wy\u015Blij zdarzenia z b\u0142\u0119dami ze Strapi do Sentry","plugin.description.short":"Wy\u015Blij zdarzenia z b\u0142\u0119dami ze Strapi do Sentry.","plugin.name":"Sentry"}}}]);

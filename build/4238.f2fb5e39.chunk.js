@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkstrapi=self.webpackChunkstrapi||[]).push([[4238],{74238:(t,i,n)=>{n.r(i),n.d(i,{default:()=>u});const u={"plugin.description.long":"G\u1EEDi l\u1ED7i Strapi l\xEAn Sentry.","plugin.description.short":"G\u1EEDi l\u1ED7i Strapi l\xEAn Sentry.","plugin.name":"Sentry"}}}]);
