@@ -485,11 +485,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
           where: epicEventQuery,
         });
       const isAvailable =
-        [
-          ...carContracts,
-          ...carReservations,
-          ...carMaintenances,
-        ]?.length === 0;
+        [...carContracts, ...carReservations, ...carMaintenances]?.length === 0;
 
       if (isAvailable) {
         return { message: "CAR_IS_AVAILABLE" };
@@ -662,6 +658,7 @@ module.exports = createCoreService("api::car.car", ({ strapi }) => ({
         (car) =>
           !uniqueBusyCarIds.includes(car.id) &&
           car.isAvailable &&
+          !car.isSold &&
           // fixme: ovo je takav hardcode fix znaci nije normalno
           car.registrationPlate != "POMOCNOVOZILO"
       );

@@ -52,7 +52,7 @@ module.exports = ({ strapi }) => ({
     const isAvailable = await strapi
       .service("api::car.car")
       .isAvailable(id, startDateTime, endDateTime, userGroup);
-    
+
     if (isAvailable.message != "CAR_IS_AVAILABLE") {
       throw new NotFoundError("CAR_IS_NOT_AVAILABLE");
     }
@@ -423,6 +423,7 @@ module.exports = ({ strapi }) => ({
         (car) =>
           !uniqueBusyCarIds.includes(car.id) &&
           car.isAvailable &&
+          !car.isSold &&
           // fixme: ovo je takav hardcode fix znaci nije normalno
           car.registrationPlate != "POMOCNOVOZILO"
       ),
@@ -549,6 +550,7 @@ module.exports = ({ strapi }) => ({
         (car) =>
           !uniqueBusyCarIds.includes(car.id) &&
           car.isAvailable &&
+          !car.isSold &&
           // fixme: ovo je takav hardcode fix znaci nije normalno
           car.registrationPlate != "POMOCNOVOZILO"
       );
@@ -631,6 +633,7 @@ module.exports = ({ strapi }) => ({
     if (
       uniqueBusyCarIds.includes(car.id) ||
       !car.isAvailable ||
+      car.isSold ||
       // fixme: ovo je takav hardcode fix znaci nije normalno
       car.registrationPlate == "POMOCNOVOZILO"
     ) {
@@ -725,6 +728,7 @@ module.exports = ({ strapi }) => ({
         (car) =>
           !uniqueBusyCarIds.includes(car.id) &&
           car.isAvailable &&
+          !car.isSold &&
           // fixme: ovo je takav bolestan i bezobrazan hardcode znaci nije normalno...
           car.registrationPlate != "POMOCNOVOZILO"
       ),
@@ -967,8 +971,11 @@ async function getReservationByCode(code, userGroup) {
       where: carReservationFilter,
     });
 
-  console.log('i\'m expecting something wrong with carReservation', carReservation);
-  
+  console.log(
+    "i'm expecting something wrong with carReservation",
+    carReservation
+  );
+
   const carGroupFilter = {
     userGroup,
     cars: {
@@ -1069,8 +1076,11 @@ async function getReservationById(id, userGroup) {
       where: carReservationFilter,
     });
 
-  console.log('i\'m expecting something wrong with carReservation', carReservation);
-  
+  console.log(
+    "i'm expecting something wrong with carReservation",
+    carReservation
+  );
+
   const carGroupFilter = {
     userGroup,
     cars: {
