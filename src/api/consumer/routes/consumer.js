@@ -10,8 +10,8 @@ module.exports = {
     },
     {
       method: "GET",
-      path: "/consumer/cars/reservations/:id",
-      handler: "consumer.getCarReservationById",
+      path: "/consumer/cars/reservations/:idOrCode",
+      handler: "consumer.getCarReservationByIdOrCode",
       config: {
         auth: false,
       },

@@ -19,7 +19,7 @@ module.exports = {
   getBookingConfirmationPdf: async (ctx, next) => {
     try {
       const userGroup = await getUserGroupId(strapi, ctx.request);
-      const id = ctx.request.params.id;
+      const idOrCode = ctx.request.params.idOrCode;
 
       const organisationDetail = await strapi.db
         .query("api::organization-detail.organization-detail")
@@ -73,7 +73,7 @@ module.exports = {
             },
           },
           where: {
-            id,
+            $or: [{ id: idOrCode }, { code: idOrCode }],
             userGroup,
           },
         });

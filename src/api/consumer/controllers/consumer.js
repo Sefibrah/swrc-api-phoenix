@@ -69,12 +69,12 @@ module.exports = {
 
     return reservation;
   },
-  getCarReservationById: async (ctx, next) => {
-    const { id, userGroup } = await getConsumerProps(strapi, ctx);
+  getCarReservationByIdOrCode: async (ctx, next) => {
+    const { idOrCode, userGroup } = await getConsumerProps(strapi, ctx);
 
     const reservation = await strapi
       .service("api::consumer.consumer")
-      .getCarReservationById(id, userGroup);
+      .getCarReservationByIdOrCode(idOrCode, userGroup);
 
     return reservation;
   },
@@ -173,9 +173,10 @@ module.exports = {
 async function getConsumerProps(strapi, ctx) {
   const id = +ctx.params?.id;
   const code = ctx.params?.code;
+  const idOrCode = ctx.params?.idOrCode;
   const vehicleType = ctx.request.query.vehicleType;
   const userGroup = await getUserGroupId(strapi, ctx.request);
-  return { id, code, vehicleType, userGroup };
+  return { id, code, idOrCode, vehicleType, userGroup };
 }
 
 function getConsumerPostProps(ctxRequest) {

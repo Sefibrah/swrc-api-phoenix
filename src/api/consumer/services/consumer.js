@@ -251,8 +251,9 @@ module.exports = ({ strapi }) => ({
 
     return carReservation;
   },
-  getCarReservationById: async (id, userGroup) => {
+  getCarReservationByIdOrCode: async (idOrCode, userGroup) => {
     const {
+      id,
       code,
       carGroup,
       car,
@@ -262,7 +263,7 @@ module.exports = ({ strapi }) => ({
       transaction,
       flightNumber,
       status,
-    } = await getReservationById(id, userGroup);
+    } = await getReservationByIdOrCode(idOrCode, userGroup);
 
     const response = {
       code,
@@ -1014,10 +1015,10 @@ async function getReservationByCode(code, userGroup) {
   };
 }
 
-async function getReservationById(id, userGroup) {
+async function getReservationByIdOrCode(idOrCode, userGroup) {
   const carReservationFilter = {
     userGroup,
-    id,
+    $or: [{ id: idOrCode }, { code: idOrCode }],
   };
 
   const carReservation = await strapi.db
@@ -1107,7 +1108,7 @@ async function getReservationById(id, userGroup) {
   const status = carReservation?.status;
 
   return {
-    id,
+    id: carReservation.id,
     code: carReservation.code,
     carGroup,
     car,
