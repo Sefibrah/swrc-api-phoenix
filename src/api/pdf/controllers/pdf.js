@@ -2,6 +2,9 @@
 const {
   getUserGroupId,
 } = require("../../../shared/functions/get-logged-user-user-group");
+const {
+  shortenString,
+} = require("../../../shared/functions/shorten-string");
 const moment = require("moment");
 const PDFDocument = require("pdfkit");
 const axios = require("axios");
@@ -315,7 +318,7 @@ module.exports = {
           ctx.set("Content-Type", "application/pdf");
           ctx.set(
             "Content-Disposition",
-            `attachment; filename=booking-confirmation-${carReservation.code}.pdf`
+            `attachment; filename=booking-confirmation-${shortenString(carReservation.code)}.pdf`
           );
           ctx.send(pdfData, 200);
           resolve(pdfData);
