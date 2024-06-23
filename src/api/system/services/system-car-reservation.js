@@ -1,5 +1,7 @@
 "use strict";
 
+const { getRandomString } = require("../../../shared/functions/get-random-string");
+
 /**
  * system service
  */
@@ -100,7 +102,7 @@ module.exports = ({ strapi }) => ({
           flightNumber,
           status,
           source,
-          code,
+          code: getRandomString(),
           rentalAgreementDetail: rentalAgreementDetail.id,
           agreementDetail: agreementDetail.id,
           transaction: transaction.id,
