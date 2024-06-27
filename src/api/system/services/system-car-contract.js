@@ -587,6 +587,7 @@ function checkDriverDocuments(driver, isPrimary, endDatetime) {
       .filter((doc) => doc.type === "DRIVING")
       .find(
         (doc) =>
+          doc.unlimited ||
           new Date(doc.expiry).getTime() > new Date(endDatetime).getTime()
       ) || null;
   if (DHasDriverLicense == null) {
@@ -599,6 +600,7 @@ function checkDriverDocuments(driver, isPrimary, endDatetime) {
       .filter((doc) => doc.type === "IDENTITY" || doc.type === "PASSPORT")
       .find(
         (doc) =>
+          doc.unlimited ||
           new Date(doc.expiry).getTime() > new Date(endDatetime).getTime()
       ) || null;
   if (DHasValidID == null) {
