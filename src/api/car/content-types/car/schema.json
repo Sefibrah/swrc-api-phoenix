@@ -146,6 +146,9 @@
     "isSold": {
       "type": "boolean",
       "default": false
+    },
+    "technicalEkplConditionUntil": {
+      "type": "datetime"
     }
   }
 }
